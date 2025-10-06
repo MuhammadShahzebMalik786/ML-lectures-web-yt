@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supervised Learning Algorithms – Third Lecture</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            color: #2563eb;
+            margin-bottom: 10px;
+        }
+
+        .header h2 {
+            font-size: 1.5em;
+            color: #6366f1;
+            font-weight: 300;
+        }
+
+        .slide {
+            background: rgba(255, 255, 255, 0.95);
+            margin: 30px 0;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide h3 {
+            font-size: 2em;
+            color: #2563eb;
+            margin-bottom: 25px;
+            border-bottom: 3px solid #6366f1;
+            padding-bottom: 10px;
+        }
+
+        .slide h4 {
+            font-size: 1.4em;
+            color: #4338ca;
+            margin: 20px 0 15px 0;
+        }
+
+        .slide p, .slide li {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: #374151;
+        }
+
+        .slide ul {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        .formula {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.3em;
+            font-family: 'Courier New', monospace;
+            color: #1e293b;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .comparison-table th {
+            background: #2563eb;
+            color: white;
+            padding: 15px;
+            font-size: 1.1em;
+        }
+
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 1em;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f9fafb;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #fef3c7 0%, #fde68a 100%);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #f59e0b;
+            margin: 20px 0;
+        }
+
+        .applications {
+            background: #ecfdf5;
+            border: 2px solid #10b981;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .applications h4 {
+            color: #047857;
+            margin-bottom: 10px;
+        }
+
+        .limitations {
+            background: #fef2f2;
+            border: 2px solid #ef4444;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .limitations h4 {
+            color: #dc2626;
+            margin-bottom: 10px;
+        }
+
+        .outro {
+            text-align: center;
+            background: linear-gradient(135deg, #2563eb 0%, #6366f1 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+
+        .outro h3 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .outro p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .diagram-placeholder {
+            background: #f1f5f9;
+            border: 2px dashed #64748b;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            margin: 20px 0;
+            color: #64748b;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Intro Slide -->
+        <div class="header">
+            <h1>Lecture 3: Supervised Learning Algorithms</h1>
+            <h2>(Linear Regression & Logistic Regression)</h2>
+        </div>
+
+        <!-- What is Supervised Learning? -->
+        <div class="slide">
+            <h3>What is Supervised Learning?</h3>
+            <ul>
+                <li><strong>Definition:</strong> Learning from labeled data to make predictions</li>
+                <li><strong>Labeled Data:</strong> Input → Output pairs (training examples)</li>
+                <li><strong>Goal:</strong> Learn mapping function f(x) = y</li>
+            </ul>
+            
+            <div class="highlight">
+                <h4>Two Main Tasks:</h4>
+                <ul>
+                    <li><strong>Regression:</strong> Predict continuous values (prices, temperatures)</li>
+                    <li><strong>Classification:</strong> Predict categories (spam/not spam, yes/no)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Linear Regression -->
+        <div class="slide">
+            <h3>Linear Regression</h3>
+            <p><strong>Purpose:</strong> Predicts continuous numerical values</p>
+            
+            <div class="formula">
+                y = β₀ + β₁x + ε
+            </div>
+            
+            <h4>Key Components:</h4>
+            <ul>
+                <li><strong>β₀ (Intercept):</strong> Y-value when x = 0</li>
+                <li><strong>β₁ (Slope):</strong> Change in y per unit change in x</li>
+                <li><strong>ε (Error):</strong> Random noise/unexplained variation</li>
+            </ul>
+
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="linear.png" alt="Linear Regression Plot" style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+            </div>
+
+            <div class="applications">
+                <h4>Applications:</h4>
+                <ul>
+                    <li>House price prediction</li>
+                    <li>Sales forecasting</li>
+                    <li>Stock market analysis</li>
+                    <li>Economic growth modeling</li>
+                </ul>
+            </div>
+
+            <div class="limitations">
+                <h4>Limitations:</h4>
+                <ul>
+                    <li>Only captures linear relationships</li>
+                    <li>Sensitive to outliers</li>
+                    <li>Assumes constant variance</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Logistic Regression -->
+        <div class="slide">
+            <h3>Logistic Regression</h3>
+            <p><strong>Purpose:</strong> Used for binary classification (0/1, Yes/No)</p>
+            
+            <div class="formula">
+                p = 1 / (1 + e⁻ᶻ)
+                <br><br>
+                where z = β₀ + β₁x
+            </div>
+            
+            <h4>Key Features:</h4>
+            <ul>
+                <li><strong>Sigmoid Function:</strong> Maps any real number to (0,1)</li>
+                <li><strong>Output:</strong> Probability of belonging to positive class</li>
+                <li><strong>Decision Boundary:</strong> Usually p = 0.5</li>
+            </ul>
+
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="Logestic regression.webp" alt="Logistic Regression Sigmoid Function" style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+            </div>
+
+            <div class="applications">
+                <h4>Applications:</h4>
+                <ul>
+                    <li>Email spam detection</li>
+                    <li>Medical diagnosis</li>
+                    <li>Customer churn prediction</li>
+                    <li>Marketing response prediction</li>
+                </ul>
+            </div>
+
+            <div class="highlight">
+                <h4>Advantages:</h4>
+                <ul>
+                    <li>Simple and fast</li>
+                    <li>Highly interpretable</li>
+                    <li>No tuning of hyperparameters</li>
+                    <li>Provides probability estimates</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Comparison Table -->
+        <div class="slide">
+            <h3>Linear vs Logistic Regression</h3>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>Linear Regression</th>
+                        <th>Logistic Regression</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Output Type</strong></td>
+                        <td>Continuous values</td>
+                        <td>Probability (0-1)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Task Type</strong></td>
+                        <td>Regression</td>
+                        <td>Classification</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Function</strong></td>
+                        <td>Straight line (linear)</td>
+                        <td>S-curve (sigmoid)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Range</strong></td>
+                        <td>(-∞, +∞)</td>
+                        <td>[0, 1]</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Use Case</strong></td>
+                        <td>Predict prices, quantities</td>
+                        <td>Predict categories, classes</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Summary -->
+        <div class="slide">
+            <h3>Summary</h3>
+            
+            <div class="highlight">
+                <h4>Key Takeaways:</h4>
+                <ul>
+                    <li><strong>Linear Regression:</strong> Best for regression tasks with continuous outputs</li>
+                    <li><strong>Logistic Regression:</strong> Ideal for binary classification problems</li>
+                    <li><strong>Both:</strong> Fundamental supervised learning algorithms</li>
+                    <li><strong>Foundation:</strong> Building blocks for more complex models</li>
+                </ul>
+            </div>
+
+            <p><strong>Remember:</strong> Choose the algorithm based on your problem type - regression or classification!</p>
+        </div>
+
+        <!-- Outro Slide -->
+        <div class="outro">
+            <h3>End of Lecture 3</h3>
+            <p>Next: Decision Trees and Random Forests</p>
+        </div>
+    </div>
+</body>
+</html>

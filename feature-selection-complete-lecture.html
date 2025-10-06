@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feature Selection Methods - Complete ML Lecture</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Feature Selection Methods</h1>
+            <p class="subtitle">Filter Methods, Wrapper Methods, Train-Test Split & Performance Evaluation</p>
+        </header>
+
+        <nav class="lecture-nav">
+            <ul>
+                <li><a href="#introduction">Introduction</a></li>
+                <li><a href="#filter-methods">Filter Methods</a></li>
+                <li><a href="#wrapper-methods">Wrapper Methods</a></li>
+                <li><a href="#train-test">Train-Test Split</a></li>
+                <li><a href="#evaluation">Performance Evaluation</a></li>
+                <li><a href="#implementation">Implementation</a></li>
+                <li><a href="#comparison">Method Comparison</a></li>
+                <li><a href="feature_selection_tutorial.ipynb" download>📓 Notebook</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <section id="introduction">
+                <h2>1. Introduction to Feature Selection</h2>
+                
+                <div class="content-box">
+                    <h3>What is Feature Selection?</h3>
+                    <p>Feature selection is the process of selecting a subset of relevant features for model construction. It's crucial for:</p>
+                    <ul>
+                        <li><strong>Reducing overfitting:</strong> Fewer features = less complexity</li>
+                        <li><strong>Improving performance:</strong> Remove noise and irrelevant features</li>
+                        <li><strong>Reducing training time:</strong> Less data to process</li>
+                        <li><strong>Better interpretability:</strong> Focus on important features</li>
+                        <li><strong>Storage efficiency:</strong> Less memory requirements</li>
+                    </ul>
+                </div>
+
+                <div class="content-box">
+                    <h3>Types of Feature Selection Methods</h3>
+                    <div class="method-grid">
+                        <div class="method-card">
+                            <h4>Filter Methods</h4>
+                            <p>Select features based on statistical measures independent of any machine learning algorithm</p>
+                            <ul>
+                                <li>Fast and scalable</li>
+                                <li>Model-independent</li>
+                                <li>Good for preprocessing</li>
+                            </ul>
+                        </div>
+                        <div class="method-card">
+                            <h4>Wrapper Methods</h4>
+                            <p>Use machine learning algorithms to evaluate feature subsets</p>
+                            <ul>
+                                <li>Model-specific</li>
+                                <li>More accurate</li>
+                                <li>Computationally expensive</li>
+                            </ul>
+                        </div>
+                        <div class="method-card">
+                            <h4>Embedded Methods</h4>
+                            <p>Feature selection occurs during model training</p>
+                            <ul>
+                                <li>Built into algorithms</li>
+                                <li>Efficient</li>
+                                <li>Algorithm-specific</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="filter-methods">
+                <h2>2. Filter Methods</h2>
+                
+                <div class="content-box">
+                    <h3>Univariate Statistical Tests</h3>
+                    
+                    <h4>1. F-test (ANOVA F-statistic)</h4>
+                    <p>Measures the linear relationship between features and target variable.</p>
+                    <div class="code-block">
+from sklearn.feature_selection import SelectKBest, f_classif<br><br>
+
+# Select top 10 features using F-test<br>
+selector = SelectKBest(score_func=f_classif, k=10)<br>
+X_selected = selector.fit_transform(X_train, y_train)
+                    </div>
+                    
+                    <h4>2. Chi-Square Test</h4>
+                    <p>Tests independence between categorical features and target (for non-negative features).</p>
+                    <div class="code-block">
+from sklearn.feature_selection import chi2<br><br>
+
+# Chi-square test for categorical features<br>
+selector_chi2 = SelectKBest(score_func=chi2, k=10)<br>
+X_selected = selector_chi2.fit_transform(X_train, y_train)
+                    </div>
+                    
+                    <h4>3. Mutual Information</h4>
+                    <p>Measures mutual dependence between features and target (captures non-linear relationships).</p>
+                    <div class="code-block">
+from sklearn.feature_selection import mutual_info_classif<br><br>
+
+# Mutual information for classification<br>
+selector_mi = SelectKBest(score_func=mutual_info_classif, k=10)<br>
+X_selected = selector_mi.fit_transform(X_train, y_train)
+                    </div>
+                </div>
+
+                <div class="performance-box">
+                    <h3>Filter Methods - Pros & Cons</h3>
+                    <div class="method-comparison">
+                        <div>
+                            <h4>Advantages:</h4>
+                            <ul>
+                                <li>Fast computation</li>
+                                <li>Scalable to large datasets</li>
+                                <li>Model-independent</li>
+                                <li>Good for preprocessing</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>Disadvantages:</h4>
+                            <ul>
+                                <li>Ignores feature interactions</li>
+                                <li>May select redundant features</li>
+                                <li>No consideration of model performance</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="wrapper-methods">
+                <h2>3. Wrapper Methods</h2>
+                
+                <div class="content-box">
+                    <h3>Recursive Feature Elimination (RFE)</h3>
+                    <p>Recursively eliminates features and builds model on remaining attributes.</p>
+                    
+                    <div class="code-block">
+from sklearn.feature_selection import RFE<br>
+from sklearn.ensemble import RandomForestClassifier<br><br>
+
+# RFE with Random Forest<br>
+estimator = RandomForestClassifier(n_estimators=100)<br>
+selector = RFE(estimator, n_features_to_select=10)<br>
+X_selected = selector.fit_transform(X_train, y_train)<br><br>
+
+# Get selected features<br>
+selected_features = feature_names[selector.get_support()]
+                    </div>
+                </div>
+
+                <div class="content-box">
+                    <h3>RFE with Cross-Validation (RFECV)</h3>
+                    <p>Automatically finds the optimal number of features using cross-validation.</p>
+                    
+                    <div class="code-block">
+from sklearn.feature_selection import RFECV<br><br>
+
+# RFECV automatically selects optimal number of features<br>
+selector_cv = RFECV(estimator, step=1, cv=5, scoring='accuracy')<br>
+X_selected = selector_cv.fit_transform(X_train, y_train)<br><br>
+
+print(f"Optimal number of features: {selector_cv.n_features_}")
+                    </div>
+                </div>
+
+                <div class="content-box">
+                    <h3>SelectFromModel</h3>
+                    <p>Selects features based on importance weights from tree-based models.</p>
+                    
+                    <div class="code-block">
+from sklearn.feature_selection import SelectFromModel<br><br>
+
+# Select features based on importance<br>
+selector_model = SelectFromModel(estimator, threshold='median')<br>
+X_selected = selector_model.fit_transform(X_train, y_train)
+                    </div>
+                </div>
+
+                <div class="performance-box">
+                    <h3>Wrapper Methods - Pros & Cons</h3>
+                    <div class="method-comparison">
+                        <div>
+                            <h4>Advantages:</h4>
+                            <ul>
+                                <li>Considers feature interactions</li>
+                                <li>Model-specific optimization</li>
+                                <li>Better performance</li>
+                                <li>Accounts for model behavior</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>Disadvantages:</h4>
+                            <ul>
+                                <li>Computationally expensive</li>
+                                <li>Risk of overfitting</li>
+                                <li>Model-dependent</li>
+                                <li>Not scalable for large datasets</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="train-test">
+                <h2>4. Train-Test Split Strategy</h2>
+                
+                <div class="content-box">
+                    <h3>Proper Data Splitting</h3>
+                    <p>Critical for unbiased evaluation of feature selection methods.</p>
+                    
+                    <div class="code-block">
+from sklearn.model_selection import train_test_split<br><br>
+
+# Stratified split to maintain class distribution<br>
+X_train, X_test, y_train, y_test = train_test_split(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;X, y, <br>
+&nbsp;&nbsp;&nbsp;&nbsp;test_size=0.3,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# 70% train, 30% test<br>
+&nbsp;&nbsp;&nbsp;&nbsp;random_state=42,&nbsp;&nbsp;&nbsp;&nbsp;# Reproducibility<br>
+&nbsp;&nbsp;&nbsp;&nbsp;stratify=y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Maintain class balance<br>
+)<br><br>
+
+print(f"Training set: {X_train.shape}")<br>
+print(f"Test set: {X_test.shape}")
+                    </div>
+                </div>
+
+                <div class="content-box">
+                    <h3>Feature Selection Workflow</h3>
+                    <ol>
+                        <li><strong>Split data</strong> into train and test sets</li>
+                        <li><strong>Apply feature selection</strong> on training data only</li>
+                        <li><strong>Transform both</strong> train and test sets using fitted selector</li>
+                        <li><strong>Train model</strong> on selected training features</li>
+                        <li><strong>Evaluate</strong> on selected test features</li>
+                    </ol>
+                    
+                    <div class="code-block">
+# Correct workflow<br>
+selector = SelectKBest(f_classif, k=10)<br><br>
+
+# Fit selector on training data only<br>
+X_train_selected = selector.fit_transform(X_train, y_train)<br><br>
+
+# Transform test data using fitted selector<br>
+X_test_selected = selector.transform(X_test)<br><br>
+
+# Train and evaluate model<br>
+model.fit(X_train_selected, y_train)<br>
+predictions = model.predict(X_test_selected)
+                    </div>
+                </div>
+            </section>
+
+            <section id="evaluation">
+                <h2>5. Performance Evaluation</h2>
+                
+                <div class="content-box">
+                    <h3>Training vs Test Performance</h3>
+                    <p>Essential to evaluate both training and test performance to detect overfitting.</p>
+                    
+                    <div class="code-block">
+from sklearn.metrics import accuracy_score, classification_report<br><br>
+
+def evaluate_performance(model, X_train, X_test, y_train, y_test):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;# Train model<br>
+&nbsp;&nbsp;&nbsp;&nbsp;model.fit(X_train, y_train)<br><br>
+    
+&nbsp;&nbsp;&nbsp;&nbsp;# Predictions<br>
+&nbsp;&nbsp;&nbsp;&nbsp;train_pred = model.predict(X_train)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;test_pred = model.predict(X_test)<br><br>
+    
+&nbsp;&nbsp;&nbsp;&nbsp;# Calculate accuracies<br>
+&nbsp;&nbsp;&nbsp;&nbsp;train_acc = accuracy_score(y_train, train_pred)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;test_acc = accuracy_score(y_test, test_pred)<br><br>
+    
+&nbsp;&nbsp;&nbsp;&nbsp;# Overfitting indicator<br>
+&nbsp;&nbsp;&nbsp;&nbsp;overfitting_gap = train_acc - test_acc<br><br>
+    
+&nbsp;&nbsp;&nbsp;&nbsp;return {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'train_accuracy': train_acc,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'test_accuracy': test_acc,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'overfitting_gap': overfitting_gap<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}
+                    </div>
+                </div>
+
+                <div class="content-box">
+                    <h3>Key Evaluation Metrics</h3>
+                    <table class="comparison-table">
+                        <tr>
+                            <th>Metric</th>
+                            <th>Description</th>
+                            <th>Good Range</th>
+                        </tr>
+                        <tr>
+                            <td>Training Accuracy</td>
+                            <td>Performance on training data</td>
+                            <td>High (but not 100%)</td>
+                        </tr>
+                        <tr>
+                            <td>Test Accuracy</td>
+                            <td>Performance on unseen data</td>
+                            <td>Close to training accuracy</td>
+                        </tr>
+                        <tr>
+                            <td>Overfitting Gap</td>
+                            <td>Train accuracy - Test accuracy</td>
+                            <td>< 0.05 (5%)</td>
+                        </tr>
+                        <tr>
+                            <td>Number of Features</td>
+                            <td>Selected feature count</td>
+                            <td>Minimal while maintaining performance</td>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+
+            <section id="implementation">
+                <h2>6. Complete Implementation Example</h2>
+                
+                <div class="content-box">
+                    <h3>Step-by-Step Implementation</h3>
+                    
+                    <div class="code-block">
+# Complete feature selection pipeline
+import numpy as np
+import pandas as pd
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.feature_selection import SelectKBest, f_classif, RFE
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+
+# 1. Load and prepare data
+data = load_breast_cancer()
+X, y = data.data, data.target
+
+# 2. Train-test split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42, stratify=y
+)
+
+# 3. Standardize features
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# 4. Filter method - F-test
+selector_filter = SelectKBest(f_classif, k=10)
+X_train_filter = selector_filter.fit_transform(X_train_scaled, y_train)
+X_test_filter = selector_filter.transform(X_test_scaled)
+
+# 5. Wrapper method - RFE
+estimator = RandomForestClassifier(n_estimators=100, random_state=42)
+selector_wrapper = RFE(estimator, n_features_to_select=10)
+X_train_wrapper = selector_wrapper.fit_transform(X_train_scaled, y_train)
+X_test_wrapper = selector_wrapper.transform(X_test_scaled)
+
+# 6. Evaluate both methods
+def compare_methods():
+    results = {}
+    
+    # Original features
+    model = RandomForestClassifier(random_state=42)
+    model.fit(X_train_scaled, y_train)
+    results['Original'] = {
+        'train_acc': accuracy_score(y_train, model.predict(X_train_scaled)),
+        'test_acc': accuracy_score(y_test, model.predict(X_test_scaled)),
+        'n_features': X_train_scaled.shape[1]
+    }
+    
+    # Filter method
+    model.fit(X_train_filter, y_train)
+    results['Filter'] = {
+        'train_acc': accuracy_score(y_train, model.predict(X_train_filter)),
+        'test_acc': accuracy_score(y_test, model.predict(X_test_filter)),
+        'n_features': X_train_filter.shape[1]
+    }
+    
+    # Wrapper method
+    model.fit(X_train_wrapper, y_train)
+    results['Wrapper'] = {
+        'train_acc': accuracy_score(y_train, model.predict(X_train_wrapper)),
+        'test_acc': accuracy_score(y_test, model.predict(X_test_wrapper)),
+        'n_features': X_train_wrapper.shape[1]
+    }
+    
+    return results
+
+# Run comparison
+results = compare_methods()
+for method, metrics in results.items():
+    print(f"{method}: Train={metrics['train_acc']:.3f}, "
+          f"Test={metrics['test_acc']:.3f}, "
+          f"Features={metrics['n_features']}")
+                    </div>
+                </div>
+            </section>
+
+            <section id="comparison">
+                <h2>7. Method Comparison & Best Practices</h2>
+                
+                <div class="content-box">
+                    <h3>When to Use Each Method</h3>
+                    
+                    <table class="comparison-table">
+                        <tr>
+                            <th>Method</th>
+                            <th>Best For</th>
+                            <th>Dataset Size</th>
+                            <th>Computational Cost</th>
+                        </tr>
+                        <tr>
+                            <td>Filter Methods</td>
+                            <td>Large datasets, preprocessing</td>
+                            <td>Large (>10K features)</td>
+                            <td>Low</td>
+                        </tr>
+                        <tr>
+                            <td>Wrapper Methods</td>
+                            <td>Small-medium datasets, high accuracy</td>
+                            <td>Small-Medium (<1K features)</td>
+                            <td>High</td>
+                        </tr>
+                        <tr>
+                            <td>Embedded Methods</td>
+                            <td>Built-in feature selection</td>
+                            <td>Any</td>
+                            <td>Medium</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="performance-box">
+                    <h3>Best Practices</h3>
+                    <ul>
+                        <li><strong>Always split data first:</strong> Apply feature selection on training data only</li>
+                        <li><strong>Use cross-validation:</strong> For robust feature selection (RFECV)</li>
+                        <li><strong>Consider domain knowledge:</strong> Don't rely solely on statistical measures</li>
+                        <li><strong>Monitor overfitting:</strong> Check training vs test performance</li>
+                        <li><strong>Try multiple methods:</strong> Compare filter and wrapper approaches</li>
+                        <li><strong>Scale features:</strong> Especially important for distance-based methods</li>
+                        <li><strong>Validate results:</strong> Use different train-test splits</li>
+                    </ul>
+                </div>
+
+                <div class="content-box">
+                    <h3>Common Pitfalls to Avoid</h3>
+                    <ul>
+                        <li>❌ Applying feature selection on entire dataset before splitting</li>
+                        <li>❌ Using test data for feature selection</li>
+                        <li>❌ Ignoring feature scaling</li>
+                        <li>❌ Selecting too few features (underfitting)</li>
+                        <li>❌ Not validating feature selection stability</li>
+                        <li>❌ Focusing only on accuracy without considering interpretability</li>
+                    </ul>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="content-box">
+                <h3>Interactive Tutorial</h3>
+                <p>📓 <strong>Jupyter Notebook:</strong> <a href="feature_selection_tutorial.ipynb" download>Download Interactive Tutorial</a></p>
+                <p>Run the notebook for hands-on practice with step-by-step code examples and visualizations.</p>
+                
+                <h3>Summary</h3>
+                <p>Feature selection is crucial for building efficient, interpretable machine learning models. 
+                Choose the right method based on your dataset size, computational resources, and accuracy requirements. 
+                Always validate your approach using proper train-test evaluation.</p>
+                
+                <p><strong>Quick Demo:</strong></p>
+                <div class="code-block">
+python3 simple_feature_selection_demo.py
+                </div>
+                
+                <p><strong>Full Implementation:</strong></p>
+                <div class="code-block">
+python3 feature_selection_implementation.py
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

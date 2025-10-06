@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feature Selection Methods - ML Lecture</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Feature Selection Methods</h1>
+            <p class="subtitle">Filter Methods, Wrapper Methods, and Train-Test Evaluation</p>
+        </header>
+
+        <nav class="lecture-nav">
+            <ul>
+                <li><a href="#introduction">Introduction</a></li>
+                <li><a href="#filter-methods">Filter Methods</a></li>
+                <li><a href="#wrapper-methods">Wrapper Methods</a></li>
+                <li><a href="#train-test">Train-Test Split</a></li>
+                <li><a href="#evaluation">Performance Evaluation</a></li>
+                <li><a href="#implementation">Implementation</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <section id="introduction">
+                <h2>1. Introduction to Feature Selection</h2>
+                <div class="content-box">
+                    <h3>What is Feature Selection?</h3>
+                    <p>Feature selection is the process of selecting a subset of relevant features for use in model construction. It helps:</p>
+                    <ul>
+                        <li>Reduce overfitting</li>
+                        <li>Improve model performance</li>
+                        <li>Reduce training time</li>
+                        <li>Improve data understanding</li>
+                    </ul>
+                </div>
+
+                <div class="content-box">
+                    <h3>Types of Feature Selection</h3>
+                    <div class="method-grid">
+                        <div class="method-card">
+                            <h4>Filter Methods</h4>
+                            <p>Select features based on statistical measures</p>
+                        </div>
+                        <div class="method-card">
+                            <h4>Wrapper Methods</h4>
+                            <p>Use machine learning algorithms to evaluate features</p>
+                        </div>
+                        <div class="method-card">
+                            <h4>Embedded Methods</h4>
+                            <p>Feature selection during model training</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="filter-methods">
+                <h2>2. Filter Methods</h2>
+                <div class="content-box">
+                    <h3>Characteristics</h3>
+                    <ul>
+                        <li>Independent of machine learning algorithms</li>
+                        <li>Fast and computationally efficient</li>
+                        <li>Based on statistical measures</li>
+                    </ul>
+
+                    <h3>Common Filter Methods</h3>
+                    <div class="technique-list">
+                        <div class="technique">
+                            <h4>Correlation Coefficient</h4>
+                            <p>Measures linear relationship between features and target</p>
+                            <code>correlation = df.corr()['target'].abs().sort_values(ascending=False)</code>
+                        </div>
+                        
+                        <div class="technique">
+                            <h4>Chi-Square Test</h4>
+                            <p>Tests independence between categorical features and target</p>
+                            <code>from sklearn.feature_selection import chi2, SelectKBest</code>
+                        </div>
+                        
+                        <div class="technique">
+                            <h4>Mutual Information</h4>
+                            <p>Measures dependency between features and target</p>
+                            <code>from sklearn.feature_selection import mutual_info_classif</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="wrapper-methods">
+                <h2>3. Wrapper Methods</h2>
+                <div class="content-box">
+                    <h3>Characteristics</h3>
+                    <ul>
+                        <li>Use machine learning algorithms for evaluation</li>
+                        <li>More computationally expensive</li>
+                        <li>Consider feature interactions</li>
+                    </ul>
+
+                    <h3>Common Wrapper Methods</h3>
+                    <div class="technique-list">
+                        <div class="technique">
+                            <h4>Forward Selection</h4>
+                            <p>Start with no features, add one at a time</p>
+                        </div>
+                        
+                        <div class="technique">
+                            <h4>Backward Elimination</h4>
+                            <p>Start with all features, remove one at a time</p>
+                        </div>
+                        
+                        <div class="technique">
+                            <h4>Recursive Feature Elimination (RFE)</h4>
+                            <p>Recursively eliminates features based on model weights</p>
+                            <code>from sklearn.feature_selection import RFE</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="train-test">
+                <h2>4. Train-Test Split Strategy</h2>
+                <div class="content-box">
+                    <h3>Why Split Data?</h3>
+                    <ul>
+                        <li>Evaluate model performance on unseen data</li>
+                        <li>Prevent overfitting</li>
+                        <li>Get realistic performance estimates</li>
+                    </ul>
+
+                    <h3>Common Split Ratios</h3>
+                    <div class="split-examples">
+                        <div class="split-card">
+                            <h4>70-30 Split</h4>
+                            <p>70% Training, 30% Testing</p>
+                        </div>
+                        <div class="split-card">
+                            <h4>80-20 Split</h4>
+                            <p>80% Training, 20% Testing</p>
+                        </div>
+                        <div class="split-card">
+                            <h4>60-20-20 Split</h4>
+                            <p>60% Train, 20% Validation, 20% Test</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="evaluation">
+                <h2>5. Performance Evaluation</h2>
+                <div class="content-box">
+                    <h3>Evaluation Metrics</h3>
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <h4>Classification</h4>
+                            <ul>
+                                <li>Accuracy</li>
+                                <li>Precision</li>
+                                <li>Recall</li>
+                                <li>F1-Score</li>
+                            </ul>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Regression</h4>
+                            <ul>
+                                <li>Mean Squared Error</li>
+                                <li>Mean Absolute Error</li>
+                                <li>R² Score</li>
+                                <li>Root Mean Squared Error</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="implementation">
+                <h2>6. Complete Implementation Example</h2>
+                <div class="content-box">
+                    <h3>Step-by-Step Process</h3>
+                    <ol>
+                        <li>Load and prepare data</li>
+                        <li>Apply filter methods</li>
+                        <li>Apply wrapper methods</li>
+                        <li>Split data into train/test sets</li>
+                        <li>Train models with selected features</li>
+                        <li>Evaluate performance on both sets</li>
+                    </ol>
+
+                    <div class="code-example">
+                        <h4>Python Implementation</h4>
+                        <pre><code># See feature_selection_implementation.py for complete code
+from sklearn.model_selection import train_test_split
+from sklearn.feature_selection import SelectKBest, chi2, RFE
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, classification_report
+
+# Load data and apply feature selection
+# Train models and evaluate performance</code></pre>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Machine Learning Lecture Series - Feature Selection Methods</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

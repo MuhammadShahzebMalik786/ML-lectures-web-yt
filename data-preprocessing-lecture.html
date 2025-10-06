@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Preprocessing in Machine Learning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar h3 {
+            margin-bottom: 20px;
+            color: #3498db;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar a {
+            color: #ecf0f1;
+            text-decoration: none;
+            display: block;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #34495e;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.2em;
+        }
+
+        .section {
+            background: white;
+            margin-bottom: 30px;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .section h3 {
+            color: #34495e;
+            margin: 20px 0 15px 0;
+        }
+
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            white-space: pre-line;
+        }
+
+        .highlight {
+            background: #f39c12;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
+        .note {
+            background: #e8f4fd;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .warning {
+            background: #fdf2e8;
+            border-left: 4px solid #f39c12;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+        }
+
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .toggle-btn {
+            display: none;
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+
+        @media (max-width: 768px) {
+            .toggle-btn {
+                display: block;
+            }
+            
+            .sidebar {
+                transform: translateX(-100%);
+                z-index: 999;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+    
+    <div class="container">
+        <nav class="sidebar" id="sidebar">
+            <h3>Data Preprocessing</h3>
+            <ul>
+                <li><a href="#introduction">Introduction</a></li>
+                <li><a href="#why-preprocessing">Why Preprocessing?</a></li>
+                <li><a href="#getting-dataset">Getting Dataset</a></li>
+                <li><a href="#importing-libraries">Importing Libraries</a></li>
+                <li><a href="#importing-dataset">Importing Dataset</a></li>
+                <li><a href="#missing-data">Missing Data</a></li>
+                <li><a href="#categorical-encoding">Categorical Encoding</a></li>
+                <li><a href="#train-test-split">Train-Test Split</a></li>
+                <li><a href="#feature-scaling">Feature Scaling</a></li>
+                <li><a href="#standardization">Standardization</a></li>
+                <li><a href="#normalization">Normalization</a></li>
+                <li><a href="#summary">Summary</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <div class="header">
+                <h1>Data Preprocessing in Machine Learning</h1>
+                <p>Essential steps to prepare your data for machine learning algorithms</p>
+            </div>
+
+            <section id="introduction" class="section">
+                <h2>Introduction to Data Preprocessing</h2>
+                <p>Data preprocessing is the process of transforming raw data into a format that can be effectively used by machine learning algorithms. It's often considered the most crucial step in the machine learning pipeline, as the quality of your data directly impacts the performance of your model.</p>
+                
+                <div class="note">
+                    <strong>Key Point:</strong> "Garbage in, garbage out" - Poor quality data leads to poor model performance, regardless of the algorithm used.
+                </div>
+
+                <h3>What is Data Preprocessing?</h3>
+                <p>Data preprocessing involves several techniques to clean, transform, and prepare data:</p>
+                <ul>
+                    <li>Cleaning data (handling missing values, outliers)</li>
+                    <li>Transforming data (encoding, scaling)</li>
+                    <li>Reducing data (feature selection, dimensionality reduction)</li>
+                    <li>Splitting data (train/test/validation sets)</li>
+                </ul>
+            </section>
+
+            <section id="why-preprocessing" class="section">
+                <h2>Why is Data Preprocessing Needed?</h2>
+                
+                <h3>1. Real-world Data is Messy</h3>
+                <ul>
+                    <li><strong>Missing Values:</strong> Incomplete records due to data collection issues</li>
+                    <li><strong>Inconsistent Formats:</strong> Different date formats, case sensitivity</li>
+                    <li><strong>Outliers:</strong> Extreme values that can skew results</li>
+                    <li><strong>Noise:</strong> Random errors in data collection</li>
+                </ul>
+
+                <h3>2. Algorithm Requirements</h3>
+                <ul>
+                    <li><strong>Numerical Input:</strong> Most ML algorithms require numerical data</li>
+                    <li><strong>Scale Sensitivity:</strong> Algorithms like KNN, SVM are sensitive to feature scales</li>
+                    <li><strong>Distribution Assumptions:</strong> Some algorithms assume normal distribution</li>
+                </ul>
+
+                <h3>3. Performance Optimization</h3>
+                <ul>
+                    <li><strong>Faster Training:</strong> Clean data trains faster</li>
+                    <li><strong>Better Accuracy:</strong> Proper preprocessing improves model performance</li>
+                    <li><strong>Reduced Overfitting:</strong> Good data helps models generalize better</li>
+                </ul>
+
+                <div class="warning">
+                    <strong>Warning:</strong> Skipping preprocessing can lead to biased models, poor performance, and unreliable predictions.
+                </div>
+            </section>
+
+            <section id="getting-dataset" class="section">
+                <h2>Getting Dataset</h2>
+                
+                <h3>Common Data Sources</h3>
+                <ul>
+                    <li><strong>CSV Files:</strong> Most common format for structured data</li>
+                    <li><strong>Databases:</strong> SQL databases, NoSQL databases</li>
+                    <li><strong>APIs:</strong> Web APIs, REST services</li>
+                    <li><strong>Web Scraping:</strong> Extracting data from websites</li>
+                    <li><strong>Public Datasets:</strong> Kaggle, UCI ML Repository, government data</li>
+                </ul>
+
+                <h3>Sample Dataset Structure</h3>
+                <p>For this lecture, we'll use a sample customer dataset:</p>
+                <div class="code-block">
+# Sample dataset: customers.csv<br>
+Country,Age,Salary,Purchased<br>
+France,44,72000,No<br>
+Spain,27,48000,Yes<br>
+Germany,30,54000,No<br>
+Spain,38,61000,No<br>
+Germany,40,,Yes<br>
+France,35,58000,Yes<br>
+Spain,,52000,No<br>
+France,48,79000,Yes<br>
+Germany,50,83000,No<br>
+France,37,67000,Yes
+                </div>
+            </section>
+
+            <section id="importing-libraries" class="section">
+                <h2>Importing Libraries</h2>
+                
+                <h3>Essential Python Libraries for Data Preprocessing</h3>
+                
+                <div class="code-block">
+# Data manipulation and analysis<br>
+import pandas as pd<br>
+import numpy as np<br>
+<br>
+# Data visualization<br>
+import matplotlib.pyplot as plt<br>
+import seaborn as sns<br>
+<br>
+# Machine learning preprocessing<br>
+from sklearn.model_selection import train_test_split<br>
+from sklearn.preprocessing import StandardScaler, MinMaxScaler<br>
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder<br>
+from sklearn.impute import SimpleImputer<br>
+<br>
+# Ignore warnings for cleaner output<br>
+import warnings<br>
+warnings.filterwarnings('ignore')
+                </div>
+
+                <h3>Library Functions Overview</h3>
+                <ul>
+                    <li><strong>pandas:</strong> Data manipulation, reading/writing files</li>
+                    <li><strong>numpy:</strong> Numerical operations, array handling</li>
+                    <li><strong>sklearn:</strong> Machine learning preprocessing tools</li>
+                    <li><strong>matplotlib/seaborn:</strong> Data visualization</li>
+                </ul>
+
+                <div class="note">
+                    <strong>Installation:</strong> pip install pandas numpy scikit-learn matplotlib seaborn
+                </div>
+            </section>
+
+            <section id="importing-dataset" class="section">
+                <h2>Importing Dataset</h2>
+                
+                <h3>Reading Data with Pandas</h3>
+                <div class="code-block">
+# Import the dataset
+dataset = pd.read_csv('customers.csv')
+
+# Display basic information about the dataset
+print("Dataset shape:", dataset.shape)
+print("\nFirst 5 rows:")
+print(dataset.head())
+
+print("\nDataset info:")
+print(dataset.info())
+
+print("\nStatistical summary:")
+print(dataset.describe())
+                </div>
+
+                <h3>Exploring the Dataset</h3>
+                <div class="code-block">
+# Check for missing values
+print("Missing values per column:")
+print(dataset.isnull().sum())
+
+# Check data types
+print("\nData types:")
+print(dataset.dtypes)
+
+# Check unique values in categorical columns
+print("\nUnique countries:", dataset['Country'].unique())
+print("Unique purchased values:", dataset['Purchased'].unique())
+                </div>
+
+                <h3>Separating Features and Target</h3>
+                <div class="code-block">
+# Separate independent variables (features) and dependent variable (target)
+X = dataset.iloc[:, :-1].values  # All columns except the last one
+y = dataset.iloc[:, -1].values   # Last column (target variable)
+
+print("Features shape:", X.shape)
+print("Target shape:", y.shape)
+print("\nFeatures (first 5 rows):")
+print(X[:5])
+print("\nTarget (first 5 values):")
+print(y[:5])
+                </div>
+            </section>
+
+            <section id="missing-data" class="section">
+                <h2>Handling Missing Data</h2>
+                
+                <h3>Why Missing Data Occurs</h3>
+                <ul>
+                    <li><strong>Data collection errors:</strong> Sensor failures, human errors</li>
+                    <li><strong>Privacy concerns:</strong> Users not providing sensitive information</li>
+                    <li><strong>System issues:</strong> Database corruption, network problems</li>
+                    <li><strong>Survey non-response:</strong> Participants skipping questions</li>
+                </ul>
+
+                <h3>Types of Missing Data</h3>
+                <ul>
+                    <li><strong>MCAR (Missing Completely at Random):</strong> Missing values are random</li>
+                    <li><strong>MAR (Missing at Random):</strong> Missing depends on observed data</li>
+                    <li><strong>MNAR (Missing Not at Random):</strong> Missing depends on unobserved data</li>
+                </ul>
+
+                <h3>Strategies for Handling Missing Data</h3>
+                
+                <h4>1. Deletion Methods</h4>
+                <div class="code-block">
+# Remove rows with any missing values
+dataset_dropna = dataset.dropna()
+print("Original shape:", dataset.shape)
+print("After dropping NaN:", dataset_dropna.shape)
+
+# Remove columns with missing values
+dataset_drop_cols = dataset.dropna(axis=1)
+print("After dropping columns with NaN:", dataset_drop_cols.shape)
+                </div>
+
+                <h4>2. Imputation Methods</h4>
+                <div class="code-block">
+# Using SimpleImputer for numerical data
+from sklearn.impute import SimpleImputer
+
+# Create imputer for numerical columns (Age, Salary)
+imputer = SimpleImputer(missing_values=np.nan, strategy='mean')
+
+# Fit and transform numerical columns (columns 1 and 2: Age and Salary)
+X[:, 1:3] = imputer.fit_transform(X[:, 1:3])
+
+print("After imputation (first 10 rows):")
+print(X[:10])
+                </div>
+
+                <h4>3. Different Imputation Strategies</h4>
+                <div class="code-block">
+# Mean imputation (for numerical data)
+imputer_mean = SimpleImputer(strategy='mean')
+
+# Median imputation (robust to outliers)
+imputer_median = SimpleImputer(strategy='median')
+
+# Mode imputation (for categorical data)
+imputer_mode = SimpleImputer(strategy='most_frequent')
+
+# Constant imputation
+imputer_constant = SimpleImputer(strategy='constant', fill_value=0)
+
+# Example: Using median for salary column
+X_copy = X.copy()
+X_copy[:, 2:3] = imputer_median.fit_transform(X_copy[:, 2:3])
+                </div>
+
+                <div class="warning">
+                    <strong>Important:</strong> Always fit the imputer on training data only, then transform both training and test data to avoid data leakage.
+            </section>
+
+            <section id="categorical-encoding" class="section">
+                <h2>Encoding Categorical Data</h2>
+                
+                <h3>Why Encode Categorical Data?</h3>
+                <p>Machine learning algorithms work with numerical data. Categorical data (text labels) must be converted to numerical format.</p>
+
+                <h3>Types of Categorical Data</h3>
+                <ul>
+                    <li><strong>Nominal:</strong> No inherent order (Country: France, Spain, Germany)</li>
+                    <li><strong>Ordinal:</strong> Has order (Education: High School < Bachelor < Master < PhD)</li>
+                </ul>
+
+                <h3>1. Label Encoding</h3>
+                <p>Converts categories to integers (0, 1, 2, ...)</p>
+                <div class="code-block">
+from sklearn.preprocessing import LabelEncoder
+
+# Encode the target variable (Purchased: No=0, Yes=1)
+label_encoder_y = LabelEncoder()
+y = label_encoder_y.fit_transform(y)
+
+print("Original target values:", dataset['Purchased'].unique())
+print("Encoded target values:", np.unique(y))
+print("Mapping: No=0, Yes=1")
+                </div>
+
+                <h3>2. One-Hot Encoding</h3>
+                <p>Creates binary columns for each category (recommended for nominal data)</p>
+                <div class="code-block">
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder
+
+# One-hot encode the Country column (column 0)
+ct = ColumnTransformer(
+    transformers=[('encoder', OneHotEncoder(), [0])],
+    remainder='passthrough'
+)
+
+X = np.array(ct.fit_transform(X))
+
+print("Shape after one-hot encoding:", X.shape)
+print("First 5 rows after encoding:")
+print(X[:5])
+
+# The columns are now: [France, Germany, Spain, Age, Salary]
+                </div>
+
+                <h3>3. Manual One-Hot Encoding with Pandas</h3>
+                <div class="code-block">
+# Alternative method using pandas
+df = pd.DataFrame(dataset)
+
+# Create dummy variables for Country
+country_dummies = pd.get_dummies(df['Country'], prefix='Country')
+print("Country dummy variables:")
+print(country_dummies.head())
+
+# Combine with other features
+df_encoded = pd.concat([country_dummies, df[['Age', 'Salary']]], axis=1)
+print("\nFinal encoded dataset:")
+print(df_encoded.head())
+                </div>
+
+                <div class="note">
+                    <strong>Dummy Variable Trap:</strong> When using one-hot encoding, you can drop one column to avoid multicollinearity (n categories → n-1 columns).
+                </div>
+            </section>
+
+            <section id="train-test-split" class="section">
+                <h2>Splitting Dataset into Train-Test Sets</h2>
+                
+                <h3>Why Split the Data?</h3>
+                <ul>
+                    <li><strong>Training Set:</strong> Used to train the model</li>
+                    <li><strong>Test Set:</strong> Used to evaluate model performance on unseen data</li>
+                    <li><strong>Validation Set:</strong> Used for hyperparameter tuning (optional)</li>
+                </ul>
+
+                <h3>Common Split Ratios</h3>
+                <ul>
+                    <li><strong>80-20:</strong> 80% training, 20% testing</li>
+                    <li><strong>70-30:</strong> 70% training, 30% testing</li>
+                    <li><strong>60-20-20:</strong> 60% training, 20% validation, 20% testing</li>
+                </ul>
+
+                <h3>Implementation</h3>
+                <div class="code-block">
+from sklearn.model_selection import train_test_split
+
+# Split the dataset (80% train, 20% test)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, 
+    test_size=0.2,      # 20% for testing
+    random_state=42,    # For reproducible results
+    stratify=y          # Maintain class distribution
+)
+
+print("Training set shape:", X_train.shape)
+print("Test set shape:", X_test.shape)
+print("Training target shape:", y_train.shape)
+print("Test target shape:", y_test.shape)
+
+# Check class distribution
+print("\nClass distribution in training set:")
+unique, counts = np.unique(y_train, return_counts=True)
+print(dict(zip(unique, counts)))
+
+print("\nClass distribution in test set:")
+unique, counts = np.unique(y_test, return_counts=True)
+print(dict(zip(unique, counts)))
+                </div>
+
+                <h3>Advanced Splitting Techniques</h3>
+                <div class="code-block">
+# Time series split (for temporal data)
+from sklearn.model_selection import TimeSeriesSplit
+
+# K-fold cross-validation split
+from sklearn.model_selection import KFold
+
+# Stratified K-fold (maintains class distribution)
+from sklearn.model_selection import StratifiedKFold
+
+# Example: 5-fold cross-validation
+kfold = KFold(n_splits=5, shuffle=True, random_state=42)
+for train_idx, val_idx in kfold.split(X_train):
+    X_fold_train, X_fold_val = X_train[train_idx], X_train[val_idx]
+    y_fold_train, y_fold_val = y_train[train_idx], y_train[val_idx]
+    # Train and validate model here
+                </div>
+
+                <div class="warning">
+                    <strong>Important:</strong> Never use test data for any preprocessing decisions. Fit preprocessing on training data only!
+                </div>
+            </section>
+
+            <section id="feature-scaling" class="section">
+                <h2>Feature Scaling</h2>
+                
+                <h3>What is Feature Scaling?</h3>
+                <p>Feature scaling transforms features to similar scales to prevent features with larger ranges from dominating the learning process.</p>
+
+                <h3>When is Feature Scaling Needed?</h3>
+                <ul>
+                    <li><strong>Distance-based algorithms:</strong> KNN, K-means, SVM</li>
+                    <li><strong>Gradient-based algorithms:</strong> Neural networks, logistic regression</li>
+                    <li><strong>Regularized algorithms:</strong> Ridge, Lasso regression</li>
+                </ul>
+
+                <h3>When Feature Scaling is NOT Needed</h3>
+                <ul>
+                    <li><strong>Tree-based algorithms:</strong> Decision trees, Random Forest, XGBoost</li>
+                    <li><strong>Naive Bayes</strong></li>
+                </ul>
+
+                <h3>Example: Why Scaling Matters</h3>
+                <div class="code-block">
+# Example data showing the scale difference
+print("Sample data before scaling:")
+print("Age range:", X_train[:, -2].min(), "to", X_train[:, -2].max())
+print("Salary range:", X_train[:, -1].min(), "to", X_train[:, -1].max())
+
+# Age: 27-50, Salary: 48000-83000
+# Without scaling, salary will dominate distance calculations!
+                </div>
+
+                <h3>Types of Feature Scaling</h3>
+                <p>There are two main approaches: <span class="highlight">Standardization</span> and <span class="highlight">Normalization</span></p>
+            </section>
+
+            <section id="standardization" class="section">
+                <h2>Standardization (Z-score Normalization)</h2>
+                
+                <h3>Formula</h3>
+                <p><strong>z = (x - μ) / σ</strong></p>
+                <ul>
+                    <li>μ = mean of the feature</li>
+                    <li>σ = standard deviation of the feature</li>
+                    <li>Result: mean = 0, standard deviation = 1</li>
+                </ul>
+
+                <h3>When to Use Standardization</h3>
+                <ul>
+                    <li>Data follows normal distribution</li>
+                    <li>Features have different units (age vs salary)</li>
+                    <li>Presence of outliers (standardization is less sensitive)</li>
+                    <li>Most common choice for feature scaling</li>
+                </ul>
+
+                <h3>Implementation</h3>
+                <div class="code-block">
+from sklearn.preprocessing import StandardScaler
+
+# Create StandardScaler object
+sc = StandardScaler()
+
+# Fit on training data and transform both training and test data
+# Only scale numerical features (last 2 columns: Age and Salary)
+X_train[:, -2:] = sc.fit_transform(X_train[:, -2:])
+X_test[:, -2:] = sc.transform(X_test[:, -2:])
+
+print("After standardization:")
+print("Training data (first 5 rows):")
+print(X_train[:5])
+
+print("\nMean of scaled features (should be ~0):")
+print("Age mean:", np.mean(X_train[:, -2]))
+print("Salary mean:", np.mean(X_train[:, -1]))
+
+print("\nStd of scaled features (should be ~1):")
+print("Age std:", np.std(X_train[:, -2]))
+print("Salary std:", np.std(X_train[:, -1]))
+                </div>
+
+                <h3>Manual Standardization</h3>
+                <div class="code-block">
+# Manual implementation for understanding
+def manual_standardization(X_train, X_test):
+    # Calculate mean and std from training data
+    mean = np.mean(X_train, axis=0)
+    std = np.std(X_train, axis=0)
+    
+    # Apply to both training and test data
+    X_train_scaled = (X_train - mean) / std
+    X_test_scaled = (X_test - mean) / std
+    
+    return X_train_scaled, X_test_scaled
+
+# Example usage
+age_salary_train = X_train[:, -2:].astype(float)
+age_salary_test = X_test[:, -2:].astype(float)
+scaled_train, scaled_test = manual_standardization(age_salary_train, age_salary_test)
+                </div>
+            </section>
+
+            <section id="normalization" class="section">
+                <h2>Normalization (Min-Max Scaling)</h2>
+                
+                <h3>Formula</h3>
+                <p><strong>x_norm = (x - min) / (max - min)</strong></p>
+                <ul>
+                    <li>Result: values between 0 and 1</li>
+                    <li>Preserves the original distribution shape</li>
+                    <li>All features have the same scale [0, 1]</li>
+                </ul>
+
+                <h3>When to Use Normalization</h3>
+                <ul>
+                    <li>Data doesn't follow normal distribution</li>
+                    <li>You want to preserve the original distribution</li>
+                    <li>Neural networks (often prefer [0, 1] range)</li>
+                    <li>When you know the approximate upper and lower bounds</li>
+                </ul>
+
+                <h3>Implementation</h3>
+                <div class="code-block">
+from sklearn.preprocessing import MinMaxScaler
+
+# Create MinMaxScaler object
+scaler = MinMaxScaler()
+
+# Reset data for demonstration
+X_train_norm = X_train.copy()
+X_test_norm = X_test.copy()
+
+# Fit on training data and transform both sets
+X_train_norm[:, -2:] = scaler.fit_transform(X_train_norm[:, -2:])
+X_test_norm[:, -2:] = scaler.transform(X_test_norm[:, -2:])
+
+print("After normalization:")
+print("Training data (first 5 rows):")
+print(X_train_norm[:5])
+
+print("\nMin values (should be ~0):")
+print("Age min:", np.min(X_train_norm[:, -2]))
+print("Salary min:", np.min(X_train_norm[:, -1]))
+
+print("\nMax values (should be ~1):")
+print("Age max:", np.max(X_train_norm[:, -2]))
+print("Salary max:", np.max(X_train_norm[:, -1]))
+                </div>
+
+                <h3>Custom Range Normalization</h3>
+                <div class="code-block">
+# Normalize to custom range [a, b]
+scaler_custom = MinMaxScaler(feature_range=(-1, 1))  # Range [-1, 1]
+
+# Or manual implementation
+def normalize_to_range(X, min_val=0, max_val=1):
+    X_min = np.min(X, axis=0)
+    X_max = np.max(X, axis=0)
+    X_scaled = (X - X_min) / (X_max - X_min)
+    return X_scaled * (max_val - min_val) + min_val
+
+# Example: normalize to [-1, 1]
+X_custom = normalize_to_range(X_train[:, -2:], -1, 1)
+print("Custom range [-1, 1]:")
+print("Min:", np.min(X_custom, axis=0))
+print("Max:", np.max(X_custom, axis=0))
+                </div>
+
+                <h3>Standardization vs Normalization Comparison</h3>
+                <div class="code-block">
+# Comparison table
+import pandas as pd
+
+comparison = pd.DataFrame({
+    'Aspect': ['Output Range', 'Distribution', 'Outlier Sensitivity', 'Use Case'],
+    'Standardization': ['(-∞, +∞)', 'Normal (μ=0, σ=1)', 'Less sensitive', 'Most algorithms'],
+    'Normalization': ['[0, 1]', 'Preserves original', 'More sensitive', 'Neural networks, bounded data']
+})
+
+print(comparison.to_string(index=False))
+                </div>
+
+                <div class="note">
+                    <strong>Key Rule:</strong> Always fit the scaler on training data only, then transform both training and test data using the same scaler parameters.
+                </div>
+            </section>
+
+            <section id="summary" class="section">
+                <h2>Summary</h2>
+                
+                <h3>Complete Data Preprocessing Pipeline</h3>
+                <div class="code-block">
+# Complete preprocessing pipeline example
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler, LabelEncoder, OneHotEncoder
+from sklearn.compose import ColumnTransformer
+from sklearn.impute import SimpleImputer
+
+def preprocess_data(file_path):
+    # 1. Load dataset
+    dataset = pd.read_csv(file_path)
+    
+    # 2. Separate features and target
+    X = dataset.iloc[:, :-1].values
+    y = dataset.iloc[:, -1].values
+    
+    # 3. Handle missing data
+    imputer = SimpleImputer(missing_values=np.nan, strategy='mean')
+    X[:, 1:3] = imputer.fit_transform(X[:, 1:3])
+    
+    # 4. Encode categorical data
+    # One-hot encode independent variable
+    ct = ColumnTransformer(
+        transformers=[('encoder', OneHotEncoder(), [0])],
+        remainder='passthrough'
+    )
+    X = np.array(ct.fit_transform(X))
+    
+    # Label encode dependent variable
+    le = LabelEncoder()
+    y = le.fit_transform(y)
+    
+    # 5. Split dataset
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42
+    )
+    
+    # 6. Feature scaling
+    sc = StandardScaler()
+    X_train[:, 3:] = sc.fit_transform(X_train[:, 3:])
+    X_test[:, 3:] = sc.transform(X_test[:, 3:])
+    
+    return X_train, X_test, y_train, y_test
+
+# Usage
+# X_train, X_test, y_train, y_test = preprocess_data('customers.csv')
+                </div>
+
+                <h3>Key Takeaways</h3>
+                <ul>
+                    <li><strong>Data Quality:</strong> Good preprocessing is crucial for model performance</li>
+                    <li><strong>Missing Data:</strong> Choose appropriate strategy based on data type and missingness pattern</li>
+                    <li><strong>Categorical Encoding:</strong> Use label encoding for ordinal, one-hot for nominal data</li>
+                    <li><strong>Train-Test Split:</strong> Always split before preprocessing to avoid data leakage</li>
+                    <li><strong>Feature Scaling:</strong> Choose standardization or normalization based on data distribution and algorithm requirements</li>
+                    <li><strong>Fit-Transform Rule:</strong> Fit on training data, transform both training and test data</li>
+                </ul>
+
+                <h3>Best Practices</h3>
+                <ol>
+                    <li>Understand your data first (EDA - Exploratory Data Analysis)</li>
+                    <li>Handle missing data appropriately</li>
+                    <li>Choose encoding methods based on data type</li>
+                    <li>Split data before any preprocessing</li>
+                    <li>Scale features when necessary</li>
+                    <li>Document your preprocessing steps</li>
+                    <li>Create reusable preprocessing pipelines</li>
+                </ol>
+
+                <div class="note">
+                    <strong>Next Steps:</strong> After preprocessing, your data is ready for machine learning algorithms. The quality of preprocessing directly impacts model performance, so invest time in this crucial step!
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steps of Machine Learning – ML Lecture</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar h3 {
+            margin-bottom: 20px;
+            color: #3498db;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 8px 12px;
+            display: block;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #34495e;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 40px;
+            flex: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.2em;
+        }
+
+        .step-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .step-number {
+            background: #3498db;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .step-title {
+            color: #2c3e50;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .step-description {
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .step-points {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .step-points li {
+            background: #f8f9fa;
+            padding: 8px 15px;
+            margin-bottom: 8px;
+            border-left: 4px solid #3498db;
+            border-radius: 4px;
+        }
+
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <h3>ML Lectures</h3>
+            <ul>
+                <li><a href="ml-lecture-1.html">Introduction to ML</a></li>
+                <li><a href="ml-lecture-2.html">Types of Learning</a></li>
+                <li><a href="ml-lecture-3.html">Linear Regression</a></li>
+                <li><a href="ml-lecture-steps.html">Steps of ML</a></li>
+                <li><a href="ml_visualizations.html">ML Visualizations</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <div class="header">
+                <h1>Steps of Machine Learning</h1>
+                <p>A comprehensive guide to the ML workflow</p>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <h2 class="step-title">Gathering Data</h2>
+                <p class="step-description">The foundation of any ML project is collecting relevant and quality data from various sources.</p>
+                <ul class="step-points">
+                    <li>Collect data from databases, APIs, web scraping</li>
+                    <li>Ensure data quality and sufficient quantity</li>
+                    <li>Consider data sources and formats (CSV, JSON, databases)</li>
+                    <li>Verify data relevance to the problem</li>
+                </ul>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <h2 class="step-title">Preparing the Data</h2>
+                <p class="step-description">Clean and preprocess the raw data to make it suitable for machine learning algorithms.</p>
+                <ul class="step-points">
+                    <li>Handle missing values (imputation, removal)</li>
+                    <li>Remove outliers and noise from data</li>
+                    <li>Feature scaling and normalization</li>
+                    <li>Split data into training and testing sets</li>
+                    <li>Encode categorical variables</li>
+                </ul>
+                <div class="code-block">
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)</div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <h2 class="step-title">Choosing the Model</h2>
+                <p class="step-description">Select the most appropriate algorithm based on your problem type and data characteristics.</p>
+                <ul class="step-points">
+                    <li>Linear Regression for continuous predictions</li>
+                    <li>Decision Trees for interpretable models</li>
+                    <li>Random Forest for robust performance</li>
+                    <li>SVM for high-dimensional data</li>
+                    <li>Neural Networks for complex patterns</li>
+                </ul>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">4</div>
+                <h2 class="step-title">Training</h2>
+                <p class="step-description">Feed the training data to the chosen algorithm so it can learn patterns and relationships.</p>
+                <ul class="step-points">
+                    <li>Fit the model to training data</li>
+                    <li>Algorithm learns patterns and relationships</li>
+                    <li>Model parameters are optimized</li>
+                    <li>Monitor training progress and convergence</li>
+                </ul>
+                <div class="code-block">
+model = LinearRegression()
+model.fit(X_train, y_train)</div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">5</div>
+                <h2 class="step-title">Evaluation</h2>
+                <p class="step-description">Test the trained model's performance on unseen data to assess its effectiveness.</p>
+                <ul class="step-points">
+                    <li>Accuracy, Precision, Recall, F1-score</li>
+                    <li>Cross-validation techniques</li>
+                    <li>Confusion matrix analysis</li>
+                    <li>ROC curves and AUC scores</li>
+                    <li>Mean Squared Error for regression</li>
+                </ul>
+                <div class="code-block">
+from sklearn.metrics import accuracy_score
+predictions = model.predict(X_test)
+accuracy = accuracy_score(y_test, predictions)</div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">6</div>
+                <h2 class="step-title">Hyperparameter Tuning</h2>
+                <p class="step-description">Optimize model parameters to achieve better performance and avoid overfitting.</p>
+                <ul class="step-points">
+                    <li>Grid search for systematic parameter exploration</li>
+                    <li>Random search for efficient parameter sampling</li>
+                    <li>Adjust learning rate, regularization parameters</li>
+                    <li>Use cross-validation for parameter selection</li>
+                    <li>Bayesian optimization for complex spaces</li>
+                </ul>
+                <div class="code-block">
+from sklearn.model_selection import GridSearchCV
+param_grid = {'C': [0.1, 1, 10], 'gamma': [0.001, 0.01, 0.1]}
+grid_search = GridSearchCV(model, param_grid, cv=5)</div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">7</div>
+                <h2 class="step-title">Prediction</h2>
+                <p class="step-description">Use the trained and optimized model to make predictions on new, unseen data.</p>
+                <ul class="step-points">
+                    <li>Deploy model for real-world applications</li>
+                    <li>Make predictions on new data</li>
+                    <li>Monitor model performance over time</li>
+                    <li>Implement model versioning and updates</li>
+                    <li>Handle model drift and retraining</li>
+                </ul>
+                <div class="code-block">
+# Make predictions on new data
+new_predictions = model.predict(X_new)
+print(f"Predictions: {new_predictions}")</div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

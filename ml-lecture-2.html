@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classification vs Regression – Second Lecture</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar h3 {
+            margin-bottom: 20px;
+            color: #3498db;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 8px 12px;
+            display: block;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .sidebar a:hover {
+            background: #34495e;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            flex: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .play-button {
+            width: 80px;
+            height: 80px;
+            background: #e74c3c;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .play-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 25px rgba(231, 76, 60, 0.3);
+        }
+
+        .play-button::before {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 20px solid white;
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            margin-left: 5px;
+        }
+
+        .play-button.playing {
+            background: #27ae60;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .section {
+            background: white;
+            margin-bottom: 30px;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .section h3 {
+            color: #34495e;
+            margin: 20px 0 10px 0;
+        }
+
+        .demo-container {
+            background: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .comparison-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border-left: 5px solid #3498db;
+        }
+
+        .regression-card {
+            border-left-color: #e74c3c;
+        }
+
+        .btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+        }
+
+        .mobile-menu {
+            display: none;
+            background: #2c3e50;
+            color: white;
+            padding: 15px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                z-index: 1000;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-menu" onclick="toggleSidebar()">
+        ☰ Menu
+    </div>
+
+    <div class="container">
+        <nav class="sidebar" id="sidebar">
+            <h3>Lecture Navigation</h3>
+            <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#classification">Classification</a></li>
+                <li><a href="#regression">Regression</a></li>
+                <li><a href="#comparison">Key Differences</a></li>
+                <li><a href="#examples">Real Examples</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <header class="header">
+                <h1>Classification vs Regression</h1>
+                <p>Second Lecture - 3 Minutes</p>
+                <div class="play-button" onclick="startLecture()" id="playBtn"></div>
+                <p id="lectureStatus">Click to start the lecture</p>
+            </header>
+
+            <section class="section" id="overview">
+                <h2>Two Main Types of Supervised Learning</h2>
+                <div class="demo-container">
+                    <svg width="600" height="200" viewBox="0 0 600 200" style="max-width: 100%;">
+                        <!-- Supervised Learning Box -->
+                        <rect x="200" y="20" width="200" height="60" fill="#3498db" stroke="#2980b9" stroke-width="2" rx="5"/>
+                        <text x="300" y="45" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Supervised Learning</text>
+                        <text x="300" y="65" text-anchor="middle" fill="white" font-size="12">(Labeled Data)</text>
+                        
+                        <!-- Classification -->
+                        <rect x="100" y="120" width="150" height="60" fill="#e74c3c" stroke="#c0392b" stroke-width="2" rx="5"/>
+                        <text x="175" y="145" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Classification</text>
+                        <text x="175" y="165" text-anchor="middle" fill="white" font-size="11">Discrete Output</text>
+                        
+                        <!-- Regression -->
+                        <rect x="350" y="120" width="150" height="60" fill="#27ae60" stroke="#229954" stroke-width="2" rx="5"/>
+                        <text x="425" y="145" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Regression</text>
+                        <text x="425" y="165" text-anchor="middle" fill="white" font-size="11">Continuous Output</text>
+                        
+                        <!-- Arrows -->
+                        <line x1="250" y1="80" x2="200" y2="115" stroke="#2c3e50" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        <line x1="350" y1="80" x2="400" y2="115" stroke="#2c3e50" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        
+                        <defs>
+                            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="#2c3e50"/>
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+                <p><strong>Key Question:</strong> What type of output are we predicting?</p>
+                <ul>
+                    <li><strong>Classification:</strong> Predicts categories (Yes/No, Cat/Dog/Bird)</li>
+                    <li><strong>Regression:</strong> Predicts numbers (Price, Temperature, Age)</li>
+                </ul>
+            </section>
+
+            <section class="section" id="classification">
+                <h2>Classification: Predicting Categories</h2>
+                <div class="demo-container">
+                    <h3>Email Spam Detection Example</h3>
+                    <svg width="600" height="300" viewBox="0 0 600 300" style="max-width: 100%;">
+                        <!-- Input Features -->
+                        <rect x="50" y="50" width="120" height="200" fill="#ecf0f1" stroke="#bdc3c7" stroke-width="1" rx="5"/>
+                        <text x="110" y="40" text-anchor="middle" font-size="12" font-weight="bold">Input Features</text>
+                        
+                        <text x="60" y="80" font-size="10">• Contains "FREE"</text>
+                        <text x="60" y="100" font-size="10">• Multiple !!!</text>
+                        <text x="60" y="120" font-size="10">• Unknown sender</text>
+                        <text x="60" y="140" font-size="10">• Urgent language</text>
+                        <text x="60" y="160" font-size="10">• Suspicious links</text>
+                        <text x="60" y="180" font-size="10">• Poor grammar</text>
+                        <text x="60" y="200" font-size="10">• Time sent</text>
+                        <text x="60" y="220" font-size="10">• Email length</text>
+                        
+                        <!-- Algorithm Box -->
+                        <rect x="240" y="100" width="120" height="100" fill="#3498db" stroke="#2980b9" stroke-width="2" rx="5"/>
+                        <text x="300" y="130" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Classification</text>
+                        <text x="300" y="150" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Algorithm</text>
+                        <text x="300" y="170" text-anchor="middle" fill="white" font-size="10">(Decision Tree,</text>
+                        <text x="300" y="185" text-anchor="middle" fill="white" font-size="10">SVM, etc.)</text>
+                        
+                        <!-- Output -->
+                        <rect x="430" y="80" width="120" height="140" fill="#e74c3c" stroke="#c0392b" stroke-width="2" rx="5"/>
+                        <text x="490" y="70" text-anchor="middle" font-size="12" font-weight="bold">Output Classes</text>
+                        
+                        <!-- Spam -->
+                        <circle cx="460" cy="120" r="25" fill="#e74c3c" stroke="white" stroke-width="2"/>
+                        <text x="460" y="125" text-anchor="middle" fill="white" font-size="11" font-weight="bold">SPAM</text>
+                        
+                        <!-- Not Spam -->
+                        <circle cx="520" cy="180" r="25" fill="#27ae60" stroke="white" stroke-width="2"/>
+                        <text x="520" y="175" text-anchor="middle" fill="white" font-size="9" font-weight="bold">NOT</text>
+                        <text x="520" y="188" text-anchor="middle" fill="white" font-size="9" font-weight="bold">SPAM</text>
+                        
+                        <!-- Arrows -->
+                        <line x1="170" y1="150" x2="235" y2="150" stroke="#2c3e50" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        <line x1="365" y1="150" x2="425" y2="150" stroke="#2c3e50" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        
+                        <!-- Decision Boundary Visualization -->
+                        <text x="300" y="270" text-anchor="middle" font-size="11" font-weight="bold">Decision: Discrete Categories</text>
+                    </svg>
+                </div>
+                
+                <h3>Classification Characteristics:</h3>
+                <ul>
+                    <li>Output is a <strong>category</strong> or <strong>class</strong></li>
+                    <li>Examples: Spam/Not Spam, Cat/Dog, Pass/Fail</li>
+                    <li>Uses decision boundaries to separate classes</li>
+                    <li>Accuracy measured by correct classifications</li>
+                </ul>
+            </section>
+
+            <section class="section" id="regression">
+                <h2>Regression: Predicting Numbers</h2>
+                <div class="demo-container">
+                    <h3>House Price Prediction Example</h3>
+                    <svg width="600" height="300" viewBox="0 0 600 300" style="max-width: 100%;">
+                        <!-- Input Features -->
+                        <rect x="50" y="50" width="120" height="200" fill="#ecf0f1" stroke="#bdc3c7" stroke-width="1" rx="5"/>
+                        <text x="110" y="40" text-anchor="middle" font-size="12" font-weight="bold">Input Features</text>
+                        
+                        <text x="60" y="80" font-size="10">• Square footage</text>
+                        <text x="60" y="100" font-size="10">• Bedrooms: 3</text>
+                        <text x="60" y="120" font-size="10">• Bathrooms: 2</text>
+                        <text x="60" y="140" font-size="10">• Location score</text>
+                        <text x="60" y="160" font-size="10">• Age: 10 years</text>
+                        <text x="60" y="180" font-size="10">• Garage spaces</text>
+                        <text x="60" y="200" font-size="10">• School rating</text>
+                        <text x="60" y="220" font-size="10">• Crime rate</text>
+                        
+                        <!-- Algorithm Box -->
+                        <rect x="240" y="100" width="120" height="100" fill="#27ae60" stroke="#229954" stroke-width="2" rx="5"/>
+                        <text x="300" y="130" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Regression</text>
+                        <text x="300" y="150" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Algorithm</text>
+                        <text x="300" y="170" text-anchor="middle" fill="white" font-size="10">(Linear Regression,</text>
+                        <text x="300" y="185" text-anchor="middle" fill="white" font-size="10">Random Forest)</text>
+                        
+                        <!-- Output -->
+                        <rect x="430" y="80" width="120" height="140" fill="#f39c12" stroke="#e67e22" stroke-width="2" rx="5"/>
+                        <text x="490" y="70" text-anchor="middle" font-size="12" font-weight="bold">Predicted Price</text>
+                        
+                        <!-- Price Display -->
+                        <text x="490" y="120" text-anchor="middle" font-size="20" font-weight="bold" fill="white">$425,000</text>
+                        
+                        <!-- Range indicator -->
+                        <rect x="440" y="140" width="100" height="20" fill="none" stroke="white" stroke-width="1" rx="10"/>
+                        <rect x="440" y="140" width="75" height="20" fill="white" rx="10"/>
+                        <text x="490" y="180" text-anchor="middle" font-size="9" fill="white">Confidence: 85%</text>
+                        
+                        <!-- Arrows -->
+                        <line x1="170" y1="150" x2="235" y2="150" stroke="#2c3e50" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        <line x1="365" y1="150" x2="425" y2="150" stroke="#2c3e50" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        
+                        <!-- Continuous Scale -->
+                        <line x1="430" y1="250" x2="550" y2="250" stroke="#2c3e50" stroke-width="2"/>
+                        <text x="400" y="255" font-size="9">$300K</text>
+                        <text x="560" y="255" font-size="9">$600K</text>
+                        <circle cx="485" cy="250" r="3" fill="#e74c3c"/>
+                        <text x="490" y="270" text-anchor="middle" font-size="11" font-weight="bold">Continuous Output</text>
+                    </svg>
+                </div>
+                
+                <h3>Regression Characteristics:</h3>
+                <ul>
+                    <li>Output is a <strong>continuous number</strong></li>
+                    <li>Examples: Price, Temperature, Stock Value</li>
+                    <li>Finds best-fit line/curve through data</li>
+                    <li>Error measured by distance from actual values</li>
+                </ul>
+            </section>
+
+            <section class="section" id="comparison">
+                <h2>Key Differences Summary</h2>
+                <div class="comparison-grid">
+                    <div class="comparison-card">
+                        <h3>🎯 Classification</h3>
+                        <p><strong>Output:</strong> Categories/Classes</p>
+                        <p><strong>Examples:</strong></p>
+                        <ul>
+                            <li>Email: Spam or Not Spam</li>
+                            <li>Image: Cat, Dog, or Bird</li>
+                            <li>Medical: Disease or Healthy</li>
+                        </ul>
+                        <p><strong>Algorithms:</strong> Decision Trees, SVM, Naive Bayes</p>
+                    </div>
+                    
+                    <div class="comparison-card regression-card">
+                        <h3>📈 Regression</h3>
+                        <p><strong>Output:</strong> Continuous Numbers</p>
+                        <p><strong>Examples:</strong></p>
+                        <ul>
+                            <li>House Price: $425,000</li>
+                            <li>Temperature: 23.5°C</li>
+                            <li>Stock Price: $150.75</li>
+                        </ul>
+                        <p><strong>Algorithms:</strong> Linear Regression, Random Forest</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" id="examples">
+                <h2>Quick Decision Guide</h2>
+                <div class="demo-container">
+                    <h3>Which Type Should You Use?</h3>
+                    <svg width="500" height="200" viewBox="0 0 500 200" style="max-width: 100%;">
+                        <!-- Decision Flow -->
+                        <rect x="150" y="20" width="200" height="40" fill="#3498db" stroke="#2980b9" stroke-width="2" rx="5"/>
+                        <text x="250" y="35" text-anchor="middle" fill="white" font-size="12">What are you predicting?</text>
+                        <text x="250" y="50" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Categories or Numbers?</text>
+                        
+                        <!-- Categories Path -->
+                        <rect x="50" y="120" width="150" height="60" fill="#e74c3c" stroke="#c0392b" stroke-width="2" rx="5"/>
+                        <text x="125" y="140" text-anchor="middle" fill="white" font-size="11" font-weight="bold">Categories</text>
+                        <text x="125" y="155" text-anchor="middle" fill="white" font-size="10">Use Classification</text>
+                        <text x="125" y="170" text-anchor="middle" fill="white" font-size="9">Yes/No, Cat/Dog</text>
+                        
+                        <!-- Numbers Path -->
+                        <rect x="300" y="120" width="150" height="60" fill="#27ae60" stroke="#229954" stroke-width="2" rx="5"/>
+                        <text x="375" y="140" text-anchor="middle" fill="white" font-size="11" font-weight="bold">Numbers</text>
+                        <text x="375" y="155" text-anchor="middle" fill="white" font-size="10">Use Regression</text>
+                        <text x="375" y="170" text-anchor="middle" fill="white" font-size="9">Price, Age, Score</text>
+                        
+                        <!-- Arrows -->
+                        <line x1="200" y1="60" x2="150" y2="115" stroke="#2c3e50" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        <line x1="300" y1="60" x2="350" y2="115" stroke="#2c3e50" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    </svg>
+                </div>
+                
+                <p><strong>Remember:</strong> The type of output determines whether you use Classification or Regression!</p>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        let lectureStarted = false;
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        }
+
+        function startLecture() {
+            const playBtn = document.getElementById('playBtn');
+            const status = document.getElementById('lectureStatus');
+            
+            if (!lectureStarted) {
+                playBtn.classList.add('playing');
+                status.textContent = 'Lecture in progress...';
+                lectureStarted = true;
+            } else {
+                playBtn.classList.remove('playing');
+                status.textContent = 'Click to start the lecture';
+                lectureStarted = false;
+            }
+        }
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('.sidebar a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                target.scrollIntoView({ behavior: 'smooth' });
+                
+                if (window.innerWidth <= 768) {
+                    document.getElementById('sidebar').classList.remove('active');
+                }
+            });
+        });
+
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                document.getElementById('sidebar').classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
