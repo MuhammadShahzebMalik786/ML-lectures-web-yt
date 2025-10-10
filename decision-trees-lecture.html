@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decision Trees - 3 Minute ML Lecture</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: #333;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .lecture-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            color: white;
+            border-radius: 10px;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-left: 4px solid #27ae60;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        
+        .tree-visual {
+            background: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-family: monospace;
+            margin: 15px 0;
+        }
+        
+        .highlight {
+            background: #e74c3c;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        .timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #e74c3c;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="timer" id="timer">3:00</div>
+    
+    <div class="lecture-container">
+        <div class="header">
+            <h1>🌳 Decision Trees</h1>
+            <p>Machine Learning Made Simple</p>
+            <p><em>3-Minute Complete Guide</em></p>
+        </div>
+
+        <div class="section">
+            <h2>🤔 What is a Decision Tree?</h2>
+            <p>A <span class="highlight">flowchart-like structure</span> that makes decisions by asking yes/no questions about data features.</p>
+            
+            <h3>📚 Detailed Explanation:</h3>
+            <p><strong>Decision Trees</strong> are supervised learning algorithms that work like a series of if-else statements. They split data based on feature values to create a tree-like model of decisions.</p>
+            
+            <p><strong>How it thinks:</strong> "If age is greater than 25 AND income is above 50k, then approve the loan. Otherwise, reject it."</p>
+            
+            <p><strong>Real-world analogy:</strong> Like a doctor diagnosing a patient - they ask questions (symptoms) and follow a decision path to reach a diagnosis.</p>
+            
+            <div class="tree-visual">
+                <strong>Example: Loan Approval System</strong><br><br>
+                Age > 25?<br>
+                ├── Yes → Income > 50k?<br>
+                │   ├── Yes → Approve Loan ✅<br>
+                │   └── No → Reject Loan ❌<br>
+                └── No → Reject Loan ❌
+            </div>
+            
+            <p><strong>Key Components:</strong></p>
+            <ul>
+                <li><strong>Root Node:</strong> The top decision (Age > 25?)</li>
+                <li><strong>Internal Nodes:</strong> Decision points (Income > 50k?)</li>
+                <li><strong>Leaf Nodes:</strong> Final outcomes (Approve/Reject)</li>
+                <li><strong>Branches:</strong> Connections showing decision paths</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>💻 Quick Implementation</h2>
+            <h3>📖 Step-by-Step Code Explanation:</h3>
+            <p><strong>This example shows how to create a simple loan approval system using decision trees.</strong></p>
+            
+            <div class="code-block">
+from sklearn.tree import DecisionTreeClassifier<br>
+from sklearn.datasets import make_classification<br>
+import numpy as np<br>
+<br>
+# Sample data: [Age, Income] → Loan Approval<br>
+# Each row represents one loan applicant<br>
+X = np.array([[25, 50000], [35, 60000], [22, 30000], <br>
+              [45, 80000], [28, 45000]])<br>
+y = np.array([0, 1, 0, 1, 0])  # 0=Reject, 1=Approve<br>
+<br>
+# Create and train model<br>
+# max_depth=3 prevents overfitting by limiting tree depth<br>
+tree = DecisionTreeClassifier(max_depth=3)<br>
+tree.fit(X, y)<br>
+<br>
+# Predict for new applicant: 30 years, $55k<br>
+prediction = tree.predict([[30, 55000]])<br>
+print(f"Loan decision: {'Approved' if prediction[0] else 'Rejected'}")<br>
+            </div>
+            
+            <h3>🔍 Code Breakdown:</h3>
+            <ul>
+                <li><strong>Line 1-3:</strong> Import necessary libraries for machine learning</li>
+                <li><strong>Line 6-8:</strong> Create training data with age and income features</li>
+                <li><strong>Line 9:</strong> Define target labels (0 = reject, 1 = approve)</li>
+                <li><strong>Line 12-13:</strong> Create and train the decision tree model</li>
+                <li><strong>Line 16-17:</strong> Make prediction for new data point</li>
+            </ul>
+            
+            <p><strong>Expected Output:</strong> The model will analyze the 30-year-old with $55k income and decide whether to approve or reject the loan based on patterns learned from training data.</p>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Real Example: Email Spam Detection</h2>
+            <h3>📧 Practical Application Explained:</h3>
+            <p><strong>This example demonstrates how decision trees can classify emails as spam or normal based on email characteristics.</strong></p>
+            
+            <div class="code-block">
+# Email features: [word_count, has_links, exclamation_marks]<br>
+# Each email is represented by these three numerical features<br>
+emails = np.array([<br>
+    [50, 0, 1],    # Normal email: 50 words, 0 links, 1 exclamation<br>
+    [200, 5, 8],   # Spam email: 200 words, 5 links, 8 exclamations<br>
+    [30, 1, 0],    # Normal email: 30 words, 1 link, 0 exclamations<br>
+    [150, 3, 12],  # Spam email: 150 words, 3 links, 12 exclamations<br>
+    [80, 1, 2]     # Normal email: 80 words, 1 link, 2 exclamations<br>
+])<br>
+labels = np.array([0, 1, 0, 1, 0])  # 0=Normal, 1=Spam<br>
+<br>
+# Train spam detector<br>
+spam_tree = DecisionTreeClassifier()<br>
+spam_tree.fit(emails, labels)<br>
+<br>
+# Check new email: 100 words, 2 links, 5 exclamations<br>
+new_email = [[100, 2, 5]]<br>
+result = spam_tree.predict(new_email)<br>
+print(f"Email classification: {'SPAM' if result[0] else 'NORMAL'}")<br>
+            </div>
+            
+            <h3>🧠 How the Algorithm Learns:</h3>
+            <p>The decision tree analyzes patterns in the training data:</p>
+            <ul>
+                <li><strong>Pattern 1:</strong> Emails with many exclamation marks (>5) tend to be spam</li>
+                <li><strong>Pattern 2:</strong> Emails with multiple links (>2) are often spam</li>
+                <li><strong>Pattern 3:</strong> Very long emails (>150 words) with links are suspicious</li>
+            </ul>
+            
+            <p><strong>Decision Process:</strong> For the new email [100, 2, 5], the tree might ask: "Does it have >4 exclamation marks? Yes → Check links... 2 links → Likely SPAM"</p>
+        </div>
+
+        <div class="section">
+            <h2>⚡ Key Concepts</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h3>🔑 Important Terms:</h3>
+                    <ul>
+                        <li><strong>Root Node:</strong> Starting point - the first question asked</li>
+                        <li><strong>Leaf Node:</strong> Final decision - no more questions</li>
+                        <li><strong>Split:</strong> Decision point where data is divided</li>
+                        <li><strong>Depth:</strong> Number of levels in the tree</li>
+                        <li><strong>Pruning:</strong> Removing branches to prevent overfitting</li>
+                        <li><strong>Gini Impurity:</strong> Measure of how mixed the classes are</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>📊 How it Works:</h3>
+                    <ul>
+                        <li><strong>Step 1:</strong> Finds best feature to split data</li>
+                        <li><strong>Step 2:</strong> Creates branches for each possible value</li>
+                        <li><strong>Step 3:</strong> Repeats process until pure groups formed</li>
+                        <li><strong>Step 4:</strong> Makes predictions by following decision path</li>
+                        <li><strong>Step 5:</strong> Uses majority vote in leaf nodes</li>
+                        <li><strong>Step 6:</strong> Stops when stopping criteria met</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h3>🎯 Splitting Criteria Explained:</h3>
+            <p><strong>Information Gain:</strong> Measures how much uncertainty is reduced by a split</p>
+            <p><strong>Gini Impurity:</strong> Measures probability of incorrect classification</p>
+            <p><strong>Entropy:</strong> Measures randomness or disorder in the data</p>
+            
+            <div class="tree-visual">
+                <strong>Example Decision Process:</strong><br><br>
+                1. Start with all data at root<br>
+                2. Find best split (e.g., Age > 30?)<br>
+                3. Split data into two groups<br>
+                4. Repeat for each group until stopping condition<br>
+                5. Assign class label to each leaf
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Complete Working Example</h2>
+            <h3>🌤️ Weather Prediction System - Detailed Walkthrough:</h3>
+            <p><strong>This comprehensive example shows how to build, train, and evaluate a decision tree for predicting whether to play tennis based on weather conditions.</strong></p>
+            
+            <div class="code-block">
+from sklearn.tree import DecisionTreeClassifier, export_text<br>
+from sklearn.model_selection import train_test_split<br>
+from sklearn.metrics import accuracy_score<br>
+<br>
+# Weather data: [Temperature, Humidity, Wind] → Play Tennis?<br>
+# Temperature in Fahrenheit, Humidity as percentage, Wind (0=No, 1=Yes)<br>
+weather_data = np.array([<br>
+    [85, 85, 0], # Hot, High humidity, No wind → Don't play<br>
+    [80, 90, 1], # Hot, High humidity, Windy → Don't play<br>
+    [83, 78, 0], # Hot, Normal humidity, No wind → Play<br>
+    [70, 96, 0], # Mild, High humidity, No wind → Play<br>
+    [68, 80, 0], # Cool, Normal humidity, No wind → Play<br>
+    [65, 70, 1], # Cool, Normal humidity, Windy → Don't play<br>
+    [64, 65, 1], # Cool, Normal humidity, Windy → Play<br>
+    [72, 95, 0], # Mild, High humidity, No wind → Don't play<br>
+    [69, 70, 0], # Cool, Normal humidity, No wind → Play<br>
+    [75, 80, 0], # Mild, Normal humidity, No wind → Play<br>
+    [75, 70, 1], # Mild, Normal humidity, Windy → Play<br>
+    [72, 90, 1]  # Mild, High humidity, Windy → Play<br>
+])<br>
+play_tennis = np.array([0, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1])<br>
+<br>
+# Split data into training and testing sets (70% train, 30% test)<br>
+X_train, X_test, y_train, y_test = train_test_split(<br>
+    weather_data, play_tennis, test_size=0.3, random_state=42)<br>
+<br>
+# Create decision tree with limited depth to prevent overfitting<br>
+model = DecisionTreeClassifier(max_depth=3, random_state=42)<br>
+model.fit(X_train, y_train)<br>
+<br>
+# Make predictions on test set<br>
+predictions = model.predict(X_test)<br>
+accuracy = accuracy_score(y_test, predictions)<br>
+print(f"Accuracy: {accuracy:.2f}")<br>
+<br>
+# Show tree structure in text format<br>
+tree_rules = export_text(model, feature_names=['Temp', 'Humidity', 'Wind'])<br>
+print("Decision Rules:")<br>
+print(tree_rules[:200] + "...")<br>
+<br>
+# Test with new weather conditions<br>
+new_weather = [[75, 75, 0]]  # 75°F, 75% humidity, no wind<br>
+prediction = model.predict(new_weather)<br>
+print(f"Should play tennis? {'Yes' if prediction[0] else 'No'}")<br>
+            </div>
+            
+            <h3>📊 Understanding the Results:</h3>
+            <ul>
+                <li><strong>Accuracy Score:</strong> Percentage of correct predictions on test data</li>
+                <li><strong>Tree Rules:</strong> Shows the actual decision logic learned by the algorithm</li>
+                <li><strong>Feature Importance:</strong> Which weather factors matter most for the decision</li>
+            </ul>
+            
+            <h3>🔍 What the Tree Learns:</h3>
+            <p>The algorithm discovers patterns like:</p>
+            <ul>
+                <li>"If humidity > 85%, usually don't play tennis"</li>
+                <li>"If temperature is between 65-75°F and humidity < 80%, usually play"</li>
+                <li>"Wind matters less than temperature and humidity"</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>✅ Pros & Cons</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div style="background: #d5f4e6; padding: 15px; border-radius: 5px;">
+                    <h3>✅ Advantages:</h3>
+                    <ul>
+                        <li><strong>Easy to understand and interpret:</strong> Visual tree structure makes sense to humans</li>
+                        <li><strong>No data preprocessing needed:</strong> Handles missing values and different data types</li>
+                        <li><strong>Handles both numerical and categorical data:</strong> Works with mixed feature types</li>
+                        <li><strong>Fast training and prediction:</strong> Efficient algorithms for building and using trees</li>
+                        <li><strong>Feature selection automatic:</strong> Ignores irrelevant features naturally</li>
+                        <li><strong>Non-parametric:</strong> No assumptions about data distribution</li>
+                    </ul>
+                </div>
+                <div style="background: #ffeaa7; padding: 15px; border-radius: 5px;">
+                    <h3>⚠️ Disadvantages:</h3>
+                    <ul>
+                        <li><strong>Can overfit easily:</strong> Creates overly complex trees that memorize training data</li>
+                        <li><strong>Unstable:</strong> Small data changes can create completely different trees</li>
+                        <li><strong>Biased toward features with more levels:</strong> Favors features with many possible values</li>
+                        <li><strong>Not great for linear relationships:</strong> Struggles with simple linear patterns</li>
+                        <li><strong>Can create biased trees:</strong> If some classes dominate the dataset</li>
+                        <li><strong>Difficulty with continuous numerical values:</strong> Creates many splits for continuous data</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h3>🛠️ When to Use Decision Trees:</h3>
+            <div style="background: #e3f2fd; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                <p><strong>Best for:</strong></p>
+                <ul>
+                    <li>Problems where you need to explain the decision process</li>
+                    <li>Mixed data types (numerical and categorical)</li>
+                    <li>Quick prototyping and baseline models</li>
+                    <li>Rule extraction and business logic</li>
+                </ul>
+                
+                <p><strong>Avoid when:</strong></p>
+                <ul>
+                    <li>You have very small datasets (prone to overfitting)</li>
+                    <li>Linear relationships are dominant</li>
+                    <li>You need the highest possible accuracy (use ensemble methods instead)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section" style="background: #e8f5e8; border-left-color: #27ae60;">
+            <h2>🎓 Summary & Next Steps</h2>
+            <h3>📝 Key Takeaways:</h3>
+            <p><strong>Decision Trees</strong> are like flowcharts that ask questions about your data to make predictions. They're intuitive, interpretable, and perfect for beginners!</p>
+            
+            <div style="background: white; padding: 15px; border-radius: 5px; margin: 15px 0;">
+                <h4>🔑 Remember These Points:</h4>
+                <ul>
+                    <li><strong>Interpretability:</strong> You can always explain why a decision was made</li>
+                    <li><strong>Simplicity:</strong> Easy to implement and understand</li>
+                    <li><strong>Versatility:</strong> Works with different types of data</li>
+                    <li><strong>Foundation:</strong> Building block for more advanced algorithms</li>
+                </ul>
+            </div>
+            
+            <h3>🚀 Next Steps in Your ML Journey:</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div style="background: #fff3cd; padding: 15px; border-radius: 5px;">
+                    <h4>🌲 Ensemble Methods:</h4>
+                    <ul>
+                        <li><strong>Random Forest:</strong> Multiple trees voting together</li>
+                        <li><strong>Gradient Boosting:</strong> Trees learning from mistakes</li>
+                        <li><strong>XGBoost:</strong> Optimized gradient boosting</li>
+                    </ul>
+                </div>
+                <div style="background: #d1ecf1; padding: 15px; border-radius: 5px;">
+                    <h4>🔧 Advanced Techniques:</h4>
+                    <ul>
+                        <li><strong>Hyperparameter Tuning:</strong> Optimize tree parameters</li>
+                        <li><strong>Feature Engineering:</strong> Create better input features</li>
+                        <li><strong>Cross-Validation:</strong> Better model evaluation</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h3>💡 Practice Suggestions:</h3>
+            <p><strong>Try building decision trees for these problems:</strong></p>
+            <ul>
+                <li>🏠 House price prediction (regression tree)</li>
+                <li>🎬 Movie recommendation system</li>
+                <li>🏥 Medical diagnosis assistant</li>
+                <li>💰 Credit card fraud detection</li>
+                <li>📈 Stock market trend prediction</li>
+            </ul>
+            
+            <div style="background: #f8d7da; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                <h4>⚠️ Important Reminders:</h4>
+                <p><strong>Always remember to:</strong></p>
+                <ul>
+                    <li>Split your data into train/validation/test sets</li>
+                    <li>Use cross-validation for model evaluation</li>
+                    <li>Prevent overfitting with max_depth and min_samples_split</li>
+                    <li>Compare with other algorithms before final decision</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 3-minute timer
+        let timeLeft = 180;
+        const timer = document.getElementById('timer');
+        
+        const countdown = setInterval(() => {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timer.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                timer.textContent = "Time's Up!";
+                timer.style.background = '#27ae60';
+            }
+            timeLeft--;
+        }, 1000);
+    </script>
+</body>
+</html>

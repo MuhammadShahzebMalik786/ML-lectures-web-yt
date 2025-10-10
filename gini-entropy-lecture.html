@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gini Impurity & Entropy - 3 Minute ML Lecture</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .lecture-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .timer {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            margin-top: 15px;
+            display: inline-block;
+            font-weight: bold;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            padding: 25px;
+            border-left: 5px solid #667eea;
+            background: linear-gradient(135deg, #f8f9ff 0%, #f0f2ff 100%);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .section h2 {
+            color: #667eea;
+            margin-top: 0;
+            font-size: 1.8em;
+        }
+        
+        .formula {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2em;
+            text-align: center;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.3);
+        }
+        
+        .example-box {
+            background: #e8f5e8;
+            border: 2px solid #27ae60;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .comparison-table th, .comparison-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .comparison-table th {
+            background: #667eea;
+            color: white;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9ff;
+        }
+        
+        .plot-container {
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .key-points {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .key-points h3 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="lecture-container">
+        <div class="header">
+            <h1>🌳 Gini Impurity & Entropy</h1>
+            <p>Decision Tree Splitting Criteria Explained</p>
+            <div class="timer">⏱️ 3-Minute Lecture</div>
+        </div>
+        
+        <div class="content">
+            <div class="section">
+                <h2>🎯 What Are They?</h2>
+                <p><strong>Gini Impurity</strong> and <strong>Entropy</strong> are measures of <span class="highlight">impurity</span> or <span class="highlight">disorder</span> in a dataset. They help decision trees decide where to split data for maximum information gain.</p>
+                
+                <div class="example-box">
+                    <strong>Real-World Analogy:</strong> Imagine sorting colored balls into boxes. A box with all red balls has <em>zero impurity</em>. A box with equal red and blue balls has <em>maximum impurity</em>.
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📊 Mathematical Formulas</h2>
+                
+                <h3>Gini Impurity</h3>
+                <div class="formula">
+                    Gini = 1 - Σ(pi)²<br>
+                    <small>where pi = probability of class i</small>
+                </div>
+                
+                <p><strong>Definition:</strong> Gini Impurity measures the probability of incorrectly classifying a randomly chosen element if it was randomly labeled according to the class distribution in the dataset. It ranges from 0 (pure) to 0.5 (maximum impurity for binary classification).</p>
+                
+                <h3>Entropy</h3>
+                <div class="formula">
+                    Entropy = -Σ(pi × log₂(pi))<br>
+                    <small>where pi = probability of class i</small>
+                </div>
+                
+                <p><strong>Definition:</strong> Entropy measures the amount of information or uncertainty in a dataset. It quantifies the average amount of information needed to identify the class of a randomly selected sample. It ranges from 0 (pure) to 1 (maximum uncertainty for binary classification).</p>
+            </div>
+
+            <div class="section">
+                <h2>🔢 Step-by-Step Example</h2>
+                <p><strong>Dataset:</strong> 10 samples - 6 Class A, 4 Class B</p>
+                
+                <h3>Gini Calculation:</h3>
+                <div class="example-box">
+                    <p>P(A) = 6/10 = 0.6, P(B) = 4/10 = 0.4</p>
+                    <p>Gini = 1 - (0.6² + 0.4²) = 1 - (0.36 + 0.16) = <strong>0.48</strong></p>
+                </div>
+                
+                <h3>Entropy Calculation:</h3>
+                <div class="example-box">
+                    <p>Entropy = -(0.6×log₂(0.6) + 0.4×log₂(0.4))</p>
+                    <p>Entropy = -(0.6×(-0.737) + 0.4×(-1.322)) = <strong>0.971</strong></p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📈 Interactive Visualizations</h2>
+                
+                <div class="plot-container">
+                    <h3>Gini vs Entropy Comparison</h3>
+                    <div id="comparison-plot"></div>
+                </div>
+                
+                <div class="plot-container">
+                    <h3>Impurity vs Class Distribution</h3>
+                    <div id="distribution-plot"></div>
+                </div>
+                
+                <div class="plot-container">
+                    <h3>Decision Tree Split Example</h3>
+                    <div id="split-example"></div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>⚖️ Gini vs Entropy Comparison</h2>
+                <table class="comparison-table">
+                    <tr>
+                        <th>Aspect</th>
+                        <th>Gini Impurity</th>
+                        <th>Entropy</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Range</strong></td>
+                        <td>0 to 0.5 (binary)</td>
+                        <td>0 to 1 (binary)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Computation</strong></td>
+                        <td>Faster (no logarithms)</td>
+                        <td>Slower (logarithmic)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sensitivity</strong></td>
+                        <td>Less sensitive to changes</td>
+                        <td>More sensitive to changes</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Default in</strong></td>
+                        <td>CART, scikit-learn</td>
+                        <td>ID3, C4.5</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Best for</strong></td>
+                        <td>Balanced datasets</td>
+                        <td>Imbalanced datasets</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="section">
+                <h2>🚀 Practical Implementation</h2>
+                <div class="formula">
+# Python Implementation<br>
+import numpy as np<br>
+<br>
+def gini_impurity(y):<br>
+    classes, counts = np.unique(y, return_counts=True)<br>
+    probabilities = counts / len(y)<br>
+    return 1 - np.sum(probabilities**2)<br>
+<br>
+def entropy(y):<br>
+    classes, counts = np.unique(y, return_counts=True)<br>
+    probabilities = counts / len(y)<br>
+    return -np.sum(probabilities * np.log2(probabilities + 1e-10))<br>
+<br>
+# Example usage<br>
+labels = [0, 0, 0, 1, 1, 1, 1, 0, 0, 1]<br>
+print(f"Gini: {gini_impurity(labels):.3f}")<br>
+print(f"Entropy: {entropy(labels):.3f}")
+                </div>
+            </div>
+
+            <div class="key-points">
+                <h3>🔑 Key Takeaways</h3>
+                <ul>
+                    <li><strong>Lower values = Better:</strong> Both measures decrease as data becomes more pure</li>
+                    <li><strong>Gini is faster:</strong> No logarithmic calculations needed</li>
+                    <li><strong>Entropy is more sensitive:</strong> Better for detecting small changes in distribution</li>
+                    <li><strong>Both work well:</strong> Choice often depends on computational constraints</li>
+                    <li><strong>Information Gain:</strong> Both used to calculate how much a split improves purity</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>🎯 When to Use Which?</h2>
+                <div class="example-box">
+                    <p><strong>Use Gini when:</strong> You need fast computation, have balanced classes, or using scikit-learn default</p>
+                    <p><strong>Use Entropy when:</strong> You have imbalanced classes, need maximum sensitivity, or working with information theory concepts</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Comparison Plot
+        const p_values = [];
+        const gini_values = [];
+        const entropy_values = [];
+        
+        for (let i = 0; i <= 100; i++) {
+            const p = i / 100;
+            p_values.push(p);
+            
+            // Gini calculation for binary classification
+            const gini = 2 * p * (1 - p);
+            gini_values.push(gini);
+            
+            // Entropy calculation for binary classification
+            let entropy = 0;
+            if (p > 0 && p < 1) {
+                entropy = -(p * Math.log2(p) + (1-p) * Math.log2(1-p));
+            }
+            entropy_values.push(entropy);
+        }
+        
+        const trace1 = {
+            x: p_values,
+            y: gini_values,
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Gini Impurity',
+            line: {color: '#e74c3c', width: 3}
+        };
+        
+        const trace2 = {
+            x: p_values,
+            y: entropy_values,
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Entropy',
+            line: {color: '#3498db', width: 3}
+        };
+        
+        const layout1 = {
+            title: 'Gini vs Entropy for Binary Classification',
+            xaxis: {title: 'Probability of Class 1'},
+            yaxis: {title: 'Impurity Measure'},
+            showlegend: true
+        };
+        
+        Plotly.newPlot('comparison-plot', [trace1, trace2], layout1);
+        
+        // Distribution Plot
+        const scenarios = ['Pure A', '90% A', '70% A', '50% A', '30% A', '10% A', 'Pure B'];
+        const gini_scenarios = [0, 0.18, 0.42, 0.5, 0.42, 0.18, 0];
+        const entropy_scenarios = [0, 0.47, 0.88, 1.0, 0.88, 0.47, 0];
+        
+        const trace3 = {
+            x: scenarios,
+            y: gini_scenarios,
+            type: 'bar',
+            name: 'Gini Impurity',
+            marker: {color: '#e74c3c'}
+        };
+        
+        const trace4 = {
+            x: scenarios,
+            y: entropy_scenarios,
+            type: 'bar',
+            name: 'Entropy',
+            marker: {color: '#3498db'}
+        };
+        
+        const layout2 = {
+            title: 'Impurity Measures for Different Class Distributions',
+            xaxis: {title: 'Class Distribution'},
+            yaxis: {title: 'Impurity Value'},
+            barmode: 'group'
+        };
+        
+        Plotly.newPlot('distribution-plot', [trace3, trace4], layout2);
+        
+        // Split Example
+        const before_split = {
+            x: ['Before Split'],
+            y: [0.48],
+            type: 'bar',
+            name: 'Original Dataset',
+            marker: {color: '#95a5a6'}
+        };
+        
+        const after_split_left = {
+            x: ['Left Branch'],
+            y: [0.32],
+            type: 'bar',
+            name: 'Left Branch',
+            marker: {color: '#27ae60'}
+        };
+        
+        const after_split_right = {
+            x: ['Right Branch'],
+            y: [0.16],
+            type: 'bar',
+            name: 'Right Branch',
+            marker: {color: '#f39c12'}
+        };
+        
+        const layout3 = {
+            title: 'Information Gain Example (Gini Impurity)',
+            xaxis: {title: 'Dataset Split'},
+            yaxis: {title: 'Gini Impurity'},
+            annotations: [{
+                x: 0.5,
+                y: 0.5,
+                text: 'Information Gain = 0.48 - (0.6×0.32 + 0.4×0.16) = 0.22',
+                showarrow: false,
+                font: {size: 14, color: '#2c3e50'}
+            }]
+        };
+        
+        Plotly.newPlot('split-example', [before_split, after_split_left, after_split_right], layout3);
+    </script>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linear Regression - 3 Minute ML Lecture</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .lecture-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            border-radius: 10px;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-left: 4px solid #3498db;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        
+        .highlight {
+            background: #f39c12;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        .timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #e74c3c;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="timer" id="timer">3:00</div>
+    
+    <div class="lecture-container">
+        <div class="header">
+            <h1>Linear Regression</h1>
+            <p>The Foundation of Machine Learning</p>
+            <p><em>3-Minute Complete Guide</em></p>
+        </div>
+
+        <div class="section">
+            <h2>🎯 What is Linear Regression?</h2>
+            <p>Linear regression finds the <span class="highlight">best straight line</span> through data points to predict continuous values.</p>
+            <p><strong>Formula:</strong> y = mx + b</p>
+            <ul>
+                <li><strong>y</strong> = predicted value</li>
+                <li><strong>m</strong> = slope</li>
+                <li><strong>x</strong> = input feature</li>
+                <li><strong>b</strong> = y-intercept</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>💻 Quick Implementation</h2>
+            <div class="code-block">
+import numpy as np
+from sklearn.linear_model import LinearRegression
+import matplotlib.pyplot as plt
+
+# Sample data: Hours studied vs Exam score
+X = np.array([[1], [2], [3], [4], [5]])  # Hours
+y = np.array([50, 60, 70, 80, 90])       # Scores
+
+# Create and train model
+model = LinearRegression()
+model.fit(X, y)
+
+# Make prediction
+prediction = model.predict([[6]])  # 6 hours
+print(f"Predicted score: {prediction[0]:.1f}")
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📊 Real Example</h2>
+            <p><strong>Problem:</strong> Predict house prices based on size</p>
+            <div class="code-block">
+# House data
+sizes = np.array([[1000], [1500], [2000], [2500]])  # sq ft
+prices = np.array([200000, 300000, 400000, 500000])  # dollars
+
+# Train model
+house_model = LinearRegression()
+house_model.fit(sizes, prices)
+
+# Predict price for 1800 sq ft house
+new_price = house_model.predict([[1800]])
+print(f"1800 sq ft house price: ${new_price[0]:,.0f}")
+
+# Output: 1800 sq ft house price: $360,000
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>⚡ Key Points</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h3>✅ When to Use:</h3>
+                    <ul>
+                        <li>Predicting continuous values</li>
+                        <li>Linear relationships</li>
+                        <li>Simple baseline model</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>❌ Limitations:</h3>
+                    <ul>
+                        <li>Only linear relationships</li>
+                        <li>Sensitive to outliers</li>
+                        <li>Assumes normal distribution</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Complete Working Example</h2>
+            <div class="code-block">
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error, r2_score
+
+# Create sample dataset
+data = {
+    'experience': [1, 2, 3, 4, 5, 6, 7, 8],
+    'salary': [30000, 35000, 40000, 45000, 50000, 55000, 60000, 65000]
+}
+df = pd.DataFrame(data)
+
+# Split data
+X = df[['experience']]
+y = df['salary']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+
+# Train and evaluate
+model = LinearRegression()
+model.fit(X_train, y_train)
+predictions = model.predict(X_test)
+
+print(f"R² Score: {r2_score(y_test, predictions):.2f}")
+print(f"Equation: Salary = {model.coef_[0]:.0f} * Experience + {model.intercept_:.0f}")
+            </div>
+        </div>
+
+        <div class="section" style="background: #e8f5e8; border-left-color: #27ae60;">
+            <h2>🎓 Summary</h2>
+            <p><strong>Linear Regression</strong> is the simplest ML algorithm that draws a line through data to make predictions. Perfect for beginners and often surprisingly effective!</p>
+            <p><strong>Next Steps:</strong> Try polynomial regression, multiple features, or regularization techniques.</p>
+        </div>
+    </div>
+
+    <script>
+        // 3-minute timer
+        let timeLeft = 180; // 3 minutes in seconds
+        const timer = document.getElementById('timer');
+        
+        const countdown = setInterval(() => {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timer.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                timer.textContent = "Time's Up!";
+                timer.style.background = '#27ae60';
+            }
+            timeLeft--;
+        }, 1000);
+    </script>
+</body>
+</html>
