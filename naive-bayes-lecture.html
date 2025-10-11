@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naive Bayes Classification – ML Lecture</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar h3 {
+            margin-bottom: 20px;
+            color: #3498db;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 8px 12px;
+            display: block;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #34495e;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            flex: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .section {
+            background: white;
+            margin-bottom: 30px;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .demo-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+
+        .formula {
+            background: #e8f4fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+        }
+
+        .example-box {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .probability-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .probability-table th,
+        .probability-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .probability-table th {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .probability-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .highlight {
+            background-color: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .visualization {
+            background: #f8f9fa;
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .step-container {
+            background: #e8f4fd;
+            border-left: 4px solid #2980b9;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+
+        .step-number {
+            background: #3498db;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .calculation-box {
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .interactive-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+
+        .interactive-btn:hover {
+            background: #2980b9;
+        }
+
+        .result-box {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .prob-bar {
+            height: 20px;
+            background: #ecf0f1;
+            border-radius: 10px;
+            margin: 5px 0;
+            overflow: hidden;
+        }
+
+        .prob-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            transition: width 0.5s ease;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <h3>Naive Bayes Classification</h3>
+            <ul>
+                <li><a href="#overview">What is Naive Bayes?</a></li>
+                <li><a href="#bayes-theorem">Bayes' Theorem</a></li>
+                <li><a href="#naive-assumption">The "Naive" Assumption</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#example">Tennis Playing Example</a></li>
+                <li><a href="#gaussian">Gaussian Naive Bayes</a></li>
+                <li><a href="#advantages">Advantages & Disadvantages</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <header class="header">
+                <h1>Naive Bayes Classification</h1>
+                <p>Probabilistic Machine Learning Algorithm</p>
+            </header>
+
+            <section class="section" id="overview">
+                <h2>What is Naive Bayes Classification?</h2>
+                <p>Naive Bayes is a <strong>probabilistic classification algorithm</strong> based on Bayes' theorem with a "naive" assumption of conditional independence between features.</p>
+                
+                <div class="demo-container">
+                    <h3>Key Characteristics:</h3>
+                    <ul>
+                        <li><strong>Probabilistic:</strong> Calculates probability of each class</li>
+                        <li><strong>Fast:</strong> Simple calculations, quick training and prediction</li>
+                        <li><strong>Effective:</strong> Works well with small datasets</li>
+                        <li><strong>"Naive":</strong> Assumes features are independent (often not true in reality)</li>
+                    </ul>
+                </div>
+
+                <div class="example-box">
+                    <h3>Real-World Applications:</h3>
+                    <ul>
+                        <li>Email spam detection</li>
+                        <li>Text classification</li>
+                        <li>Sentiment analysis</li>
+                        <li>Medical diagnosis</li>
+                        <li>Weather prediction</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="section" id="bayes-theorem">
+                <h2>Bayes' Theorem Foundation</h2>
+                <p>Naive Bayes is built on Bayes' theorem, which calculates conditional probability:</p>
+                
+                <div class="formula">
+                    P(A|B) = P(B|A) × P(A) / P(B)
+                </div>
+
+                <div class="demo-container">
+                    <h3>In Classification Context:</h3>
+                    <div class="formula">
+                        P(Class|Features) = P(Features|Class) × P(Class) / P(Features)
+                    </div>
+                    <ul>
+                        <li><strong>P(Class|Features):</strong> Probability of class given features (what we want)</li>
+                        <li><strong>P(Features|Class):</strong> Likelihood of features given class</li>
+                        <li><strong>P(Class):</strong> Prior probability of class</li>
+                        <li><strong>P(Features):</strong> Evidence (normalizing constant)</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="section" id="naive-assumption">
+                <h2>The "Naive" Assumption</h2>
+                <p>The algorithm assumes that all features are <span class="highlight">conditionally independent</span> given the class label.</p>
+                
+                <div class="demo-container">
+                    <h3>What This Means:</h3>
+                    <p>For features X₁, X₂, X₃... given class C:</p>
+                    <div class="formula">
+                        P(X₁, X₂, X₃|C) = P(X₁|C) × P(X₂|C) × P(X₃|C)
+                    </div>
+                    <p><strong>Why "Naive"?</strong> In reality, features often depend on each other, but this assumption simplifies calculations significantly.</p>
+                </div>
+
+                <div class="example-box">
+                    <h3>Example of Independence Assumption:</h3>
+                    <p>In email spam detection:</p>
+                    <ul>
+                        <li>Presence of word "FREE" is independent of word "URGENT"</li>
+                        <li>Email length is independent of sender domain</li>
+                        <li>Time sent is independent of number of exclamation marks</li>
+                    </ul>
+                    <p><em>Note: These may actually be related, but Naive Bayes treats them as independent.</em></p>
+                </div>
+            </section>
+
+            <section class="section" id="how-it-works">
+                <h2>How Naive Bayes Works</h2>
+                
+                <div class="demo-container">
+                    <h3>Step-by-Step Process:</h3>
+                    <ol>
+                        <li><strong>Calculate Prior Probabilities:</strong> P(Class) for each class</li>
+                        <li><strong>Calculate Likelihoods:</strong> P(Feature|Class) for each feature</li>
+                        <li><strong>Apply Bayes' Theorem:</strong> Multiply prior × likelihoods</li>
+                        <li><strong>Predict:</strong> Choose class with highest probability</li>
+                    </ol>
+                </div>
+
+                <div class="formula">
+                    P(Class|X₁,X₂,...,Xₙ) ∝ P(Class) × ∏P(Xᵢ|Class)
+                </div>
+            </section>
+
+            <section class="section" id="example">
+                <h2>Tennis Playing Example - Step by Step</h2>
+                <p>Let's predict whether to play tennis based on weather conditions:</p>
+
+                <div class="demo-container">
+                    <h3>Training Data:</h3>
+                    <table class="probability-table">
+                        <tr>
+                            <th>Outlook</th>
+                            <th>Temperature</th>
+                            <th>Humidity</th>
+                            <th>Wind</th>
+                            <th>Play Tennis?</th>
+                        </tr>
+                        <tr><td>Sunny</td><td>Hot</td><td>High</td><td>Weak</td><td>No</td></tr>
+                        <tr><td>Sunny</td><td>Hot</td><td>High</td><td>Strong</td><td>No</td></tr>
+                        <tr><td>Overcast</td><td>Hot</td><td>High</td><td>Weak</td><td>Yes</td></tr>
+                        <tr><td>Rain</td><td>Mild</td><td>High</td><td>Weak</td><td>Yes</td></tr>
+                        <tr><td>Rain</td><td>Cool</td><td>Normal</td><td>Weak</td><td>Yes</td></tr>
+                        <tr><td>Rain</td><td>Cool</td><td>Normal</td><td>Strong</td><td>No</td></tr>
+                        <tr><td>Overcast</td><td>Cool</td><td>Normal</td><td>Strong</td><td>Yes</td></tr>
+                        <tr><td>Sunny</td><td>Mild</td><td>High</td><td>Weak</td><td>No</td></tr>
+                    </table>
+                </div>
+
+                <div class="visualization">
+                    <h3>🎯 Interactive Problem Solving</h3>
+                    <p><strong>Question:</strong> Play tennis when Outlook=Sunny, Temperature=Cool, Humidity=High, Wind=Strong?</p>
+                    
+                    <button class="interactive-btn" onclick="showStep(1)">Step 1: Calculate Priors</button>
+                    <button class="interactive-btn" onclick="showStep(2)">Step 2: Calculate Likelihoods</button>
+                    <button class="interactive-btn" onclick="showStep(3)">Step 3: Apply Bayes' Theorem</button>
+                    <button class="interactive-btn" onclick="showStep(4)">Step 4: Make Prediction</button>
+                    <button class="interactive-btn" onclick="showAllSteps()">Show All Steps</button>
+
+                    <div id="step1" class="step-container" style="display:none;">
+                        <div class="step-number">1</div>
+                        <strong>Calculate Prior Probabilities</strong>
+                        <div class="calculation-box">
+                            Count of "Yes": 4 instances<br>
+                            Count of "No": 4 instances<br>
+                            Total instances: 8<br><br>
+                            P(Play=Yes) = 4/8 = 0.5<br>
+                            P(Play=No) = 4/8 = 0.5
+                        </div>
+                        <div class="result-box">
+                            ✅ Both classes have equal prior probability (50% each)
+                        </div>
+                    </div>
+
+                    <div id="step2" class="step-container" style="display:none;">
+                        <div class="step-number">2</div>
+                        <strong>Calculate Likelihoods for Each Feature</strong>
+                        
+                        <h4>For Play=Yes (4 instances):</h4>
+                        <div class="calculation-box">
+                            P(Outlook=Sunny|Yes) = 1/4 = 0.25 (1 sunny day when played)<br>
+                            P(Temperature=Cool|Yes) = 2/4 = 0.5 (2 cool days when played)<br>
+                            P(Humidity=High|Yes) = 2/4 = 0.5 (2 high humidity days when played)<br>
+                            P(Wind=Strong|Yes) = 2/4 = 0.5 (2 strong wind days when played)
+                        </div>
+
+                        <h4>For Play=No (4 instances):</h4>
+                        <div class="calculation-box">
+                            P(Outlook=Sunny|No) = 2/4 = 0.5 (2 sunny days when not played)<br>
+                            P(Temperature=Cool|No) = 1/4 = 0.25 (1 cool day when not played)<br>
+                            P(Humidity=High|No) = 3/4 = 0.75 (3 high humidity days when not played)<br>
+                            P(Wind=Strong|No) = 2/4 = 0.5 (2 strong wind days when not played)
+                        </div>
+                    </div>
+
+                    <div id="step3" class="step-container" style="display:none;">
+                        <div class="step-number">3</div>
+                        <strong>Apply Bayes' Theorem</strong>
+                        
+                        <div class="calculation-box">
+                            <strong>For Play=Yes:</strong><br>
+                            P(Yes|features) ∝ P(Yes) × P(Sunny|Yes) × P(Cool|Yes) × P(High|Yes) × P(Strong|Yes)<br>
+                            P(Yes|features) ∝ 0.5 × 0.25 × 0.5 × 0.5 × 0.5<br>
+                            P(Yes|features) ∝ 0.0156<br><br>
+
+                            <strong>For Play=No:</strong><br>
+                            P(No|features) ∝ P(No) × P(Sunny|No) × P(Cool|No) × P(High|No) × P(Strong|No)<br>
+                            P(No|features) ∝ 0.5 × 0.5 × 0.25 × 0.75 × 0.5<br>
+                            P(No|features) ∝ 0.0234
+                        </div>
+
+                        <div class="visualization">
+                            <h4>Probability Comparison:</h4>
+                            <p>Play=Yes: 0.0156</p>
+                            <div class="prob-bar">
+                                <div class="prob-fill" style="width: 40%; background: #27ae60;"></div>
+                            </div>
+                            <p>Play=No: 0.0234</p>
+                            <div class="prob-bar">
+                                <div class="prob-fill" style="width: 60%; background: #e74c3c;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="step4" class="step-container" style="display:none;">
+                        <div class="step-number">4</div>
+                        <strong>Make Final Prediction</strong>
+                        
+                        <div class="calculation-box">
+                            Normalize probabilities:<br>
+                            Total = 0.0156 + 0.0234 = 0.039<br><br>
+                            P(Yes|features) = 0.0156 / 0.039 = 0.40 (40%)<br>
+                            P(No|features) = 0.0234 / 0.039 = 0.60 (60%)
+                        </div>
+
+                        <div class="result-box">
+                            🎾 <strong>PREDICTION: Don't Play Tennis</strong><br>
+                            Confidence: 60% (No) vs 40% (Yes)<br>
+                            Reason: High humidity strongly indicates not playing
+                        </div>
+                    </div>
+                </div>
+
+                <div class="visualization">
+                    <h3>🧮 Try Your Own Example</h3>
+                    <p>Select conditions and see the prediction:</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0;">
+                        <div>
+                            <label>Outlook:</label>
+                            <select id="outlook" class="interactive-btn" style="width: 100%;">
+                                <option value="Sunny">Sunny</option>
+                                <option value="Overcast">Overcast</option>
+                                <option value="Rain">Rain</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Temperature:</label>
+                            <select id="temperature" class="interactive-btn" style="width: 100%;">
+                                <option value="Hot">Hot</option>
+                                <option value="Mild">Mild</option>
+                                <option value="Cool">Cool</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Humidity:</label>
+                            <select id="humidity" class="interactive-btn" style="width: 100%;">
+                                <option value="High">High</option>
+                                <option value="Normal">Normal</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Wind:</label>
+                            <select id="wind" class="interactive-btn" style="width: 100%;">
+                                <option value="Weak">Weak</option>
+                                <option value="Strong">Strong</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button class="interactive-btn" onclick="calculatePrediction()" style="width: 100%; padding: 15px; font-size: 16px;">
+                        🔮 Calculate Prediction
+                    </button>
+                    
+                    <div id="customResult" style="margin-top: 20px;"></div>
+                </div>
+            </section>
+
+            <section class="section" id="gaussian">
+                <h2>Gaussian Naive Bayes</h2>
+                <p>When dealing with <strong>continuous numerical features</strong>, we use Gaussian (Normal) distribution:</p>
+
+                <div class="demo-container">
+                    <h3>Gaussian Distribution Formula:</h3>
+                    <div class="formula">
+                        P(x|class) = (1/√(2πσ²)) × e^(-(x-μ)²/(2σ²))
+                    </div>
+                    <ul>
+                        <li><strong>μ (mu):</strong> Mean of feature values for the class</li>
+                        <li><strong>σ (sigma):</strong> Standard deviation for the class</li>
+                        <li><strong>x:</strong> Feature value we want to evaluate</li>
+                    </ul>
+                </div>
+
+                <div class="example-box">
+                    <h3>Example: Height and Weight Classification</h3>
+                    <p>Classifying gender based on height and weight:</p>
+                    <ul>
+                        <li><strong>Male:</strong> Height μ=175cm, σ=10cm; Weight μ=70kg, σ=15kg</li>
+                        <li><strong>Female:</strong> Height μ=162cm, σ=8cm; Weight μ=55kg, σ=12kg</li>
+                    </ul>
+                    <p>For a person with height=170cm, weight=65kg, calculate P(height|Male), P(weight|Male), etc.</p>
+                </div>
+            </section>
+
+            <section class="section" id="advantages">
+                <h2>Advantages & Disadvantages</h2>
+                
+                <div class="demo-container">
+                    <h3>✅ Advantages:</h3>
+                    <ul>
+                        <li><strong>Fast:</strong> Quick training and prediction</li>
+                        <li><strong>Simple:</strong> Easy to understand and implement</li>
+                        <li><strong>Small Data:</strong> Works well with limited training data</li>
+                        <li><strong>Multi-class:</strong> Naturally handles multiple classes</li>
+                        <li><strong>Probabilistic:</strong> Provides probability estimates</li>
+                        <li><strong>No Overfitting:</strong> Less prone to overfitting</li>
+                    </ul>
+                </div>
+
+                <div class="demo-container">
+                    <h3>❌ Disadvantages:</h3>
+                    <ul>
+                        <li><strong>Independence Assumption:</strong> Features are rarely truly independent</li>
+                        <li><strong>Categorical Inputs:</strong> Requires discretization for continuous features</li>
+                        <li><strong>Zero Probability:</strong> If a feature value never appears with a class</li>
+                        <li><strong>Limited Expressiveness:</strong> Cannot capture complex relationships</li>
+                    </ul>
+                </div>
+
+                <div class="example-box">
+                    <h3>When to Use Naive Bayes:</h3>
+                    <ul>
+                        <li>Text classification (spam detection, sentiment analysis)</li>
+                        <li>Small to medium datasets</li>
+                        <li>When you need fast, simple baseline model</li>
+                        <li>When features are relatively independent</li>
+                        <li>Multi-class classification problems</li>
+                    </ul>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Training data for calculations
+        const trainingData = [
+            {outlook: 'Sunny', temperature: 'Hot', humidity: 'High', wind: 'Weak', play: 'No'},
+            {outlook: 'Sunny', temperature: 'Hot', humidity: 'High', wind: 'Strong', play: 'No'},
+            {outlook: 'Overcast', temperature: 'Hot', humidity: 'High', wind: 'Weak', play: 'Yes'},
+            {outlook: 'Rain', temperature: 'Mild', humidity: 'High', wind: 'Weak', play: 'Yes'},
+            {outlook: 'Rain', temperature: 'Cool', humidity: 'Normal', wind: 'Weak', play: 'Yes'},
+            {outlook: 'Rain', temperature: 'Cool', humidity: 'Normal', wind: 'Strong', play: 'No'},
+            {outlook: 'Overcast', temperature: 'Cool', humidity: 'Normal', wind: 'Strong', play: 'Yes'},
+            {outlook: 'Sunny', temperature: 'Mild', humidity: 'High', wind: 'Weak', play: 'No'}
+        ];
+
+        function showStep(stepNumber) {
+            // Hide all steps first
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`step${i}`).style.display = 'none';
+            }
+            // Show selected step
+            document.getElementById(`step${stepNumber}`).style.display = 'block';
+        }
+
+        function showAllSteps() {
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`step${i}`).style.display = 'block';
+            }
+        }
+
+        function calculatePrediction() {
+            const outlook = document.getElementById('outlook').value;
+            const temperature = document.getElementById('temperature').value;
+            const humidity = document.getElementById('humidity').value;
+            const wind = document.getElementById('wind').value;
+
+            // Calculate priors
+            const yesCount = trainingData.filter(d => d.play === 'Yes').length;
+            const noCount = trainingData.filter(d => d.play === 'No').length;
+            const total = trainingData.length;
+            
+            const priorYes = yesCount / total;
+            const priorNo = noCount / total;
+
+            // Calculate likelihoods for Yes
+            const yesData = trainingData.filter(d => d.play === 'Yes');
+            const likelihoodYes = {
+                outlook: yesData.filter(d => d.outlook === outlook).length / yesCount,
+                temperature: yesData.filter(d => d.temperature === temperature).length / yesCount,
+                humidity: yesData.filter(d => d.humidity === humidity).length / yesCount,
+                wind: yesData.filter(d => d.wind === wind).length / yesCount
+            };
+
+            // Calculate likelihoods for No
+            const noData = trainingData.filter(d => d.play === 'No');
+            const likelihoodNo = {
+                outlook: noData.filter(d => d.outlook === outlook).length / noCount,
+                temperature: noData.filter(d => d.temperature === temperature).length / noCount,
+                humidity: noData.filter(d => d.humidity === humidity).length / noCount,
+                wind: noData.filter(d => d.wind === wind).length / noCount
+            };
+
+            // Calculate posterior probabilities
+            const posteriorYes = priorYes * likelihoodYes.outlook * likelihoodYes.temperature * 
+                               likelihoodYes.humidity * likelihoodYes.wind;
+            const posteriorNo = priorNo * likelihoodNo.outlook * likelihoodNo.temperature * 
+                              likelihoodNo.humidity * likelihoodNo.wind;
+
+            // Normalize
+            const total_posterior = posteriorYes + posteriorNo;
+            const normalizedYes = posteriorYes / total_posterior;
+            const normalizedNo = posteriorNo / total_posterior;
+
+            // Display results
+            const resultDiv = document.getElementById('customResult');
+            const prediction = normalizedYes > normalizedNo ? 'Play Tennis' : "Don't Play Tennis";
+            const confidence = Math.max(normalizedYes, normalizedNo) * 100;
+
+            resultDiv.innerHTML = `
+                <div class="result-box">
+                    <h3>🎯 Prediction Results</h3>
+                    <p><strong>Conditions:</strong> ${outlook}, ${temperature}, ${humidity} Humidity, ${wind} Wind</p>
+                    <div style="margin: 15px 0;">
+                        <p>Play Tennis: ${(normalizedYes * 100).toFixed(1)}%</p>
+                        <div class="prob-bar">
+                            <div class="prob-fill" style="width: ${normalizedYes * 100}%; background: #27ae60;"></div>
+                        </div>
+                        <p>Don't Play: ${(normalizedNo * 100).toFixed(1)}%</p>
+                        <div class="prob-bar">
+                            <div class="prob-fill" style="width: ${normalizedNo * 100}%; background: #e74c3c;"></div>
+                        </div>
+                    </div>
+                    <h4>🏆 Final Prediction: ${prediction}</h4>
+                    <p>Confidence: ${confidence.toFixed(1)}%</p>
+                </div>
+            `;
+        }
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
