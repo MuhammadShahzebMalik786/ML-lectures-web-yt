@@ -16,36 +16,56 @@ body {
     padding: 0 20px;
 }
 
-/* Navigation */
-.navbar {
-    background: #fff;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+/* Header - Unified for all pages */
+.header {
+    background: #2563eb;
+    color: white;
+    padding: 0;
     position: fixed;
     width: 100%;
     top: 0;
     z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .nav-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0 20px;
     height: 70px;
 }
 
-.nav-logo {
+.logo, .nav-logo {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #2563eb;
+    color: white;
+    text-decoration: none;
 }
 
 .nav-menu {
     display: flex;
     list-style: none;
     gap: 2rem;
+}
+
+.nav-menu li a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.nav-menu li a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Main content spacing */
+body {
+    padding-top: 70px;
 }
 
 .nav-menu a {

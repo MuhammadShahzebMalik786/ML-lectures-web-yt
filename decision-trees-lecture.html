@@ -8,21 +8,18 @@
     <style>
         body {
             background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-            color: #333;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         .lecture-container {
             max-width: 900px;
-            margin: 0 auto;
+            margin: 90px auto 0;
             padding: 20px;
             background: white;
-            margin-top: 20px;
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
         
-        .header {
+        .lecture-header {
             text-align: center;
             margin-bottom: 30px;
             padding: 20px;
@@ -78,10 +75,24 @@
     </style>
 </head>
 <body>
+    <!-- Navigation Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="index.html" class="logo">ML Tutorials</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="ml-lecture-1.html">Lecture 1</a></li>
+                    <li><a href="ml-lecture-2.html">Lecture 2</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
     <div class="timer" id="timer">3:00</div>
     
     <div class="lecture-container">
-        <div class="header">
+        <div class="lecture-header">
             <h1>🌳 Decision Trees</h1>
             <p>Machine Learning Made Simple</p>
             <p><em>3-Minute Complete Guide</em></p>
