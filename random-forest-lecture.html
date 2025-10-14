@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Forest Algorithm - ML Lecture</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">ML Lectures</a>
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="ml-lecture-1.html" class="nav-link">Intro to ML</a>
+                <a href="decision-trees-lecture.html" class="nav-link">Decision Trees</a>
+                <a href="#" class="nav-link active">Random Forest</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <section class="hero-section">
+                <h1>Random Forest Algorithm</h1>
+                <p class="hero-subtitle">Ensemble Learning with Decision Trees</p>
+            </section>
+
+            <section class="content-section">
+                <h2>What is Random Forest?</h2>
+                <div class="content-card">
+                    <p>Random Forest is an ensemble learning method that combines multiple decision trees to create a more robust and accurate model. It uses bagging (bootstrap aggregating) and random feature selection to reduce overfitting and improve generalization.</p>
+                    
+                    <!-- Visual Analogy -->
+                    <div class="visual-analogy">
+                        <h3>🌳 Think of it like asking multiple experts:</h3>
+                        <div class="analogy-container">
+                            <div class="analogy-item">
+                                <div class="expert-icon">👨‍⚕️</div>
+                                <p>Doctor A's Opinion</p>
+                            </div>
+                            <div class="plus">+</div>
+                            <div class="analogy-item">
+                                <div class="expert-icon">👩‍⚕️</div>
+                                <p>Doctor B's Opinion</p>
+                            </div>
+                            <div class="plus">+</div>
+                            <div class="analogy-item">
+                                <div class="expert-icon">👨‍⚕️</div>
+                                <p>Doctor C's Opinion</p>
+                            </div>
+                            <div class="arrow">→</div>
+                            <div class="result">
+                                <div class="result-icon">🎯</div>
+                                <p><strong>Final Diagnosis</strong><br>(Majority Vote)</p>
+                            </div>
+                        </div>
+                        <p class="analogy-text">Just like consulting multiple doctors gives a more reliable diagnosis, Random Forest combines multiple decision trees for better predictions!</p>
+                    </div>
+                    
+                    <h3>Key Concepts:</h3>
+                    <ul>
+                        <li><strong>Ensemble Method:</strong> Combines predictions from multiple models</li>
+                        <li><strong>Bootstrap Sampling:</strong> Each tree trained on random subset of data</li>
+                        <li><strong>Random Feature Selection:</strong> Each split considers random subset of features</li>
+                        <li><strong>Voting/Averaging:</strong> Final prediction based on majority vote or average</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <h2>How Random Forest Works</h2>
+                <div class="content-card">
+                    <!-- Visual Workflow -->
+                    <div class="workflow-diagram">
+                        <h3>📊 Visual Workflow:</h3>
+                        <div class="workflow-container">
+                            <div class="workflow-step">
+                                <div class="step-icon">📋</div>
+                                <h4>Original Dataset</h4>
+                                <div class="dataset-visual">
+                                    <div class="data-row">🔵🔴🔵🔴🔵</div>
+                                    <div class="data-row">🔴🔵🔵🔴🔵</div>
+                                    <div class="data-row">🔵🔴🔴🔵🔴</div>
+                                </div>
+                            </div>
+                            
+                            <div class="arrow-down">↓</div>
+                            
+                            <div class="workflow-step">
+                                <div class="step-icon">🎲</div>
+                                <h4>Bootstrap Sampling</h4>
+                                <div class="bootstrap-visual">
+                                    <div class="sample">Sample 1: 🔵🔴🔵🔵🔴</div>
+                                    <div class="sample">Sample 2: 🔴🔵🔴🔵🔵</div>
+                                    <div class="sample">Sample 3: 🔵🔵🔴🔴🔵</div>
+                                </div>
+                            </div>
+                            
+                            <div class="arrow-down">↓</div>
+                            
+                            <div class="workflow-step">
+                                <div class="step-icon">🌳</div>
+                                <h4>Train Decision Trees</h4>
+                                <div class="trees-visual">
+                                    <div class="tree">Tree 1</div>
+                                    <div class="tree">Tree 2</div>
+                                    <div class="tree">Tree 3</div>
+                                    <div class="tree">...</div>
+                                    <div class="tree">Tree 100</div>
+                                </div>
+                            </div>
+                            
+                            <div class="arrow-down">↓</div>
+                            
+                            <div class="workflow-step">
+                                <div class="step-icon">🗳️</div>
+                                <h4>Combine Predictions</h4>
+                                <div class="voting-visual">
+                                    <div class="vote">Tree 1: Class A</div>
+                                    <div class="vote">Tree 2: Class B</div>
+                                    <div class="vote">Tree 3: Class A</div>
+                                    <div class="vote-result">→ Final: Class A (Majority)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="algorithm-steps">
+                        <h3>Algorithm Steps:</h3>
+                        <ol>
+                            <li><strong>Bootstrap Sampling:</strong> Create N bootstrap samples from training data</li>
+                            <li><strong>Tree Training:</strong> Train decision tree on each bootstrap sample</li>
+                            <li><strong>Random Features:</strong> At each split, consider only √p features (p = total features)</li>
+                            <li><strong>Grow Trees:</strong> Grow trees to maximum depth (no pruning)</li>
+                            <li><strong>Prediction:</strong> Combine predictions from all trees</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <h2>Random Forest vs Decision Trees</h2>
+                <div class="content-card">
+                    <!-- Visual Comparison -->
+                    <div class="visual-comparison">
+                        <h3>🔍 Visual Comparison:</h3>
+                        <div class="comparison-visual">
+                            <div class="single-tree-side">
+                                <h4>Single Decision Tree</h4>
+                                <div class="tree-diagram">
+                                    <div class="tree-node root">Root</div>
+                                    <div class="tree-branches">
+                                        <div class="tree-node">Left</div>
+                                        <div class="tree-node">Right</div>
+                                    </div>
+                                    <div class="tree-leaves">
+                                        <div class="leaf">🔴</div>
+                                        <div class="leaf">🔵</div>
+                                        <div class="leaf">🔴</div>
+                                        <div class="leaf">🔵</div>
+                                    </div>
+                                </div>
+                                <div class="risk-indicator high">⚠️ High Overfitting Risk</div>
+                            </div>
+                            
+                            <div class="vs-divider">VS</div>
+                            
+                            <div class="forest-side">
+                                <h4>Random Forest</h4>
+                                <div class="forest-diagram">
+                                    <div class="mini-tree">🌳</div>
+                                    <div class="mini-tree">🌳</div>
+                                    <div class="mini-tree">🌳</div>
+                                    <div class="mini-tree">🌳</div>
+                                    <div class="mini-tree">🌳</div>
+                                </div>
+                                <div class="forest-prediction">
+                                    <div class="individual-votes">
+                                        <span>🔴</span><span>🔵</span><span>🔴</span><span>🔴</span><span>🔵</span>
+                                    </div>
+                                    <div class="final-vote">→ Final: 🔴 (3 votes)</div>
+                                </div>
+                                <div class="risk-indicator low">✅ Lower Overfitting Risk</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="comparison-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Aspect</th>
+                                    <th>Decision Tree</th>
+                                    <th>Random Forest</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Overfitting</td>
+                                    <td>High tendency</td>
+                                    <td>Reduced overfitting</td>
+                                </tr>
+                                <tr>
+                                    <td>Accuracy</td>
+                                    <td>Good on training data</td>
+                                    <td>Better generalization</td>
+                                </tr>
+                                <tr>
+                                    <td>Interpretability</td>
+                                    <td>High (visual tree)</td>
+                                    <td>Lower (black box)</td>
+                                </tr>
+                                <tr>
+                                    <td>Training Time</td>
+                                    <td>Fast</td>
+                                    <td>Slower (multiple trees)</td>
+                                </tr>
+                                <tr>
+                                    <td>Variance</td>
+                                    <td>High</td>
+                                    <td>Low (averaging effect)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <h2>Feature Importance</h2>
+                <div class="content-card">
+                    <p>Random Forest provides feature importance scores by measuring how much each feature decreases impurity across all trees.</p>
+                    
+                    <!-- Visual Feature Importance -->
+                    <div class="feature-importance-visual">
+                        <h3>📊 Feature Importance Example:</h3>
+                        <div class="importance-chart">
+                            <div class="feature-bar">
+                                <span class="feature-name">Age</span>
+                                <div class="bar-container">
+                                    <div class="importance-bar" style="width: 85%;">0.35</div>
+                                </div>
+                            </div>
+                            <div class="feature-bar">
+                                <span class="feature-name">Income</span>
+                                <div class="bar-container">
+                                    <div class="importance-bar" style="width: 70%;">0.28</div>
+                                </div>
+                            </div>
+                            <div class="feature-bar">
+                                <span class="feature-name">Education</span>
+                                <div class="bar-container">
+                                    <div class="importance-bar" style="width: 50%;">0.20</div>
+                                </div>
+                            </div>
+                            <div class="feature-bar">
+                                <span class="feature-name">Location</span>
+                                <div class="bar-container">
+                                    <div class="importance-bar" style="width: 35%;">0.12</div>
+                                </div>
+                            </div>
+                            <div class="feature-bar">
+                                <span class="feature-name">Gender</span>
+                                <div class="bar-container">
+                                    <div class="importance-bar" style="width: 15%;">0.05</div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="chart-explanation">📈 Higher bars = More important features for prediction</p>
+                    </div>
+                    
+                    <h3>Calculation Method:</h3>
+                    <ul>
+                        <li>For each tree, calculate impurity decrease for each feature</li>
+                        <li>Average across all trees in the forest</li>
+                        <li>Normalize to get relative importance scores</li>
+                    </ul>
+
+                    <div class="code-example">
+                        <h4>Python Example:</h4>
+                        <pre><code>from sklearn.ensemble import RandomForestClassifier
+import pandas as pd
+
+# Train Random Forest
+rf = RandomForestClassifier(n_estimators=100, random_state=42)
+rf.fit(X_train, y_train)
+
+# Get feature importance
+importance = rf.feature_importances_
+feature_names = X_train.columns
+
+# Create importance DataFrame
+importance_df = pd.DataFrame({
+    'feature': feature_names,
+    'importance': importance
+}).sort_values('importance', ascending=False)
+
+print(importance_df)</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <h2>Classification vs Regression</h2>
+                <div class="content-card">
+                    <div class="use-cases">
+                        <div class="use-case">
+                            <h3>Random Forest Classifier</h3>
+                            <ul>
+                                <li><strong>Prediction:</strong> Majority voting from all trees</li>
+                                <li><strong>Output:</strong> Class labels or probabilities</li>
+                                <li><strong>Use Cases:</strong> Email spam detection, image classification, medical diagnosis</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="use-case">
+                            <h3>Random Forest Regressor</h3>
+                            <ul>
+                                <li><strong>Prediction:</strong> Average of all tree predictions</li>
+                                <li><strong>Output:</strong> Continuous numerical values</li>
+                                <li><strong>Use Cases:</strong> House price prediction, stock prices, weather forecasting</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <h2>Scikit-Learn Implementation</h2>
+                <div class="content-card">
+                    <div class="code-example">
+                        <h4>Classification Example:</h4>
+                        <pre><code>from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, classification_report
+
+# Load and split data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create and train Random Forest
+rf_classifier = RandomForestClassifier(
+    n_estimators=100,      # Number of trees
+    max_depth=10,          # Maximum depth of trees
+    min_samples_split=5,   # Minimum samples to split
+    min_samples_leaf=2,    # Minimum samples in leaf
+    random_state=42
+)
+
+rf_classifier.fit(X_train, y_train)
+
+# Make predictions
+y_pred = rf_classifier.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+
+print(f"Accuracy: {accuracy:.3f}")
+print(classification_report(y_test, y_pred))</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h4>Regression Example:</h4>
+                        <pre><code>from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error, r2_score
+
+# Create and train Random Forest Regressor
+rf_regressor = RandomForestRegressor(
+    n_estimators=100,
+    max_depth=10,
+    random_state=42
+)
+
+rf_regressor.fit(X_train, y_train)
+
+# Make predictions
+y_pred = rf_regressor.predict(X_test)
+
+# Evaluate
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+print(f"MSE: {mse:.3f}")
+print(f"R² Score: {r2:.3f}")</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <h2>Benefits of Random Forest</h2>
+                <div class="content-card">
+                    <div class="benefits-grid">
+                        <div class="benefit">
+                            <h3>🎯 High Accuracy</h3>
+                            <p>Ensemble approach typically outperforms single decision trees</p>
+                        </div>
+                        
+                        <div class="benefit">
+                            <h3>🛡️ Overfitting Resistance</h3>
+                            <p>Averaging multiple trees reduces overfitting significantly</p>
+                        </div>
+                        
+                        <div class="benefit">
+                            <h3>📊 Feature Importance</h3>
+                            <p>Provides built-in feature importance ranking</p>
+                        </div>
+                        
+                        <div class="benefit">
+                            <h3>🔧 Handles Missing Values</h3>
+                            <p>Can handle missing values and mixed data types</p>
+                        </div>
+                        
+                        <div class="benefit">
+                            <h3>⚡ Parallel Training</h3>
+                            <p>Trees can be trained independently in parallel</p>
+                        </div>
+                        
+                        <div class="benefit">
+                            <h3>🎛️ Few Hyperparameters</h3>
+                            <p>Works well with default parameters, minimal tuning needed</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <h2>Key Parameters</h2>
+                <div class="content-card">
+                    <div class="parameters">
+                        <div class="parameter">
+                            <h4>n_estimators</h4>
+                            <p>Number of trees in the forest. More trees = better performance but slower training.</p>
+                            <span class="param-default">Default: 100</span>
+                        </div>
+                        
+                        <div class="parameter">
+                            <h4>max_depth</h4>
+                            <p>Maximum depth of trees. Controls overfitting.</p>
+                            <span class="param-default">Default: None (unlimited)</span>
+                        </div>
+                        
+                        <div class="parameter">
+                            <h4>min_samples_split</h4>
+                            <p>Minimum samples required to split internal node.</p>
+                            <span class="param-default">Default: 2</span>
+                        </div>
+                        
+                        <div class="parameter">
+                            <h4>max_features</h4>
+                            <p>Number of features to consider for best split.</p>
+                            <span class="param-default">Default: √(total features)</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="resources-section">
+                <h2>📚 Resources & Practice</h2>
+                <div class="resources-grid">
+                    <div class="resource-card">
+                        <h3>📝 Code Examples</h3>
+                        <p>Complete Random Forest implementations</p>
+                        <a href="#" class="download-btn">Download Code</a>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <h3>📊 Practice Dataset</h3>
+                        <p>Sample datasets for hands-on practice</p>
+                        <a href="#" class="download-btn">Download Data</a>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <h3>📋 Exercises</h3>
+                        <p>Practice problems and solutions</p>
+                        <a href="#" class="download-btn">Download Exercises</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 ML Lecture Series. Educational content for machine learning fundamentals.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
