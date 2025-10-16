@@ -14,6 +14,7 @@
                 <a href="index.html" class="nav-link">Home</a>
                 <a href="ml-lecture-1.html" class="nav-link">Intro to ML</a>
                 <a href="decision-trees-lecture.html" class="nav-link">Decision Trees</a>
+                <a href="support-vector-machine-lecture.html" class="nav-link">SVM</a>
                 <a href="#" class="nav-link active">Random Forest</a>
             </nav>
         </div>
@@ -329,57 +330,25 @@ print(importance_df)</code></pre>
             <section class="content-section">
                 <h2>Scikit-Learn Implementation</h2>
                 <div class="content-card">
-                    <div class="code-example">
-                        <h4>Classification Example:</h4>
-                        <pre><code>from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, classification_report
-
-# Load and split data
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# Create and train Random Forest
-rf_classifier = RandomForestClassifier(
-    n_estimators=100,      # Number of trees
-    max_depth=10,          # Maximum depth of trees
-    min_samples_split=5,   # Minimum samples to split
-    min_samples_leaf=2,    # Minimum samples in leaf
-    random_state=42
-)
-
-rf_classifier.fit(X_train, y_train)
-
-# Make predictions
-y_pred = rf_classifier.predict(X_test)
-accuracy = accuracy_score(y_test, y_pred)
-
-print(f"Accuracy: {accuracy:.3f}")
-print(classification_report(y_test, y_pred))</code></pre>
+                    <div class="interactive-code">
+                        <h4>🚀 Interactive Python Examples:</h4>
+                        <p>Click the button below to open the complete Jupyter notebook with all examples:</p>
+                        <button class="notebook-btn" onclick="openNotebook('random-forest-practical.ipynb')">
+                            📓 Open Random Forest Notebook
+                        </button>
+                        <p class="notebook-info">Includes: Classification, Regression, Feature Importance, Hyperparameter Tuning</p>
                     </div>
 
-                    <div class="code-example">
-                        <h4>Regression Example:</h4>
-                        <pre><code>from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_squared_error, r2_score
+                    <div class="code-preview">
+                        <h4>Preview - Classification Example:</h4>
+                        <pre><code># Quick Preview - Full code in notebook
+from sklearn.ensemble import RandomForestClassifier
 
-# Create and train Random Forest Regressor
-rf_regressor = RandomForestRegressor(
-    n_estimators=100,
-    max_depth=10,
-    random_state=42
-)
+rf = RandomForestClassifier(n_estimators=100, random_state=42)
+rf.fit(X_train, y_train)
+predictions = rf.predict(X_test)
 
-rf_regressor.fit(X_train, y_train)
-
-# Make predictions
-y_pred = rf_regressor.predict(X_test)
-
-# Evaluate
-mse = mean_squared_error(y_test, y_pred)
-r2 = r2_score(y_test, y_pred)
-
-print(f"MSE: {mse:.3f}")
-print(f"R² Score: {r2:.3f}")</code></pre>
+# Click notebook button above for complete implementation!</code></pre>
                     </div>
                 </div>
             </section>
@@ -453,25 +422,44 @@ print(f"R² Score: {r2:.3f}")</code></pre>
             </section>
 
             <section class="resources-section">
-                <h2>📚 Resources & Practice</h2>
-                <div class="resources-grid">
-                    <div class="resource-card">
-                        <h3>📝 Code Examples</h3>
-                        <p>Complete Random Forest implementations</p>
-                        <a href="#" class="download-btn">Download Code</a>
+                <h2>🚀 Hands-on Practice</h2>
+                <div class="interactive-resources">
+                    <div class="practice-card">
+                        <h3>📊 Classification Example</h3>
+                        <p>Iris dataset classification with feature importance</p>
+                        <button class="practice-btn" onclick="openNotebook('random-forest-practical.ipynb')">
+                            Start Classification
+                        </button>
                     </div>
                     
-                    <div class="resource-card">
-                        <h3>📊 Practice Dataset</h3>
-                        <p>Sample datasets for hands-on practice</p>
-                        <a href="#" class="download-btn">Download Data</a>
+                    <div class="practice-card">
+                        <h3>📈 Regression Example</h3>
+                        <p>House price prediction with Random Forest</p>
+                        <button class="practice-btn" onclick="openNotebook('random-forest-practical.ipynb')">
+                            Start Regression
+                        </button>
                     </div>
                     
-                    <div class="resource-card">
-                        <h3>📋 Exercises</h3>
-                        <p>Practice problems and solutions</p>
-                        <a href="#" class="download-btn">Download Exercises</a>
+                    <div class="practice-card">
+                        <h3>🔧 Hyperparameter Tuning</h3>
+                        <p>Optimize Random Forest performance</p>
+                        <button class="practice-btn" onclick="openNotebook('random-forest-practical.ipynb')">
+                            Start Tuning
+                        </button>
                     </div>
+                    
+                    <div class="practice-card">
+                        <h3>⚖️ Model Comparison</h3>
+                        <p>Compare Decision Tree vs Random Forest</p>
+                        <button class="practice-btn" onclick="openNotebook('random-forest-practical.ipynb')">
+                            Start Comparison
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="teacher-note">
+                    <h3>👨‍🏫 For Teachers:</h3>
+                    <p>All examples are ready-to-run in Jupyter notebook. Students can modify parameters and see immediate results. Perfect for interactive teaching!</p>
                 </div>
             </section>
         </div>
@@ -484,5 +472,25 @@ print(f"R² Score: {r2:.3f}")</code></pre>
     </footer>
 
     <script src="script.js"></script>
+    <script>
+        function openNotebook(notebookName) {
+            // Try to open with Jupyter
+            const jupyterUrl = `http://localhost:8888/notebooks/${notebookName}`;
+            
+            // Open in new tab
+            const newWindow = window.open(jupyterUrl, '_blank');
+            
+            // If popup blocked or Jupyter not running, show instructions
+            setTimeout(() => {
+                if (!newWindow || newWindow.closed) {
+                    showNotebookInstructions(notebookName);
+                }
+            }, 1000);
+        }
+        
+        function showNotebookInstructions(notebookName) {
+            alert(`To open the notebook:\n\n1. Make sure Jupyter is running: jupyter notebook\n2. Navigate to: ${notebookName}\n3. Or copy the file path and open in your preferred environment\n\nFile location: ${window.location.pathname.replace('random-forest-lecture.html', notebookName)}`);
+        }
+    </script>
 </body>
 </html>

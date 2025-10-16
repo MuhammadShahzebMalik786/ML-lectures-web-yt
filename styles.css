@@ -1182,3 +1182,150 @@ html {
         width: 100%;
     }
 }
+/* Interactive Notebook Styles */
+.interactive-code {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    padding: 25px;
+    border-radius: 15px;
+    text-align: center;
+    margin: 20px 0;
+    border: 2px solid #0ea5e9;
+}
+
+.notebook-btn {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+    margin: 15px 0;
+}
+
+.notebook-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+}
+
+.notebook-info {
+    font-style: italic;
+    color: #1e40af;
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
+
+.code-preview {
+    background: #f8fafc;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.code-preview h4 {
+    color: #374151;
+    margin-bottom: 10px;
+}
+
+.code-preview pre {
+    background: #1f2937;
+    color: #e5e7eb;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    overflow-x: auto;
+}
+
+/* Interactive Resources */
+.interactive-resources {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin: 30px 0;
+}
+
+.practice-card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    transition: all 0.3s;
+    border: 2px solid transparent;
+}
+
+.practice-card:hover {
+    transform: translateY(-5px);
+    border-color: #2563eb;
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.15);
+}
+
+.practice-card h3 {
+    color: #2563eb;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.practice-card p {
+    color: #6b7280;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.practice-btn {
+    background: #22c55e;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 0.95rem;
+}
+
+.practice-btn:hover {
+    background: #16a34a;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(34, 197, 94, 0.3);
+}
+
+.teacher-note {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    padding: 25px;
+    border-radius: 15px;
+    margin-top: 30px;
+    border-left: 5px solid #f59e0b;
+}
+
+.teacher-note h3 {
+    color: #92400e;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.teacher-note p {
+    color: #78350f;
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* Responsive Design for Interactive Elements */
+@media (max-width: 768px) {
+    .interactive-resources {
+        grid-template-columns: 1fr;
+    }
+    
+    .notebook-btn {
+        padding: 12px 20px;
+        font-size: 1rem;
+    }
+    
+    .practice-card {
+        padding: 20px;
+    }
+}

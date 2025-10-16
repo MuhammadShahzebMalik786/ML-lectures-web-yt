@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support Vector Machine - 3 Minute ML Lecture</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .lecture-container {
+            max-width: 900px;
+            margin: 90px auto 0;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .lecture-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 10px;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        
+        .svm-visual {
+            background: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-family: monospace;
+            margin: 15px 0;
+        }
+        
+        .highlight {
+            background: #e74c3c;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        .timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #e74c3c;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="index.html" class="logo">ML Tutorials</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="naive-bayes-lecture.html">Naive Bayes</a></li>
+                    <li><a href="decision-trees-lecture.html">Decision Trees</a></li>
+                    <li><a href="random-forest-lecture.html">Random Forest</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="timer" id="timer">3:00</div>
+    
+    <div class="lecture-container">
+        <div class="lecture-header">
+            <h1>🎯 Support Vector Machine (SVM)</h1>
+            <p>Machine Learning Made Simple</p>
+            <p><em>3-Minute Complete Guide</em></p>
+        </div>
+
+        <div class="section">
+            <h2>🤔 What is a Support Vector Machine?</h2>
+            <p>A <span class="highlight">powerful classifier</span> that finds the optimal boundary (hyperplane) to separate different classes with maximum margin.</p>
+            
+            <h3>📚 Detailed Explanation:</h3>
+            <p><strong>Support Vector Machine (SVM)</strong> is a supervised learning algorithm that creates the best possible decision boundary between classes by maximizing the margin between them.</p>
+            
+            <p><strong>How it thinks:</strong> "Find the line that separates cats from dogs with the widest possible gap, so I'm most confident about future predictions."</p>
+            
+            <p><strong>Real-world analogy:</strong> Like drawing a fence between two neighborhoods - you want the fence as far as possible from both sides to avoid disputes.</p>
+            
+            <div class="svm-visual">
+                <strong>Example: Email Classification</strong><br><br>
+                SPAM emails    |    NORMAL emails<br>
+                    ●          |         ○<br>
+                    ●          |         ○<br>
+                ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●<br>
+                    ●    ← MARGIN →    ○<br>
+                    ●          |         ○<br>
+                               |<br>
+                        DECISION BOUNDARY
+            </div>
+            
+            <p><strong>Key Components:</strong></p>
+            <ul>
+                <li><strong>Support Vectors:</strong> Data points closest to the decision boundary</li>
+                <li><strong>Hyperplane:</strong> The decision boundary that separates classes</li>
+                <li><strong>Margin:</strong> Distance between hyperplane and nearest data points</li>
+                <li><strong>Kernel:</strong> Function that transforms data to higher dimensions</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>💻 Quick Implementation</h2>
+            <h3>📖 Step-by-Step Code Explanation:</h3>
+            <p><strong>This example shows how to create a simple binary classifier using SVM.</strong></p>
+            
+            <div class="code-block">
+from sklearn.svm import SVC<br>
+from sklearn.datasets import make_classification<br>
+import numpy as np<br>
+<br>
+# Sample data: [Feature1, Feature2] → Class<br>
+# Each row represents one data point with 2 features<br>
+X = np.array([[2, 3], [3, 3], [1, 1], [2, 1], <br>
+              [3, 2], [1, 3], [4, 4], [5, 5]])<br>
+y = np.array([0, 0, 0, 0, 1, 1, 1, 1])  # 0=Class A, 1=Class B<br>
+<br>
+# Create and train SVM model<br>
+# kernel='linear' creates a straight line boundary<br>
+# C=1.0 controls the trade-off between margin and misclassification<br>
+svm = SVC(kernel='linear', C=1.0)<br>
+svm.fit(X, y)<br>
+<br>
+# Predict for new data point: [2.5, 2.5]<br>
+prediction = svm.predict([[2.5, 2.5]])<br>
+print(f"Prediction: Class {'B' if prediction[0] else 'A'}")<br>
+            </div>
+            
+            <h3>🔍 Code Breakdown:</h3>
+            <ul>
+                <li><strong>Line 1-3:</strong> Import SVM classifier and necessary libraries</li>
+                <li><strong>Line 6-8:</strong> Create training data with 2 features per sample</li>
+                <li><strong>Line 9:</strong> Define class labels (0 and 1 for binary classification)</li>
+                <li><strong>Line 14-15:</strong> Create and train the SVM model with linear kernel</li>
+                <li><strong>Line 18-19:</strong> Make prediction for new data point</li>
+            </ul>
+            
+            <p><strong>Expected Output:</strong> The model will classify the point [2.5, 2.5] based on which side of the optimal hyperplane it falls.</p>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Real Example: Text Classification</h2>
+            <h3>📧 Practical Application Explained:</h3>
+            <p><strong>This example demonstrates how SVM can classify text documents using TF-IDF features.</strong></p>
+            
+            <div class="code-block">
+from sklearn.feature_extraction.text import TfidfVectorizer<br>
+from sklearn.svm import SVC<br>
+from sklearn.pipeline import Pipeline<br>
+<br>
+# Sample text data for sentiment analysis<br>
+texts = [<br>
+    "I love this product, it's amazing!",<br>
+    "This is the worst thing ever",<br>
+    "Great quality and fast delivery",<br>
+    "Terrible customer service, very disappointed",<br>
+    "Excellent value for money",<br>
+    "Complete waste of time and money"<br>
+]<br>
+labels = [1, 0, 1, 0, 1, 0]  # 1=Positive, 0=Negative<br>
+<br>
+# Create pipeline: Text → TF-IDF → SVM<br>
+text_classifier = Pipeline([<br>
+    ('tfidf', TfidfVectorizer(max_features=1000)),<br>
+    ('svm', SVC(kernel='rbf', C=1.0))<br>
+])<br>
+<br>
+# Train the model<br>
+text_classifier.fit(texts, labels)<br>
+<br>
+# Predict sentiment for new text<br>
+new_text = ["This product is okay, nothing special"]<br>
+result = text_classifier.predict(new_text)<br>
+print(f"Sentiment: {'Positive' if result[0] else 'Negative'}")<br>
+            </div>
+            
+            <h3>🧠 How the Algorithm Works:</h3>
+            <p>The SVM analyzes patterns in the text features:</p>
+            <ul>
+                <li><strong>Step 1:</strong> Convert text to numerical features using TF-IDF</li>
+                <li><strong>Step 2:</strong> Find optimal hyperplane in high-dimensional space</li>
+                <li><strong>Step 3:</strong> Use RBF kernel to handle non-linear patterns</li>
+                <li><strong>Step 4:</strong> Classify new text based on which side of hyperplane it falls</li>
+            </ul>
+            
+            <p><strong>Decision Process:</strong> The SVM learns that words like "amazing", "great", "excellent" indicate positive sentiment, while "worst", "terrible", "disappointed" indicate negative sentiment.</p>
+        </div>
+
+        <div class="section">
+            <h2>⚡ Key Concepts</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h3>🔑 Important Terms:</h3>
+                    <ul>
+                        <li><strong>Support Vectors:</strong> Critical data points that define the boundary</li>
+                        <li><strong>Hyperplane:</strong> Decision boundary in n-dimensional space</li>
+                        <li><strong>Margin:</strong> Distance between hyperplane and support vectors</li>
+                        <li><strong>Kernel Trick:</strong> Maps data to higher dimensions</li>
+                        <li><strong>C Parameter:</strong> Controls regularization strength</li>
+                        <li><strong>Gamma:</strong> Defines influence of single training example</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>📊 How it Works:</h3>
+                    <ul>
+                        <li><strong>Step 1:</strong> Find support vectors (closest points to boundary)</li>
+                        <li><strong>Step 2:</strong> Maximize margin between classes</li>
+                        <li><strong>Step 3:</strong> Use kernel function for non-linear data</li>
+                        <li><strong>Step 4:</strong> Solve optimization problem</li>
+                        <li><strong>Step 5:</strong> Create decision function</li>
+                        <li><strong>Step 6:</strong> Classify new points based on hyperplane</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h3>🎯 Kernel Types Explained:</h3>
+            <p><strong>Linear Kernel:</strong> Creates straight line boundaries (fast, simple)</p>
+            <p><strong>RBF (Radial Basis Function):</strong> Creates curved boundaries (flexible)</p>
+            <p><strong>Polynomial Kernel:</strong> Creates polynomial boundaries (moderate complexity)</p>
+            <p><strong>Sigmoid Kernel:</strong> Similar to neural networks (rarely used)</p>
+            
+            <div class="svm-visual">
+                <strong>Kernel Comparison:</strong><br><br>
+                Linear: ————————————————————<br>
+                RBF: ～～～～～～～～～～～～～～～～<br>
+                Polynomial: ∩∪∩∪∩∪∩∪∩∪∩∪∩∪∩∪<br>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Complete Working Example</h2>
+            <h3>🏥 Medical Diagnosis System - Detailed Walkthrough:</h3>
+            <p><strong>This comprehensive example shows how to build a medical diagnosis classifier using SVM with proper data preprocessing and evaluation.</strong></p>
+            
+            <div class="code-block">
+from sklearn.svm import SVC<br>
+from sklearn.model_selection import train_test_split<br>
+from sklearn.preprocessing import StandardScaler<br>
+from sklearn.metrics import classification_report, accuracy_score<br>
+import numpy as np<br>
+<br>
+# Medical data: [age, blood_pressure, cholesterol, heart_rate]<br>
+# Simulated patient data for heart disease prediction<br>
+medical_data = np.array([<br>
+    [45, 120, 200, 70],   # Healthy patient<br>
+    [65, 160, 300, 90],   # At-risk patient<br>
+    [35, 110, 180, 65],   # Healthy patient<br>
+    [70, 180, 350, 100],  # At-risk patient<br>
+    [50, 130, 220, 75],   # Healthy patient<br>
+    [60, 170, 320, 95],   # At-risk patient<br>
+    [40, 115, 190, 68],   # Healthy patient<br>
+    [75, 190, 380, 110]   # At-risk patient<br>
+])<br>
+<br>
+# Labels: 0=Healthy, 1=At-risk for heart disease<br>
+labels = np.array([0, 1, 0, 1, 0, 1, 0, 1])<br>
+<br>
+# Split data into training and testing sets<br>
+X_train, X_test, y_train, y_test = train_test_split(<br>
+    medical_data, labels, test_size=0.3, random_state=42<br>
+)<br>
+<br>
+# Feature scaling (important for SVM)<br>
+scaler = StandardScaler()<br>
+X_train_scaled = scaler.fit_transform(X_train)<br>
+X_test_scaled = scaler.transform(X_test)<br>
+<br>
+# Train SVM with RBF kernel<br>
+svm_model = SVC(kernel='rbf', C=1.0, gamma='scale')<br>
+svm_model.fit(X_train_scaled, y_train)<br>
+<br>
+# Make predictions<br>
+predictions = svm_model.predict(X_test_scaled)<br>
+<br>
+# Evaluate model performance<br>
+accuracy = accuracy_score(y_test, predictions)<br>
+print(f"Model Accuracy: {accuracy:.2f}")<br>
+<br>
+# Predict for new patient: 55 years, BP=140, Chol=250, HR=80<br>
+new_patient = scaler.transform([[55, 140, 250, 80]])<br>
+diagnosis = svm_model.predict(new_patient)<br>
+print(f"Diagnosis: {'At-risk' if diagnosis[0] else 'Healthy'}")<br>
+            </div>
+            
+            <h3>🔬 Advanced Features Explained:</h3>
+            <ul>
+                <li><strong>StandardScaler:</strong> Normalizes features to same scale (crucial for SVM)</li>
+                <li><strong>train_test_split:</strong> Separates data for unbiased evaluation</li>
+                <li><strong>RBF Kernel:</strong> Handles non-linear relationships in medical data</li>
+                <li><strong>C Parameter:</strong> Controls balance between margin and misclassification</li>
+                <li><strong>Gamma:</strong> Controls influence of individual training samples</li>
+            </ul>
+            
+            <p><strong>Why Feature Scaling Matters:</strong> SVM is sensitive to feature scales. Age (20-80) and cholesterol (150-400) have different ranges, so scaling ensures fair treatment of all features.</p>
+        </div>
+
+        <div class="section">
+            <h2>🎨 SVM Kernels in Action</h2>
+            <h3>🔧 Choosing the Right Kernel:</h3>
+            
+            <div class="code-block">
+# Comparing different kernels on the same dataset<br>
+from sklearn.datasets import make_circles<br>
+<br>
+# Create non-linearly separable data (circles)<br>
+X_circles, y_circles = make_circles(n_samples=100, noise=0.1, factor=0.3)<br>
+<br>
+# Test different kernels<br>
+kernels = ['linear', 'rbf', 'poly']<br>
+<br>
+for kernel in kernels:<br>
+    svm = SVC(kernel=kernel, C=1.0)<br>
+    svm.fit(X_circles, y_circles)<br>
+    score = svm.score(X_circles, y_circles)<br>
+    print(f"{kernel.upper()} kernel accuracy: {score:.3f}")<br>
+            </div>
+            
+            <h3>📊 Kernel Selection Guidelines:</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h4>🎯 When to Use Each Kernel:</h4>
+                    <ul>
+                        <li><strong>Linear:</strong> Large datasets, text classification</li>
+                        <li><strong>RBF:</strong> Small-medium datasets, unknown patterns</li>
+                        <li><strong>Polynomial:</strong> Image processing, specific domains</li>
+                        <li><strong>Custom:</strong> Domain-specific problems</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>⚡ Performance Tips:</h4>
+                    <ul>
+                        <li><strong>Start with RBF:</strong> Good default choice</li>
+                        <li><strong>Try Linear:</strong> If RBF is too slow</li>
+                        <li><strong>Scale Features:</strong> Always normalize your data</li>
+                        <li><strong>Tune Parameters:</strong> Use GridSearchCV</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📈 Advantages & Disadvantages</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div style="background: #d4edda; padding: 15px; border-radius: 5px;">
+                    <h3>✅ Advantages:</h3>
+                    <ul>
+                        <li><strong>Effective:</strong> Works well with high-dimensional data</li>
+                        <li><strong>Memory Efficient:</strong> Uses only support vectors</li>
+                        <li><strong>Versatile:</strong> Different kernels for different problems</li>
+                        <li><strong>Robust:</strong> Works well with small datasets</li>
+                        <li><strong>No Local Minima:</strong> Convex optimization problem</li>
+                        <li><strong>Generalization:</strong> Good performance on unseen data</li>
+                    </ul>
+                </div>
+                <div style="background: #f8d7da; padding: 15px; border-radius: 5px;">
+                    <h3>❌ Disadvantages:</h3>
+                    <ul>
+                        <li><strong>Slow on Large Data:</strong> O(n³) training complexity</li>
+                        <li><strong>No Probability:</strong> Only gives class predictions</li>
+                        <li><strong>Sensitive to Scaling:</strong> Requires feature normalization</li>
+                        <li><strong>Parameter Tuning:</strong> C and gamma need optimization</li>
+                        <li><strong>Black Box:</strong> Hard to interpret results</li>
+                        <li><strong>Noise Sensitive:</strong> Outliers can affect performance</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🛠️ Hyperparameter Tuning</h2>
+            <h3>🎛️ Optimizing SVM Performance:</h3>
+            
+            <div class="code-block">
+from sklearn.model_selection import GridSearchCV<br>
+<br>
+# Define parameter grid for tuning<br>
+param_grid = {<br>
+    'C': [0.1, 1, 10, 100],<br>
+    'gamma': ['scale', 'auto', 0.001, 0.01, 0.1, 1],<br>
+    'kernel': ['rbf', 'linear', 'poly']<br>
+}<br>
+<br>
+# Create SVM and GridSearch<br>
+svm = SVC()<br>
+grid_search = GridSearchCV(svm, param_grid, cv=5, scoring='accuracy')<br>
+<br>
+# Find best parameters<br>
+grid_search.fit(X_train_scaled, y_train)<br>
+<br>
+print(f"Best parameters: {grid_search.best_params_}")<br>
+print(f"Best cross-validation score: {grid_search.best_score_:.3f}")<br>
+<br>
+# Use best model for predictions<br>
+best_svm = grid_search.best_estimator_<br>
+final_predictions = best_svm.predict(X_test_scaled)<br>
+            </div>
+            
+            <h3>🎯 Parameter Meanings:</h3>
+            <ul>
+                <li><strong>C (Regularization):</strong> Higher C = less regularization, more complex model</li>
+                <li><strong>Gamma (RBF width):</strong> Higher gamma = more influence from nearby points</li>
+                <li><strong>Kernel:</strong> Type of decision boundary (linear, curved, polynomial)</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🎓 Next Steps & Best Practices</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h3>🚀 Advanced Techniques:</h3>
+                    <ul>
+                        <li><strong>Multi-class SVM:</strong> One-vs-One, One-vs-Rest</li>
+                        <li><strong>SVM Regression:</strong> SVR for continuous predictions</li>
+                        <li><strong>Online SVM:</strong> Incremental learning</li>
+                        <li><strong>Ensemble Methods:</strong> Combine multiple SVMs</li>
+                        <li><strong>Custom Kernels:</strong> Domain-specific functions</li>
+                        <li><strong>Feature Selection:</strong> Reduce dimensionality</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>💡 Best Practices:</h3>
+                    <ul>
+                        <li><strong>Always Scale:</strong> Use StandardScaler or MinMaxScaler</li>
+                        <li><strong>Cross-Validation:</strong> Use CV for parameter tuning</li>
+                        <li><strong>Start Simple:</strong> Try linear kernel first</li>
+                        <li><strong>Handle Imbalance:</strong> Use class_weight parameter</li>
+                        <li><strong>Monitor Overfitting:</strong> Check validation scores</li>
+                        <li><strong>Consider Alternatives:</strong> Random Forest for large data</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h3>💡 Practice Suggestions:</h3>
+            <p><strong>Try building SVM models for these problems:</strong></p>
+            <ul>
+                <li>🖼️ Image classification (handwritten digits)</li>
+                <li>📧 Spam email detection</li>
+                <li>🏥 Medical diagnosis systems</li>
+                <li>💰 Credit card fraud detection</li>
+                <li>📈 Stock market prediction</li>
+                <li>🎬 Movie sentiment analysis</li>
+            </ul>
+            
+            <div style="background: #f8d7da; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                <h4>⚠️ Important Reminders:</h4>
+                <p><strong>Always remember to:</strong></p>
+                <ul>
+                    <li>Scale your features before training SVM</li>
+                    <li>Use cross-validation for hyperparameter tuning</li>
+                    <li>Start with RBF kernel, then try linear for speed</li>
+                    <li>Monitor for overfitting with validation curves</li>
+                    <li>Consider computational cost for large datasets</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 3-minute timer
+        let timeLeft = 180;
+        const timer = document.getElementById('timer');
+        
+        const countdown = setInterval(() => {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timer.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                timer.textContent = "Time's Up!";
+                timer.style.background = '#27ae60';
+            }
+            timeLeft--;
+        }, 1000);
+    </script>
+</body>
+</html>
