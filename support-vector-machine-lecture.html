@@ -101,229 +101,143 @@
 
         <div class="section">
             <h2>🤔 What is a Support Vector Machine?</h2>
-            <p>A <span class="highlight">powerful classifier</span> that finds the optimal boundary (hyperplane) to separate different classes with maximum margin.</p>
+            <p>A <span class="highlight">powerful classifier</span> that finds the optimal boundary to separate classes with maximum margin.</p>
             
-            <h3>📚 Detailed Explanation:</h3>
-            <p><strong>Support Vector Machine (SVM)</strong> is a supervised learning algorithm that creates the best possible decision boundary between classes by maximizing the margin between them.</p>
-            
-            <p><strong>How it thinks:</strong> "Find the line that separates cats from dogs with the widest possible gap, so I'm most confident about future predictions."</p>
-            
-            <p><strong>Real-world analogy:</strong> Like drawing a fence between two neighborhoods - you want the fence as far as possible from both sides to avoid disputes.</p>
-            
-            <div class="svm-visual">
-                <strong>Example: Email Classification</strong><br><br>
-                SPAM emails    |    NORMAL emails<br>
-                    ●          |         ○<br>
-                    ●          |         ○<br>
-                ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●<br>
-                    ●    ← MARGIN →    ○<br>
-                    ●          |         ○<br>
-                               |<br>
-                        DECISION BOUNDARY
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://scikit-learn.org/stable/_images/sphx_glr_plot_svm_margin_001.png" alt="SVM Margin Visualization" style="max-width: 100%; height: 300px; border-radius: 10px;">
+                <p><em>SVM finds the line with maximum margin between classes</em></p>
             </div>
             
-            <p><strong>Key Components:</strong></p>
-            <ul>
-                <li><strong>Support Vectors:</strong> Data points closest to the decision boundary</li>
-                <li><strong>Hyperplane:</strong> The decision boundary that separates classes</li>
-                <li><strong>Margin:</strong> Distance between hyperplane and nearest data points</li>
-                <li><strong>Kernel:</strong> Function that transforms data to higher dimensions</li>
-            </ul>
-        </div>
-
-        <div class="section">
-            <h2>💻 Quick Implementation</h2>
-            <h3>📖 Step-by-Step Code Explanation:</h3>
-            <p><strong>This example shows how to create a simple binary classifier using SVM.</strong></p>
+            <p><strong>Think of SVM like a referee in a sports game:</strong> It draws the fairest possible line between two teams, keeping maximum distance from both sides to avoid disputes. This "fairest line" is what makes SVM so powerful - it doesn't just separate classes, it does so with maximum confidence.</p>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://miro.medium.com/v2/resize:fit:1400/1*ZpkLQf2FNfzfH4HXeMw4MQ.png" alt="SVM vs Other Classifiers" style="max-width: 100%; height: 250px; border-radius: 10px;">
+                <p><em>SVM vs other classifiers - notice the optimal margin</em></p>
+            </div>
+            
+            <p><strong>Why is this important?</strong> Imagine you're trying to separate emails into spam and not-spam. Other algorithms might draw any line that separates them, but SVM finds the line that's furthest away from both types of emails. This means when a new, uncertain email arrives, SVM is most likely to classify it correctly.</p>
             
             <div class="code-block">
-from sklearn.svm import SVC<br>
-from sklearn.datasets import make_classification<br>
-import numpy as np<br>
-<br>
-# Sample data: [Feature1, Feature2] → Class<br>
-# Each row represents one data point with 2 features<br>
-X = np.array([[2, 3], [3, 3], [1, 1], [2, 1], <br>
-              [3, 2], [1, 3], [4, 4], [5, 5]])<br>
-y = np.array([0, 0, 0, 0, 1, 1, 1, 1])  # 0=Class A, 1=Class B<br>
-<br>
-# Create and train SVM model<br>
-# kernel='linear' creates a straight line boundary<br>
-# C=1.0 controls the trade-off between margin and misclassification<br>
-svm = SVC(kernel='linear', C=1.0)<br>
-svm.fit(X, y)<br>
-<br>
-# Predict for new data point: [2.5, 2.5]<br>
-prediction = svm.predict([[2.5, 2.5]])<br>
-print(f"Prediction: Class {'B' if prediction[0] else 'A'}")<br>
+svm = SVC().fit(X, y)  # That's it! SVM in one line
             </div>
-            
-            <h3>🔍 Code Breakdown:</h3>
-            <ul>
-                <li><strong>Line 1-3:</strong> Import SVM classifier and necessary libraries</li>
-                <li><strong>Line 6-8:</strong> Create training data with 2 features per sample</li>
-                <li><strong>Line 9:</strong> Define class labels (0 and 1 for binary classification)</li>
-                <li><strong>Line 14-15:</strong> Create and train the SVM model with linear kernel</li>
-                <li><strong>Line 18-19:</strong> Make prediction for new data point</li>
-            </ul>
-            
-            <p><strong>Expected Output:</strong> The model will classify the point [2.5, 2.5] based on which side of the optimal hyperplane it falls.</p>
         </div>
 
         <div class="section">
-            <h2>🎯 Real Example: Text Classification</h2>
-            <h3>📧 Practical Application Explained:</h3>
-            <p><strong>This example demonstrates how SVM can classify text documents using TF-IDF features.</strong></p>
+            <h2>💻 How SVM Works</h2>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://static.javatpoint.com/tutorial/machine-learning/images/support-vector-machine-algorithm.png" alt="SVM Working Process" style="max-width: 100%; height: 300px; border-radius: 10px;">
+                <p><em>Step-by-step: How SVM finds the optimal decision boundary</em></p>
+            </div>
+            
+            <p><strong>The SVM Process Explained:</strong></p>
+            <p>1. <strong>Identify Support Vectors:</strong> SVM looks at your data and finds the points that are closest to the boundary between different classes. These are called "support vectors" - think of them as the most important data points that will determine where the boundary goes.</p>
+            
+            <p>2. <strong>Maximize the Margin:</strong> Instead of just drawing any line that separates the classes, SVM draws the line that is as far as possible from the support vectors on both sides. This creates the widest possible "safety zone" between classes.</p>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://miro.medium.com/v2/resize:fit:1400/1*Ub8HsQqZ8E7PKeQmvjKoSg.png" alt="SVM Support Vectors" style="max-width: 100%; height: 250px; border-radius: 10px;">
+                <p><em>Support vectors (circled points) determine the decision boundary</em></p>
+            </div>
+            
+            <p>3. <strong>Handle Complex Data:</strong> When data isn't linearly separable (can't be separated by a straight line), SVM uses "kernels" to transform the data into higher dimensions where it becomes separable. It's like lifting a tangled rope into 3D space to untangle it.</p>
             
             <div class="code-block">
-from sklearn.feature_extraction.text import TfidfVectorizer<br>
-from sklearn.svm import SVC<br>
-from sklearn.pipeline import Pipeline<br>
-<br>
-# Sample text data for sentiment analysis<br>
-texts = [<br>
-    "I love this product, it's amazing!",<br>
-    "This is the worst thing ever",<br>
-    "Great quality and fast delivery",<br>
-    "Terrible customer service, very disappointed",<br>
-    "Excellent value for money",<br>
-    "Complete waste of time and money"<br>
-]<br>
-labels = [1, 0, 1, 0, 1, 0]  # 1=Positive, 0=Negative<br>
-<br>
-# Create pipeline: Text → TF-IDF → SVM<br>
-text_classifier = Pipeline([<br>
-    ('tfidf', TfidfVectorizer(max_features=1000)),<br>
-    ('svm', SVC(kernel='rbf', C=1.0))<br>
-])<br>
-<br>
-# Train the model<br>
-text_classifier.fit(texts, labels)<br>
-<br>
-# Predict sentiment for new text<br>
-new_text = ["This product is okay, nothing special"]<br>
-result = text_classifier.predict(new_text)<br>
-print(f"Sentiment: {'Positive' if result[0] else 'Negative'}")<br>
-            </div>
-            
-            <h3>🧠 How the Algorithm Works:</h3>
-            <p>The SVM analyzes patterns in the text features:</p>
-            <ul>
-                <li><strong>Step 1:</strong> Convert text to numerical features using TF-IDF</li>
-                <li><strong>Step 2:</strong> Find optimal hyperplane in high-dimensional space</li>
-                <li><strong>Step 3:</strong> Use RBF kernel to handle non-linear patterns</li>
-                <li><strong>Step 4:</strong> Classify new text based on which side of hyperplane it falls</li>
-            </ul>
-            
-            <p><strong>Decision Process:</strong> The SVM learns that words like "amazing", "great", "excellent" indicate positive sentiment, while "worst", "terrible", "disappointed" indicate negative sentiment.</p>
-        </div>
-
-        <div class="section">
-            <h2>⚡ Key Concepts</h2>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                <div>
-                    <h3>🔑 Important Terms:</h3>
-                    <ul>
-                        <li><strong>Support Vectors:</strong> Critical data points that define the boundary</li>
-                        <li><strong>Hyperplane:</strong> Decision boundary in n-dimensional space</li>
-                        <li><strong>Margin:</strong> Distance between hyperplane and support vectors</li>
-                        <li><strong>Kernel Trick:</strong> Maps data to higher dimensions</li>
-                        <li><strong>C Parameter:</strong> Controls regularization strength</li>
-                        <li><strong>Gamma:</strong> Defines influence of single training example</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3>📊 How it Works:</h3>
-                    <ul>
-                        <li><strong>Step 1:</strong> Find support vectors (closest points to boundary)</li>
-                        <li><strong>Step 2:</strong> Maximize margin between classes</li>
-                        <li><strong>Step 3:</strong> Use kernel function for non-linear data</li>
-                        <li><strong>Step 4:</strong> Solve optimization problem</li>
-                        <li><strong>Step 5:</strong> Create decision function</li>
-                        <li><strong>Step 6:</strong> Classify new points based on hyperplane</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <h3>🎯 Kernel Types Explained:</h3>
-            <p><strong>Linear Kernel:</strong> Creates straight line boundaries (fast, simple)</p>
-            <p><strong>RBF (Radial Basis Function):</strong> Creates curved boundaries (flexible)</p>
-            <p><strong>Polynomial Kernel:</strong> Creates polynomial boundaries (moderate complexity)</p>
-            <p><strong>Sigmoid Kernel:</strong> Similar to neural networks (rarely used)</p>
-            
-            <div class="svm-visual">
-                <strong>Kernel Comparison:</strong><br><br>
-                Linear: ————————————————————<br>
-                RBF: ～～～～～～～～～～～～～～～～<br>
-                Polynomial: ∩∪∩∪∩∪∩∪∩∪∩∪∩∪∩∪<br>
+svm = SVC(kernel='rbf').fit(X, y)  # RBF kernel for complex patterns
             </div>
         </div>
 
         <div class="section">
-            <h2>🚀 Complete Working Example</h2>
-            <h3>🏥 Medical Diagnosis System - Detailed Walkthrough:</h3>
-            <p><strong>This comprehensive example shows how to build a medical diagnosis classifier using SVM with proper data preprocessing and evaluation.</strong></p>
+            <h2>🎯 SVM Kernels: The Magic Behind Complex Patterns</h2>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://static.javatpoint.com/tutorial/machine-learning/images/support-vector-machine-algorithm2.png" alt="SVM Kernels Visualization" style="max-width: 100%; height: 350px; border-radius: 10px;">
+                <p><em>Different kernels handle different data patterns - from simple lines to complex curves</em></p>
+            </div>
+            
+            <p><strong>Understanding Kernels Through Real Examples:</strong></p>
+            
+            <p><strong>Linear Kernel:</strong> Imagine trying to separate cats from dogs based on weight and height. If heavier, taller animals are mostly dogs and lighter, shorter ones are cats, a straight line can separate them perfectly. This is when you use a linear kernel.</p>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://scikit-learn.org/stable/_images/sphx_glr_plot_svm_kernels_001.png" alt="Linear vs RBF Kernel" style="max-width: 100%; height: 300px; border-radius: 10px;">
+                <p><em>Linear kernel (left) vs RBF kernel (right) - see how RBF handles curved boundaries</em></p>
+            </div>
+            
+            <p><strong>RBF (Radial Basis Function) Kernel:</strong> Now imagine the data is more complex - maybe small dogs and large cats exist too. The boundary becomes curved, like drawing circles around clusters. RBF kernel excels at this by creating flexible, curved decision boundaries.</p>
+            
+            <p><strong>Polynomial Kernel:</strong> Think of data that follows a specific mathematical pattern, like a parabola. Polynomial kernels can capture these specific curved relationships, making them perfect for certain scientific or engineering applications.</p>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://miro.medium.com/v2/resize:fit:1400/1*mCwnu5kXot6buL7jeIafqQ.png" alt="Kernel Transformation" style="max-width: 100%; height: 250px; border-radius: 10px;">
+                <p><em>How kernels transform data: from non-separable to separable</em></p>
+            </div>
             
             <div class="code-block">
-from sklearn.svm import SVC<br>
-from sklearn.model_selection import train_test_split<br>
-from sklearn.preprocessing import StandardScaler<br>
-from sklearn.metrics import classification_report, accuracy_score<br>
-import numpy as np<br>
-<br>
-# Medical data: [age, blood_pressure, cholesterol, heart_rate]<br>
-# Simulated patient data for heart disease prediction<br>
-medical_data = np.array([<br>
-    [45, 120, 200, 70],   # Healthy patient<br>
-    [65, 160, 300, 90],   # At-risk patient<br>
-    [35, 110, 180, 65],   # Healthy patient<br>
-    [70, 180, 350, 100],  # At-risk patient<br>
-    [50, 130, 220, 75],   # Healthy patient<br>
-    [60, 170, 320, 95],   # At-risk patient<br>
-    [40, 115, 190, 68],   # Healthy patient<br>
-    [75, 190, 380, 110]   # At-risk patient<br>
-])<br>
-<br>
-# Labels: 0=Healthy, 1=At-risk for heart disease<br>
-labels = np.array([0, 1, 0, 1, 0, 1, 0, 1])<br>
-<br>
-# Split data into training and testing sets<br>
-X_train, X_test, y_train, y_test = train_test_split(<br>
-    medical_data, labels, test_size=0.3, random_state=42<br>
-)<br>
-<br>
-# Feature scaling (important for SVM)<br>
-scaler = StandardScaler()<br>
-X_train_scaled = scaler.fit_transform(X_train)<br>
-X_test_scaled = scaler.transform(X_test)<br>
-<br>
-# Train SVM with RBF kernel<br>
-svm_model = SVC(kernel='rbf', C=1.0, gamma='scale')<br>
-svm_model.fit(X_train_scaled, y_train)<br>
-<br>
-# Make predictions<br>
-predictions = svm_model.predict(X_test_scaled)<br>
-<br>
-# Evaluate model performance<br>
-accuracy = accuracy_score(y_test, predictions)<br>
-print(f"Model Accuracy: {accuracy:.2f}")<br>
-<br>
-# Predict for new patient: 55 years, BP=140, Chol=250, HR=80<br>
-new_patient = scaler.transform([[55, 140, 250, 80]])<br>
-diagnosis = svm_model.predict(new_patient)<br>
-print(f"Diagnosis: {'At-risk' if diagnosis[0] else 'Healthy'}")<br>
+SVC(kernel='linear')    # For simple, straight-line separations<br>
+SVC(kernel='rbf')       # For complex, curved patterns (most common)<br>
+SVC(kernel='poly')      # For specific polynomial relationships
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>⚡ Key Concepts: The Building Blocks of SVM</h2>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://miro.medium.com/v2/resize:fit:1400/1*WNxO_GgLZkbRhF4pWoAFdQ.png" alt="SVM Components Explained" style="max-width: 100%; height: 300px; border-radius: 10px;">
+                <p><em>The anatomy of SVM: Support vectors, hyperplane, and margin</em></p>
             </div>
             
-            <h3>🔬 Advanced Features Explained:</h3>
-            <ul>
-                <li><strong>StandardScaler:</strong> Normalizes features to same scale (crucial for SVM)</li>
-                <li><strong>train_test_split:</strong> Separates data for unbiased evaluation</li>
-                <li><strong>RBF Kernel:</strong> Handles non-linear relationships in medical data</li>
-                <li><strong>C Parameter:</strong> Controls balance between margin and misclassification</li>
-                <li><strong>Gamma:</strong> Controls influence of individual training samples</li>
-            </ul>
+            <p><strong>Support Vectors - The VIP Data Points:</strong></p>
+            <p>Imagine you're organizing a party and need to put a rope barrier between two groups of people. You don't need to consider everyone - just the people standing closest to where the rope will go. These "closest people" are your support vectors. In SVM, these are the data points that actually matter for drawing the decision boundary. Remove any other point, and the boundary stays the same. Remove a support vector, and everything changes!</p>
             
-            <p><strong>Why Feature Scaling Matters:</strong> SVM is sensitive to feature scales. Age (20-80) and cholesterol (150-400) have different ranges, so scaling ensures fair treatment of all features.</p>
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://scikit-learn.org/stable/_images/sphx_glr_plot_svm_exercise_001.png" alt="Support Vectors Highlighted" style="max-width: 100%; height: 250px; border-radius: 10px;">
+                <p><em>Support vectors (highlighted) are the only points that matter for the decision boundary</em></p>
+            </div>
+            
+            <p><strong>Hyperplane - The Ultimate Decision Maker:</strong></p>
+            <p>In 2D, it's a line. In 3D, it's a flat surface. In higher dimensions, it's called a hyperplane. This is SVM's decision boundary - everything on one side gets classified as Class A, everything on the other side as Class B. The beauty is that SVM finds the hyperplane that's furthest from all the support vectors, making it the most confident decision possible.</p>
+            
+            <p><strong>Margin - The Confidence Zone:</strong></p>
+            <p>The margin is like a "buffer zone" around the decision boundary. A wider margin means SVM is more confident about its decisions. It's the distance from the hyperplane to the nearest support vectors on each side. SVM's goal is to maximize this margin, creating the most robust classifier possible.</p>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://miro.medium.com/v2/resize:fit:1400/1*4OzCwNKao56MJb4QJ8X-Bg.png" alt="Margin Visualization" style="max-width: 100%; height: 250px; border-radius: 10px;">
+                <p><em>Wider margin = more confident predictions</em></p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Real-World Applications: Where SVM Shines</h2>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://scikit-learn.org/stable/_images/sphx_glr_plot_iris_svc_001.png" alt="SVM Applications" style="max-width: 100%; height: 300px; border-radius: 10px;">
+                <p><em>SVM successfully classifying the famous Iris dataset</em></p>
+            </div>
+            
+            <p><strong>Email Spam Detection:</strong></p>
+            <p>Every day, your email provider uses algorithms like SVM to protect you from spam. SVM analyzes thousands of features in each email - word frequency, sender patterns, link density, and more. It creates a high-dimensional boundary that separates legitimate emails from spam with remarkable accuracy. The beauty is that SVM can handle the complexity of natural language without getting confused by new spam tactics.</p>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://miro.medium.com/v2/resize:fit:1400/1*Ub8HsQqZ8E7PKeQmvjKoSg.png" alt="Text Classification" style="max-width: 100%; height: 250px; border-radius: 10px;">
+                <p><em>SVM processing text data for classification</em></p>
+            </div>
+            
+            <p><strong>Medical Diagnosis:</strong></p>
+            <p>Doctors use SVM-powered systems to analyze medical images, predict disease risks, and assist in diagnosis. For example, SVM can analyze thousands of features in a mammogram to detect early signs of breast cancer, often spotting patterns that human eyes might miss. The algorithm's ability to work with high-dimensional data makes it perfect for processing complex medical information.</p>
+            
+            <p><strong>Financial Fraud Detection:</strong></p>
+            <p>Banks use SVM to detect fraudulent transactions in real-time. By analyzing spending patterns, location data, transaction amounts, and timing, SVM can instantly flag suspicious activities. Its ability to create complex decision boundaries helps it distinguish between legitimate unusual purchases and actual fraud attempts.</p>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://miro.medium.com/v2/resize:fit:1400/1*ZpkLQf2FNfzfH4HXeMw4MQ.png" alt="SVM Decision Boundary" style="max-width: 100%; height: 250px; border-radius: 10px;">
+                <p><em>SVM creating optimal decision boundaries for complex real-world data</em></p>
+            </div>
+            
+            <div class="code-block">
+Pipeline([('vectorizer', TfidfVectorizer()), ('svm', SVC())]).fit(texts, labels)
+            </div>
         </div>
 
         <div class="section">
@@ -371,68 +285,67 @@ for kernel in kernels:<br>
         </div>
 
         <div class="section">
-            <h2>📈 Advantages & Disadvantages</h2>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                <div style="background: #d4edda; padding: 15px; border-radius: 5px;">
-                    <h3>✅ Advantages:</h3>
-                    <ul>
-                        <li><strong>Effective:</strong> Works well with high-dimensional data</li>
-                        <li><strong>Memory Efficient:</strong> Uses only support vectors</li>
-                        <li><strong>Versatile:</strong> Different kernels for different problems</li>
-                        <li><strong>Robust:</strong> Works well with small datasets</li>
-                        <li><strong>No Local Minima:</strong> Convex optimization problem</li>
-                        <li><strong>Generalization:</strong> Good performance on unseen data</li>
-                    </ul>
-                </div>
-                <div style="background: #f8d7da; padding: 15px; border-radius: 5px;">
-                    <h3>❌ Disadvantages:</h3>
-                    <ul>
-                        <li><strong>Slow on Large Data:</strong> O(n³) training complexity</li>
-                        <li><strong>No Probability:</strong> Only gives class predictions</li>
-                        <li><strong>Sensitive to Scaling:</strong> Requires feature normalization</li>
-                        <li><strong>Parameter Tuning:</strong> C and gamma need optimization</li>
-                        <li><strong>Black Box:</strong> Hard to interpret results</li>
-                        <li><strong>Noise Sensitive:</strong> Outliers can affect performance</li>
-                    </ul>
-                </div>
+            <h2>📈 SVM vs Other Algorithms: When to Choose What</h2>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://miro.medium.com/v2/resize:fit:1400/1*mCwnu5kXot6buL7jeIafqQ.png" alt="Algorithm Comparison" style="max-width: 100%; height: 300px; border-radius: 10px;">
+                <p><em>Comparing SVM with other popular machine learning algorithms</em></p>
+            </div>
+            
+            <p><strong>SVM's Superpowers:</strong></p>
+            <p><strong>High-Dimensional Excellence:</strong> While other algorithms struggle when you have thousands of features (like in text analysis or genomics), SVM actually thrives. It's like having a superhero that gets stronger with more complexity. This makes SVM perfect for analyzing documents, DNA sequences, or any data with many features.</p>
+            
+            <p><strong>Memory Efficiency:</strong> Unlike algorithms that need to remember all your training data, SVM only remembers the support vectors - usually just a small fraction of your data. It's like having a brilliant student who only needs to remember the key points to ace any test.</p>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://scikit-learn.org/stable/_images/sphx_glr_plot_classifier_comparison_001.png" alt="Classifier Comparison" style="max-width: 100%; height: 350px; border-radius: 10px;">
+                <p><em>SVM vs other classifiers on different types of datasets</em></p>
+            </div>
+            
+            <p><strong>SVM's Limitations:</strong></p>
+            <p><strong>Speed on Large Datasets:</strong> SVM is like a master craftsman - it produces excellent results but takes time with large projects. For datasets with millions of samples, faster algorithms like Random Forest might be better choices.</p>
+            
+            <p><strong>No Probability Scores:</strong> SVM tells you "this is spam" or "this is not spam" but doesn't tell you "I'm 85% confident this is spam." If you need probability estimates, algorithms like Logistic Regression might be more suitable.</p>
+            
+            <p><strong>Feature Scaling Sensitivity:</strong> SVM is like a precise instrument that needs calibration. You must scale your features (make them similar ranges) before using SVM, or it might focus too much on features with larger numbers.</p>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://miro.medium.com/v2/resize:fit:1400/1*WNxO_GgLZkbRhF4pWoAFdQ.png" alt="SVM Workflow" style="max-width: 100%; height: 250px; border-radius: 10px;">
+                <p><em>The complete SVM workflow: from raw data to predictions</em></p>
             </div>
         </div>
 
         <div class="section">
-            <h2>🛠️ Hyperparameter Tuning</h2>
-            <h3>🎛️ Optimizing SVM Performance:</h3>
+            <h2>🛠️ Fine-Tuning SVM: The Art of Parameter Optimization</h2>
             
-            <div class="code-block">
-from sklearn.model_selection import GridSearchCV<br>
-<br>
-# Define parameter grid for tuning<br>
-param_grid = {<br>
-    'C': [0.1, 1, 10, 100],<br>
-    'gamma': ['scale', 'auto', 0.001, 0.01, 0.1, 1],<br>
-    'kernel': ['rbf', 'linear', 'poly']<br>
-}<br>
-<br>
-# Create SVM and GridSearch<br>
-svm = SVC()<br>
-grid_search = GridSearchCV(svm, param_grid, cv=5, scoring='accuracy')<br>
-<br>
-# Find best parameters<br>
-grid_search.fit(X_train_scaled, y_train)<br>
-<br>
-print(f"Best parameters: {grid_search.best_params_}")<br>
-print(f"Best cross-validation score: {grid_search.best_score_:.3f}")<br>
-<br>
-# Use best model for predictions<br>
-best_svm = grid_search.best_estimator_<br>
-final_predictions = best_svm.predict(X_test_scaled)<br>
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://miro.medium.com/v2/resize:fit:1400/1*4OzCwNKao56MJb4QJ8X-Bg.png" alt="Parameter Effects" style="max-width: 100%; height: 300px; border-radius: 10px;">
+                <p><em>How C and gamma parameters dramatically affect SVM's decision boundary</em></p>
             </div>
             
-            <h3>🎯 Parameter Meanings:</h3>
-            <ul>
-                <li><strong>C (Regularization):</strong> Higher C = less regularization, more complex model</li>
-                <li><strong>Gamma (RBF width):</strong> Higher gamma = more influence from nearby points</li>
-                <li><strong>Kernel:</strong> Type of decision boundary (linear, curved, polynomial)</li>
-            </ul>
+            <p><strong>The C Parameter - The Perfectionist vs The Flexible Friend:</strong></p>
+            <p>Think of C as SVM's personality trait. A high C value makes SVM a perfectionist - it tries to classify every single training example correctly, even if it means creating a very complex boundary. This can lead to overfitting, like memorizing answers instead of understanding concepts.</p>
+            
+            <p>A low C value makes SVM more flexible and forgiving. It's okay with making a few mistakes on training data if it means creating a simpler, more generalizable boundary. It's like a teacher who focuses on the big picture rather than nitpicking every detail.</p>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://scikit-learn.org/stable/_images/sphx_glr_plot_svm_regularization_001.png" alt="C Parameter Effect" style="max-width: 100%; height: 250px; border-radius: 10px;">
+                <p><em>Low C (left) vs High C (right) - notice how the boundary changes</em></p>
+            </div>
+            
+            <p><strong>The Gamma Parameter - Local vs Global Thinking:</strong></p>
+            <p>Gamma controls how far the influence of a single training example reaches. High gamma means each point only influences its immediate neighborhood - like having very localized opinions. This creates complex, wiggly boundaries that can overfit.</p>
+            
+            <p>Low gamma means each point has a far-reaching influence - like having a global perspective. This creates smoother, more generalized boundaries. It's the difference between a local neighborhood watch and a national security system.</p>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://scikit-learn.org/stable/_images/sphx_glr_plot_rbf_parameters_001.png" alt="Gamma Parameter Effect" style="max-width: 100%; height: 300px; border-radius: 10px;">
+                <p><em>Different gamma values create different decision boundaries</em></p>
+            </div>
+            
+            <div class="code-block">
+GridSearchCV(SVC(), {'C': [0.1, 1, 10], 'gamma': ['scale', 0.01, 0.1]}).fit(X, y)
+            </div>
         </div>
 
         <div class="section">
