@@ -6,23 +6,29 @@ A comprehensive educational website series featuring complete video lectures on 
 
 Educational platform for students and professionals learning machine learning through structured video content and supplementary resources.
 
-## 📚 Current Lectures (2/10)
+## 📚 Current Lectures (10/10)
 
 ### ✅ Completed Lectures
 
-1. **ml-lecture-1.html** - Introduction to Machine Learning (First Lecture)
-2. **ml-lecture-2.html** - Classification vs Regression (Second Lecture)
+1. **ml-lecture-1.html** - Introduction to Machine Learning
+2. **ml-lecture-2.html** - Classification vs Regression
+3. **ml-lecture-3.html** - Supervised Learning Algorithms
+4. **linear-regression-lecture.html** - Linear Regression Deep Dive
+5. **decision-trees-lecture.html** - Decision Trees
+6. **random-forest-lecture.html** - Random Forest
+7. **support-vector-machine-lecture.html** - Support Vector Machines
+8. **naive-bayes-lecture.html** - Naive Bayes
+9. **neural-networks-lecture.html** - Neural Networks Basics
+10. **evaluation-metrics-lecture.html** - Model Evaluation & Metrics
 
-### 🚧 Next Lectures to Create
+### 📍 **ADD NEW LECTURES HERE** 
+**Next lecture should be added as:** `ml-lecture-11.html`
 
-3. **Supervised Learning Algorithms** - Linear & Logistic Regression
-4. **Decision Trees and Random Forests** - Tree-based models
-5. **Support Vector Machines (SVM)** - Maximum margin classifiers
-6. **Neural Networks Basics** - Introduction to deep learning
-7. **Unsupervised Learning** - Clustering, PCA, Dimensionality Reduction
-8. **Model Evaluation & Validation** - Cross-validation, Metrics
-9. **Feature Engineering & Selection** - Data preprocessing techniques
-10. **Advanced Topics** - Ensemble methods, Deep Learning intro
+### 🚧 Suggested Future Topics
+
+11. **Unsupervised Learning** - Clustering, PCA, Dimensionality Reduction
+12. **Feature Engineering & Selection** - Data preprocessing techniques  
+13. **Advanced Topics** - Ensemble methods, Deep Learning advanced
 
 ## 📁 Project Structure
 
