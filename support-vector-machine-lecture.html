@@ -104,14 +104,14 @@
             <p>A <span class="highlight">powerful classifier</span> that finds the optimal boundary to separate classes with maximum margin.</p>
             
             <div style="text-align: center; margin: 20px 0;">
-                <img src="https://scikit-learn.org/stable/_images/sphx_glr_plot_svm_margin_001.png" alt="SVM Margin Visualization" style="max-width: 100%; height: 300px; border-radius: 10px;">
+                <img src="https://tse1.mm.bing.net/th/id/OIP.WYsV6W-SxqzZwZzbo7wMUwHaEp?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3" alt="SVM Margin Visualization" style="max-width: 100%; height: 300px; border-radius: 10px;">
                 <p><em>SVM finds the line with maximum margin between classes</em></p>
             </div>
             
             <p><strong>Think of SVM like a referee in a sports game:</strong> It draws the fairest possible line between two teams, keeping maximum distance from both sides to avoid disputes. This "fairest line" is what makes SVM so powerful - it doesn't just separate classes, it does so with maximum confidence.</p>
             
             <div style="text-align: center; margin: 20px 0;">
-                <img src="https://miro.medium.com/v2/resize:fit:1400/1*ZpkLQf2FNfzfH4HXeMw4MQ.png" alt="SVM vs Other Classifiers" style="max-width: 100%; height: 250px; border-radius: 10px;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Svm_max_sep_hyperplane_with_margin.png/512px-Svm_max_sep_hyperplane_with_margin.png" alt="SVM vs Other Classifiers" style="max-width: 100%; height: 250px; border-radius: 10px;">
                 <p><em>SVM vs other classifiers - notice the optimal margin</em></p>
             </div>
             
@@ -126,7 +126,7 @@ svm = SVC().fit(X, y)  # That's it! SVM in one line
             <h2>💻 How SVM Works</h2>
             
             <div style="text-align: center; margin: 20px 0;">
-                <img src="https://static.javatpoint.com/tutorial/machine-learning/images/support-vector-machine-algorithm.png" alt="SVM Working Process" style="max-width: 100%; height: 300px; border-radius: 10px;">
+                <img src="https://www.researchgate.net/profile/Juan-Salazar-Uribe/publication/260773845/figure/fig2/AS:655142869282818@1533209640305/An-SVM-example-in-which-a-the-two-dimensional-training-data-set-black-circles.png" alt="SVM Working Process" style="max-width: 100%; height: 300px; border-radius: 10px;">
                 <p><em>Step-by-step: How SVM finds the optimal decision boundary</em></p>
             </div>
             
@@ -136,7 +136,7 @@ svm = SVC().fit(X, y)  # That's it! SVM in one line
             <p>2. <strong>Maximize the Margin:</strong> Instead of just drawing any line that separates the classes, SVM draws the line that is as far as possible from the support vectors on both sides. This creates the widest possible "safety zone" between classes.</p>
             
             <div style="text-align: center; margin: 20px 0;">
-                <img src="https://miro.medium.com/v2/resize:fit:1400/1*Ub8HsQqZ8E7PKeQmvjKoSg.png" alt="SVM Support Vectors" style="max-width: 100%; height: 250px; border-radius: 10px;">
+                <img src="https://learnopencv.com/wp-content/uploads/2018/07/support-vectors-and-maximum-margin.png" alt="SVM Support Vectors" style="max-width: 100%; height: 250px; border-radius: 10px;">
                 <p><em>Support vectors (circled points) determine the decision boundary</em></p>
             </div>
             
@@ -151,7 +151,7 @@ svm = SVC(kernel='rbf').fit(X, y)  # RBF kernel for complex patterns
             <h2>🎯 SVM Kernels: The Magic Behind Complex Patterns</h2>
             
             <div style="text-align: center; margin: 20px 0;">
-                <img src="https://static.javatpoint.com/tutorial/machine-learning/images/support-vector-machine-algorithm2.png" alt="SVM Kernels Visualization" style="max-width: 100%; height: 350px; border-radius: 10px;">
+                <img src="https://www.researchgate.net/profile/Amin-Almahsoli/publication/324094384/figure/fig1/AS:610830571741184@1522887133154/SVM-kernels-a-Linear-b-Polynomial-c-RBF-and-d-Sigmoid.png" alt="SVM Kernels Visualization" style="max-width: 100%; height: 350px; border-radius: 10px;">
                 <p><em>Different kernels handle different data patterns - from simple lines to complex curves</em></p>
             </div>
             
@@ -160,8 +160,8 @@ svm = SVC(kernel='rbf').fit(X, y)  # RBF kernel for complex patterns
             <p><strong>Linear Kernel:</strong> Imagine trying to separate cats from dogs based on weight and height. If heavier, taller animals are mostly dogs and lighter, shorter ones are cats, a straight line can separate them perfectly. This is when you use a linear kernel.</p>
             
             <div style="text-align: center; margin: 20px 0;">
-                <img src="https://scikit-learn.org/stable/_images/sphx_glr_plot_svm_kernels_001.png" alt="Linear vs RBF Kernel" style="max-width: 100%; height: 300px; border-radius: 10px;">
-                <p><em>Linear kernel (left) vs RBF kernel (right) - see how RBF handles curved boundaries</em></p>
+                <img src="https://miro.medium.com/max/1400/1*mCwnu5kXot6buL7jeIafqQ.png" alt="Linear vs RBF Kernel" style="max-width: 100%; height: 300px; border-radius: 10px;">
+                <p><em>Linear kernel (top) vs RBF kernel (bottom) - see how RBF handles curved boundaries</em></p>
             </div>
             
             <p><strong>RBF (Radial Basis Function) Kernel:</strong> Now imagine the data is more complex - maybe small dogs and large cats exist too. The boundary becomes curved, like drawing circles around clusters. RBF kernel excels at this by creating flexible, curved decision boundaries.</p>
@@ -169,7 +169,7 @@ svm = SVC(kernel='rbf').fit(X, y)  # RBF kernel for complex patterns
             <p><strong>Polynomial Kernel:</strong> Think of data that follows a specific mathematical pattern, like a parabola. Polynomial kernels can capture these specific curved relationships, making them perfect for certain scientific or engineering applications.</p>
             
             <div style="text-align: center; margin: 20px 0;">
-                <img src="https://miro.medium.com/v2/resize:fit:1400/1*mCwnu5kXot6buL7jeIafqQ.png" alt="Kernel Transformation" style="max-width: 100%; height: 250px; border-radius: 10px;">
+                <img src="https://www.analyticsvidhya.com/wp-content/uploads/2017/09/12093717/SVM_3.png" alt="Kernel Transformation" style="max-width: 100%; height: 250px; border-radius: 10px;">
                 <p><em>How kernels transform data: from non-separable to separable</em></p>
             </div>
             
@@ -184,7 +184,7 @@ SVC(kernel='poly')      # For specific polynomial relationships
             <h2>⚡ Key Concepts: The Building Blocks of SVM</h2>
             
             <div style="text-align: center; margin: 20px 0;">
-                <img src="https://miro.medium.com/v2/resize:fit:1400/1*WNxO_GgLZkbRhF4pWoAFdQ.png" alt="SVM Components Explained" style="max-width: 100%; height: 300px; border-radius: 10px;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/SVM_margin.png/512px-SVM_margin.png" alt="SVM Components Explained" style="max-width: 100%; height: 300px; border-radius: 10px;">
                 <p><em>The anatomy of SVM: Support vectors, hyperplane, and margin</em></p>
             </div>
             
@@ -192,7 +192,7 @@ SVC(kernel='poly')      # For specific polynomial relationships
             <p>Imagine you're organizing a party and need to put a rope barrier between two groups of people. You don't need to consider everyone - just the people standing closest to where the rope will go. These "closest people" are your support vectors. In SVM, these are the data points that actually matter for drawing the decision boundary. Remove any other point, and the boundary stays the same. Remove a support vector, and everything changes!</p>
             
             <div style="text-align: center; margin: 20px 0;">
-                <img src="https://scikit-learn.org/stable/_images/sphx_glr_plot_svm_exercise_001.png" alt="Support Vectors Highlighted" style="max-width: 100%; height: 250px; border-radius: 10px;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Svm_separating_hyperplanes.png/512px-Svm_separating_hyperplanes.png" alt="Support Vectors Highlighted" style="max-width: 100%; height: 250px; border-radius: 10px;">
                 <p><em>Support vectors (highlighted) are the only points that matter for the decision boundary</em></p>
             </div>
             
@@ -203,7 +203,7 @@ SVC(kernel='poly')      # For specific polynomial relationships
             <p>The margin is like a "buffer zone" around the decision boundary. A wider margin means SVM is more confident about its decisions. It's the distance from the hyperplane to the nearest support vectors on each side. SVM's goal is to maximize this margin, creating the most robust classifier possible.</p>
             
             <div style="text-align: center; margin: 20px 0;">
-                <img src="https://miro.medium.com/v2/resize:fit:1400/1*4OzCwNKao56MJb4QJ8X-Bg.png" alt="Margin Visualization" style="max-width: 100%; height: 250px; border-radius: 10px;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Svm_max_sep_hyperplane_with_margin.png/512px-Svm_max_sep_hyperplane_with_margin.png" alt="Margin Visualization" style="max-width: 100%; height: 250px; border-radius: 10px;">
                 <p><em>Wider margin = more confident predictions</em></p>
             </div>
         </div>
@@ -212,7 +212,7 @@ SVC(kernel='poly')      # For specific polynomial relationships
             <h2>🚀 Real-World Applications: Where SVM Shines</h2>
             
             <div style="text-align: center; margin: 20px 0;">
-                <img src="https://scikit-learn.org/stable/_images/sphx_glr_plot_iris_svc_001.png" alt="SVM Applications" style="max-width: 100%; height: 300px; border-radius: 10px;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Iris_dataset_scatterplot.svg/512px-Iris_dataset_scatterplot.svg.png" alt="SVM Applications" style="max-width: 100%; height: 300px; border-radius: 10px;">
                 <p><em>SVM successfully classifying the famous Iris dataset</em></p>
             </div>
             
@@ -220,7 +220,7 @@ SVC(kernel='poly')      # For specific polynomial relationships
             <p>Every day, your email provider uses algorithms like SVM to protect you from spam. SVM analyzes thousands of features in each email - word frequency, sender patterns, link density, and more. It creates a high-dimensional boundary that separates legitimate emails from spam with remarkable accuracy. The beauty is that SVM can handle the complexity of natural language without getting confused by new spam tactics.</p>
             
             <div style="text-align: center; margin: 20px 0;">
-                <img src="https://miro.medium.com/v2/resize:fit:1400/1*Ub8HsQqZ8E7PKeQmvjKoSg.png" alt="Text Classification" style="max-width: 100%; height: 250px; border-radius: 10px;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Text_classification_workflow.svg/512px-Text_classification_workflow.svg.png" alt="Text Classification" style="max-width: 100%; height: 250px; border-radius: 10px;">
                 <p><em>SVM processing text data for classification</em></p>
             </div>
             
@@ -231,7 +231,7 @@ SVC(kernel='poly')      # For specific polynomial relationships
             <p>Banks use SVM to detect fraudulent transactions in real-time. By analyzing spending patterns, location data, transaction amounts, and timing, SVM can instantly flag suspicious activities. Its ability to create complex decision boundaries helps it distinguish between legitimate unusual purchases and actual fraud attempts.</p>
             
             <div style="text-align: center; margin: 20px 0;">
-                <img src="https://miro.medium.com/v2/resize:fit:1400/1*ZpkLQf2FNfzfH4HXeMw4MQ.png" alt="SVM Decision Boundary" style="max-width: 100%; height: 250px; border-radius: 10px;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Svm_max_sep_hyperplane_with_margin.png/512px-Svm_max_sep_hyperplane_with_margin.png" alt="SVM Decision Boundary" style="max-width: 100%; height: 250px; border-radius: 10px;">
                 <p><em>SVM creating optimal decision boundaries for complex real-world data</em></p>
             </div>
             
@@ -288,7 +288,7 @@ for kernel in kernels:<br>
             <h2>📈 SVM vs Other Algorithms: When to Choose What</h2>
             
             <div style="text-align: center; margin: 20px 0;">
-                <img src="https://miro.medium.com/v2/resize:fit:1400/1*mCwnu5kXot6buL7jeIafqQ.png" alt="Algorithm Comparison" style="max-width: 100%; height: 300px; border-radius: 10px;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Comparison_of_classification_algorithms.svg/512px-Comparison_of_classification_algorithms.svg.png" alt="Algorithm Comparison" style="max-width: 100%; height: 300px; border-radius: 10px;">
                 <p><em>Comparing SVM with other popular machine learning algorithms</em></p>
             </div>
             
@@ -298,7 +298,7 @@ for kernel in kernels:<br>
             <p><strong>Memory Efficiency:</strong> Unlike algorithms that need to remember all your training data, SVM only remembers the support vectors - usually just a small fraction of your data. It's like having a brilliant student who only needs to remember the key points to ace any test.</p>
             
             <div style="text-align: center; margin: 20px 0;">
-                <img src="https://scikit-learn.org/stable/_images/sphx_glr_plot_classifier_comparison_001.png" alt="Classifier Comparison" style="max-width: 100%; height: 350px; border-radius: 10px;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Kernel_trick_idea.svg/512px-Kernel_trick_idea.svg.png" alt="Classifier Comparison" style="max-width: 100%; height: 350px; border-radius: 10px;">
                 <p><em>SVM vs other classifiers on different types of datasets</em></p>
             </div>
             
@@ -310,7 +310,7 @@ for kernel in kernels:<br>
             <p><strong>Feature Scaling Sensitivity:</strong> SVM is like a precise instrument that needs calibration. You must scale your features (make them similar ranges) before using SVM, or it might focus too much on features with larger numbers.</p>
             
             <div style="text-align: center; margin: 20px 0;">
-                <img src="https://miro.medium.com/v2/resize:fit:1400/1*WNxO_GgLZkbRhF4pWoAFdQ.png" alt="SVM Workflow" style="max-width: 100%; height: 250px; border-radius: 10px;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/SVM_margin.png/512px-SVM_margin.png" alt="SVM Workflow" style="max-width: 100%; height: 250px; border-radius: 10px;">
                 <p><em>The complete SVM workflow: from raw data to predictions</em></p>
             </div>
         </div>
@@ -319,7 +319,7 @@ for kernel in kernels:<br>
             <h2>🛠️ Fine-Tuning SVM: The Art of Parameter Optimization</h2>
             
             <div style="text-align: center; margin: 20px 0;">
-                <img src="https://miro.medium.com/v2/resize:fit:1400/1*4OzCwNKao56MJb4QJ8X-Bg.png" alt="Parameter Effects" style="max-width: 100%; height: 300px; border-radius: 10px;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Kernel_trick.svg/512px-Kernel_trick.svg.png" alt="Parameter Effects" style="max-width: 100%; height: 300px; border-radius: 10px;">
                 <p><em>How C and gamma parameters dramatically affect SVM's decision boundary</em></p>
             </div>
             
@@ -329,7 +329,7 @@ for kernel in kernels:<br>
             <p>A low C value makes SVM more flexible and forgiving. It's okay with making a few mistakes on training data if it means creating a simpler, more generalizable boundary. It's like a teacher who focuses on the big picture rather than nitpicking every detail.</p>
             
             <div style="text-align: center; margin: 20px 0;">
-                <img src="https://scikit-learn.org/stable/_images/sphx_glr_plot_svm_regularization_001.png" alt="C Parameter Effect" style="max-width: 100%; height: 250px; border-radius: 10px;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Svm_max_sep_hyperplane_with_margin.png/512px-Svm_max_sep_hyperplane_with_margin.png" alt="C Parameter Effect" style="max-width: 100%; height: 250px; border-radius: 10px;">
                 <p><em>Low C (left) vs High C (right) - notice how the boundary changes</em></p>
             </div>
             
@@ -339,7 +339,7 @@ for kernel in kernels:<br>
             <p>Low gamma means each point has a far-reaching influence - like having a global perspective. This creates smoother, more generalized boundaries. It's the difference between a local neighborhood watch and a national security system.</p>
             
             <div style="text-align: center; margin: 20px 0;">
-                <img src="https://scikit-learn.org/stable/_images/sphx_glr_plot_rbf_parameters_001.png" alt="Gamma Parameter Effect" style="max-width: 100%; height: 300px; border-radius: 10px;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Kernel_trick_idea.svg/512px-Kernel_trick_idea.svg.png" alt="Gamma Parameter Effect" style="max-width: 100%; height: 300px; border-radius: 10px;">
                 <p><em>Different gamma values create different decision boundaries</em></p>
             </div>
             
