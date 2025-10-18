@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artificial Neuron - 3 Minute ML Lecture</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .lecture-container {
+            max-width: 900px;
+            margin: 90px auto 0;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .lecture-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 10px;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        
+        .neuron-visual {
+            background: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-family: monospace;
+            margin: 15px 0;
+        }
+        
+        .activation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .activation-card {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .highlight {
+            background: #e74c3c;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        .timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #e74c3c;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .math-formula {
+            background: #f8f9fa;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            font-size: 16px;
+        }
+        
+        .diagram-svg {
+            width: 100%;
+            max-width: 600px;
+            height: 200px;
+            margin: 20px auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="index.html" class="logo">ML Tutorials</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="neural-networks-lecture.html">Neural Networks</a></li>
+                    <li><a href="support-vector-machine-lecture.html">SVM</a></li>
+                    <li><a href="artificial-neuron-lecture.html">Full Version</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="timer" id="timer">3:00</div>
+    
+    <div class="lecture-container">
+        <div class="lecture-header">
+            <h1>🧠 Artificial Neuron</h1>
+            <p>Machine Learning Made Simple</p>
+            <p><em>3-Minute Complete Guide</em></p>
+        </div>
+
+        <!-- What is an Artificial Neuron? -->
+        <div class="section">
+            <h2>🤔 What is an Artificial Neuron?</h2>
+            <p>An artificial neuron is the <span class="highlight">basic building block</span> of neural networks, inspired by biological neurons in the brain.</p>
+            
+            <div class="neuron-visual">
+                <svg class="diagram-svg" viewBox="0 0 600 200">
+                    <!-- Inputs -->
+                    <circle cx="50" cy="50" r="20" fill="#3498db" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="50" y="55" text-anchor="middle" fill="white" font-weight="bold">x₁</text>
+                    
+                    <circle cx="50" cy="100" r="20" fill="#3498db" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="50" y="105" text-anchor="middle" fill="white" font-weight="bold">x₂</text>
+                    
+                    <circle cx="50" cy="150" r="20" fill="#3498db" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="50" y="155" text-anchor="middle" fill="white" font-weight="bold">x₃</text>
+                    
+                    <!-- Connections with weights -->
+                    <line x1="70" y1="50" x2="180" y2="100" stroke="#2c3e50" stroke-width="3"/>
+                    <text x="125" y="70" text-anchor="middle" fill="#e74c3c" font-weight="bold">w₁</text>
+                    
+                    <line x1="70" y1="100" x2="180" y2="100" stroke="#2c3e50" stroke-width="3"/>
+                    <text x="125" y="95" text-anchor="middle" fill="#e74c3c" font-weight="bold">w₂</text>
+                    
+                    <line x1="70" y1="150" x2="180" y2="100" stroke="#2c3e50" stroke-width="3"/>
+                    <text x="125" y="130" text-anchor="middle" fill="#e74c3c" font-weight="bold">w₃</text>
+                    
+                    <!-- Neuron -->
+                    <circle cx="200" cy="100" r="40" fill="#e74c3c" stroke="#2c3e50" stroke-width="3"/>
+                    <text x="200" y="90" text-anchor="middle" fill="white" font-weight="bold">Σ</text>
+                    <text x="200" y="110" text-anchor="middle" fill="white" font-weight="bold">f(x)</text>
+                    
+                    <!-- Output -->
+                    <line x1="240" y1="100" x2="350" y2="100" stroke="#2c3e50" stroke-width="3"/>
+                    <circle cx="370" cy="100" r="20" fill="#27ae60" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="370" y="105" text-anchor="middle" fill="white" font-weight="bold">y</text>
+                    
+                    <!-- Labels -->
+                    <text x="50" y="30" text-anchor="middle" font-weight="bold">Inputs</text>
+                    <text x="200" y="30" text-anchor="middle" font-weight="bold">Neuron</text>
+                    <text x="370" y="30" text-anchor="middle" font-weight="bold">Output</text>
+                </svg>
+            </div>
+            
+            <p><strong>Key Components:</strong></p>
+            <ul>
+                <li><strong>Inputs (x₁, x₂, x₃)</strong>: Data features</li>
+                <li><strong>Weights (w₁, w₂, w₃)</strong>: Importance of each input</li>
+                <li><strong>Bias (b)</strong>: Adjustment parameter</li>
+                <li><strong>Activation Function (f)</strong>: Decision maker</li>
+            </ul>
+        </div>
+
+        <!-- How Does It Work? -->
+        <div class="section">
+            <h2>⚙️ How Does It Work?</h2>
+            
+            <div class="math-formula">
+                <strong>Step 1:</strong> Linear Combination<br>
+                z = w₁x₁ + w₂x₂ + w₃x₃ + b<br><br>
+                <strong>Step 2:</strong> Apply Activation<br>
+                y = f(z)
+            </div>
+            
+            <p>The neuron:</p>
+            <ol>
+                <li>Multiplies each input by its weight</li>
+                <li>Sums everything up (including bias)</li>
+                <li>Applies an activation function</li>
+                <li>Produces the final output</li>
+            </ol>
+        </div>
+
+        <!-- Activation Functions -->
+        <div class="section">
+            <h2>🔥 Activation Functions</h2>
+            <p>Activation functions determine how the neuron responds to inputs:</p>
+            
+            <div class="activation-grid">
+                <div class="activation-card">
+                    <h3>ReLU</h3>
+                    <div class="math-formula">f(x) = max(0, x)</div>
+                    <svg width="200" height="120" viewBox="0 0 200 120">
+                        <line x1="20" y1="100" x2="180" y2="100" stroke="#333" stroke-width="2"/>
+                        <line x1="100" y1="20" x2="100" y2="100" stroke="#333" stroke-width="2"/>
+                        <polyline points="20,100 100,100 180,20" fill="none" stroke="#e74c3c" stroke-width="3"/>
+                        <text x="185" y="25" font-size="12" fill="#e74c3c">ReLU</text>
+                    </svg>
+                    <p><strong>Use:</strong> Hidden layers</p>
+                    <p><strong>Range:</strong> [0, ∞)</p>
+                </div>
+                
+                <div class="activation-card">
+                    <h3>Sigmoid</h3>
+                    <div class="math-formula">f(x) = 1/(1+e⁻ˣ)</div>
+                    <svg width="200" height="120" viewBox="0 0 200 120">
+                        <line x1="20" y1="100" x2="180" y2="100" stroke="#333" stroke-width="2"/>
+                        <line x1="100" y1="20" x2="100" y2="100" stroke="#333" stroke-width="2"/>
+                        <path d="M 20 95 Q 60 90 100 60 Q 140 30 180 25" fill="none" stroke="#3498db" stroke-width="3"/>
+                        <text x="185" y="30" font-size="12" fill="#3498db">Sigmoid</text>
+                    </svg>
+                    <p><strong>Use:</strong> Binary classification</p>
+                    <p><strong>Range:</strong> (0, 1)</p>
+                </div>
+                
+                <div class="activation-card">
+                    <h3>Softmax</h3>
+                    <div class="math-formula">f(xᵢ) = eˣⁱ/Σeˣʲ</div>
+                    <svg width="200" height="120" viewBox="0 0 200 120">
+                        <rect x="40" y="60" width="30" height="40" fill="#9b59b6"/>
+                        <rect x="85" y="40" width="30" height="60" fill="#e74c3c"/>
+                        <rect x="130" y="70" width="30" height="30" fill="#27ae60"/>
+                        <text x="100" y="115" text-anchor="middle" font-size="10">Probabilities</text>
+                    </svg>
+                    <p><strong>Use:</strong> Multi-class classification</p>
+                    <p><strong>Range:</strong> (0, 1), sum=1</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Code Example -->
+        <div class="section">
+            <h2>💻 Simple Implementation</h2>
+            <div class="code-block">
+import numpy as np
+
+class Neuron:
+    def __init__(self, n_inputs):
+        self.weights = np.random.randn(n_inputs) * 0.1
+        self.bias = 0
+    
+    def relu(self, x):
+        return max(0, x)
+    
+    def sigmoid(self, x):
+        return 1 / (1 + np.exp(-x))
+    
+    def forward(self, inputs, activation='relu'):
+        z = np.dot(self.weights, inputs) + self.bias
+        
+        if activation == 'relu':
+            return self.relu(z)
+        elif activation == 'sigmoid':
+            return self.sigmoid(z)
+        return z
+
+# Usage
+neuron = Neuron(3)
+inputs = [1.0, -0.5, 2.0]
+output = neuron.forward(inputs, 'relu')
+print(f"Output: {output}")
+            </div>
+        </div>
+
+        <!-- When to Use What -->
+        <div class="section">
+            <h2>🎯 When to Use What?</h2>
+            <div class="neuron-visual">
+                <strong>ReLU:</strong> Hidden layers (fast, simple)<br>
+                <strong>Sigmoid:</strong> Binary output (0 or 1)<br>
+                <strong>Softmax:</strong> Multi-class output (probabilities)
+            </div>
+            
+            <p><strong>Example Network:</strong></p>
+            <ul>
+                <li>Input → Hidden (ReLU) → Hidden (ReLU) → Output (Sigmoid/Softmax)</li>
+                <li>Image classification: ReLU hidden layers + Softmax output</li>
+                <li>Binary prediction: ReLU hidden layers + Sigmoid output</li>
+            </ul>
+        </div>
+
+        <!-- Key Takeaways -->
+        <div class="section">
+            <h2>🎯 Key Takeaways</h2>
+            <ul>
+                <li>Neurons are the <span class="highlight">building blocks</span> of neural networks</li>
+                <li><span class="highlight">Weights</span> determine input importance</li>
+                <li><span class="highlight">Activation functions</span> add non-linearity</li>
+                <li><span class="highlight">ReLU</span> for hidden layers, <span class="highlight">Sigmoid/Softmax</span> for output</li>
+                <li>Multiple neurons create <span class="highlight">powerful networks</span></li>
+            </ul>
+        </div>
+
+        <!-- Navigation -->
+        <div class="section" style="text-align: center; border: none; background: none;">
+            <a href="neural-networks-lecture.html" style="background: #667eea; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin: 0 10px;">← Neural Networks</a>
+            <a href="index.html" style="background: #27ae60; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin: 0 10px;">🏠 Home</a>
+            <a href="artificial-neuron-lecture.html" style="background: #e74c3c; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin: 0 10px;">Full Version →</a>
+        </div>
+    </div>
+
+    <script>
+        // 3-minute timer
+        let timeLeft = 180; // 3 minutes in seconds
+        const timer = document.getElementById('timer');
+        
+        const countdown = setInterval(() => {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timer.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                timer.textContent = "Time's up!";
+                timer.style.background = '#27ae60';
+            }
+            timeLeft--;
+        }, 1000);
+    </script>
+</body>
+</html>
