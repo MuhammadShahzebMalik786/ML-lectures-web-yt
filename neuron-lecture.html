@@ -231,7 +231,7 @@
                     <svg width="200" height="120" viewBox="0 0 200 120">
                         <line x1="20" y1="100" x2="180" y2="100" stroke="#333" stroke-width="2"/>
                         <line x1="100" y1="20" x2="100" y2="100" stroke="#333" stroke-width="2"/>
-                        <path d="M 20 95 Q 60 90 100 60 Q 140 30 180 25" fill="none" stroke="#3498db" stroke-width="3"/>
+                        <path d="M 20 98 C 40 97 60 94 80 85 C 90 75 100 60 110 45 C 120 35 140 27 160 26 C 170 25 180 25 180 25" fill="none" stroke="#3498db" stroke-width="3"/>
                         <text x="185" y="30" font-size="12" fill="#3498db">Sigmoid</text>
                     </svg>
                     <p><strong>Use:</strong> Binary classification</p>
@@ -257,32 +257,32 @@
         <div class="section">
             <h2>💻 Simple Implementation</h2>
             <div class="code-block">
-import numpy as np
+import numpy as np<br><br>
 
-class Neuron:
-    def __init__(self, n_inputs):
-        self.weights = np.random.randn(n_inputs) * 0.1
-        self.bias = 0
+class Neuron:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;def __init__(self, n_inputs):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.weights = np.random.randn(n_inputs) * 0.1<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.bias = 0<br><br>
     
-    def relu(self, x):
-        return max(0, x)
+&nbsp;&nbsp;&nbsp;&nbsp;def relu(self, x):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return max(0, x)<br><br>
     
-    def sigmoid(self, x):
-        return 1 / (1 + np.exp(-x))
+&nbsp;&nbsp;&nbsp;&nbsp;def sigmoid(self, x):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 1 / (1 + np.exp(-x))<br><br>
     
-    def forward(self, inputs, activation='relu'):
-        z = np.dot(self.weights, inputs) + self.bias
+&nbsp;&nbsp;&nbsp;&nbsp;def forward(self, inputs, activation='relu'):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;z = np.dot(self.weights, inputs) + self.bias<br><br>
         
-        if activation == 'relu':
-            return self.relu(z)
-        elif activation == 'sigmoid':
-            return self.sigmoid(z)
-        return z
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if activation == 'relu':<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return self.relu(z)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elif activation == 'sigmoid':<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return self.sigmoid(z)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return z<br><br>
 
-# Usage
-neuron = Neuron(3)
-inputs = [1.0, -0.5, 2.0]
-output = neuron.forward(inputs, 'relu')
+# Usage<br>
+neuron = Neuron(3)<br>
+inputs = [1.0, -0.5, 2.0]<br>
+output = neuron.forward(inputs, 'relu')<br>
 print(f"Output: {output}")
             </div>
         </div>

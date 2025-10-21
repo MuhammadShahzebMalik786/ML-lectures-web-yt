@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convolutional Neural Networks (CNN) - 3 Minute ML Lecture</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .lecture-container {
+            max-width: 900px;
+            margin: 90px auto 0;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .lecture-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 10px;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        
+        .highlight {
+            background: #e74c3c;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        .timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #e74c3c;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="index.html" class="logo">ML Tutorials</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="neural-networks-lecture.html">Neural Networks</a></li>
+                    <li><a href="decision-trees-lecture.html">Decision Trees</a></li>
+                    <li><a href="random-forest-lecture.html">Random Forest</a></li>
+                    <li><a href="ml-lecture-12.html">📍 Next (12)</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="timer" id="timer">3:00</div>
+    
+    <div class="lecture-container">
+        <div class="lecture-header">
+            <h1>🖼️ Convolutional Neural Networks (CNN)</h1>
+            <p>Machine Learning Made Simple</p>
+            <p><em>3-Minute Complete Guide</em></p>
+        </div>
+
+        <div class="section">
+            <h2>🤔 What is a CNN?</h2>
+            <p>A <span class="highlight">specialized neural network</span> designed to process grid-like data such as images by detecting local patterns and features.</p>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Typical_cnn.png/512px-Typical_cnn.png" alt="CNN Architecture" style="max-width: 100%; height: 300px; border-radius: 10px;">
+                <p><em>CNN architecture: Convolution → Pooling → Fully Connected</em></p>
+            </div>
+            
+            <p><strong>Think of CNN like a detective with a magnifying glass:</strong> Imagine you're examining a photo to find specific objects. You don't look at the entire image at once - you use a magnifying glass to scan small sections, looking for edges, shapes, and patterns. That's exactly what a CNN does with its "filters"!</p>
+            
+            <p><strong>Why CNNs for images?</strong> Regular neural networks treat each pixel independently, but CNNs understand that nearby pixels are related. A CNN knows that if it finds an edge in one spot, it should look for similar edges nearby to form shapes and objects.</p>
+            
+            <div class="code-block">
+model = Sequential([Conv2D(32, (3,3), activation='relu'), <br>MaxPooling2D(2,2)])
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔍 CNN Components: The Building Blocks</h2>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/2D_Convolution_Animation.gif/256px-2D_Convolution_Animation.gif" alt="Convolution Operation" style="max-width: 100%; height: 200px; border-radius: 10px;">
+                <p><em>Convolution operation: sliding filter across the image</em></p>
+            </div>
+            
+            <p><strong>Convolutional Layers - The Feature Detectors:</strong></p>
+            <p>These layers use small filters (like 3x3 grids) that slide across the image. Each filter specializes in detecting specific features - one might detect horizontal edges, another vertical edges, another curves. It's like having multiple specialized detectives, each looking for different clues!</p>
+            
+            <p><strong>Pooling Layers - The Summarizers:</strong></p>
+            <p>Pooling layers reduce the image size while keeping important information. Max pooling takes the strongest signal from each small region. Think of it as creating a summary - instead of remembering every detail, you keep only the most important features.</p>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Max_pooling.png/256px-Max_pooling.png" alt="Max Pooling" style="max-width: 100%; height: 200px; border-radius: 10px;">
+                <p><em>Max pooling: keeping the strongest features</em></p>
+            </div>
+            
+            <p><strong>Fully Connected Layers - The Decision Makers:</strong></p>
+            <p>After extracting features, these layers combine everything to make the final classification. They're like a judge who reviews all the evidence (features) collected by the detectives (convolutional layers) to make the final verdict.</p>
+            
+            <div class="code-block">
+# CNN Architecture<br>
+model = Sequential([<br>
+    Conv2D(32, (3,3), activation='relu', input_shape=(28,28,1)),<br>
+    MaxPooling2D(2,2),<br>
+    Conv2D(64, (3,3), activation='relu'),<br>
+    MaxPooling2D(2,2),<br>
+    Flatten(),<br>
+    Dense(128, activation='relu'),<br>
+    Dense(10, activation='softmax')<br>
+])
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🚀 CNN in Action: Real-World Applications</h2>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://anhreynolds.com/img/cnn.png" alt="CNN Applications" style="max-width: 100%; height: 250px; border-radius: 10px;">
+                <p><em>CNNs excel at pattern recognition in images</em></p>
+            </div>
+            
+            <p><strong>Image Classification:</strong> CNNs can identify objects in photos with superhuman accuracy. They power photo tagging on social media, medical image diagnosis, and autonomous vehicle vision systems.</p>
+            
+            <p><strong>Object Detection:</strong> Beyond just "what's in the image," CNNs can tell you "where it is" by drawing bounding boxes around objects. This enables applications like security cameras and retail analytics.</p>
+            
+            <p><strong>Medical Imaging:</strong> CNNs help doctors detect cancer in X-rays, analyze MRI scans, and identify diseases from medical images - often more accurately than human specialists!</p>
+            
+            <div class="code-block">
+# Simple CNN for image classification<br>
+from tensorflow.keras import layers, models<br>
+<br>
+model = models.Sequential([<br>
+    layers.Conv2D(32, (3, 3), activation='relu', input_shape=(224, 224, 3)),<br>
+    layers.MaxPooling2D((2, 2)),<br>
+    layers.Conv2D(64, (3, 3), activation='relu'),<br>
+    layers.MaxPooling2D((2, 2)),<br>
+    layers.Conv2D(64, (3, 3), activation='relu'),<br>
+    layers.Flatten(),<br>
+    layers.Dense(64, activation='relu'),<br>
+    layers.Dense(10, activation='softmax')<br>
+])
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>💡 CNN Best Practices & Quick Tips</h2>
+            
+            <div style="background: #fff3cd; padding: 15px; border-radius: 5px; margin-bottom: 15px;">
+                <h4>🎯 Key Success Strategies:</h4>
+                <ul>
+                    <li><strong>Data Augmentation:</strong> Rotate, flip, and zoom images to create more training examples</li>
+                    <li><strong>Transfer Learning:</strong> Use pre-trained models like ResNet or VGG as starting points</li>
+                    <li><strong>Proper Preprocessing:</strong> Normalize pixel values (0-1 range) for better training</li>
+                    <li><strong>Batch Normalization:</strong> Helps training converge faster and more stably</li>
+                </ul>
+            </div>
+            
+            <div style="background: #d4edda; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                <h4>🎯 Quick Start Code:</h4>
+                <div class="code-block">
+# Complete CNN in just a few lines!<br>
+import tensorflow as tf<br>
+<br>
+model = tf.keras.Sequential([<br>
+    tf.keras.layers.Conv2D(32, 3, activation='relu'),<br>
+    tf.keras.layers.MaxPooling2D(),<br>
+    tf.keras.layers.Conv2D(32, 3, activation='relu'),<br>
+    tf.keras.layers.MaxPooling2D(),<br>
+    tf.keras.layers.Flatten(),<br>
+    tf.keras.layers.Dense(10, activation='softmax')<br>
+])<br>
+<br>
+model.compile(optimizer='adam',<br>
+              loss='sparse_categorical_crossentropy',<br>
+              metrics=['accuracy'])
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 3-minute timer
+        let timeLeft = 180;
+        const timer = document.getElementById('timer');
+        
+        const countdown = setInterval(() => {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timer.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                timer.textContent = "Time's Up!";
+                timer.style.background = '#27ae60';
+            }
+            timeLeft--;
+        }, 1000);
+    </script>
+</body>
+</html>

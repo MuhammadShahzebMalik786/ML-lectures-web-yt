@@ -6,7 +6,7 @@ A comprehensive educational website series featuring complete video lectures on 
 
 Educational platform for students and professionals learning machine learning through structured video content and supplementary resources.
 
-## 📚 Current Lectures (10/10)
+## 📚 Current Lectures (11/11)
 
 ### ✅ Completed Lectures
 
@@ -20,9 +20,13 @@ Educational platform for students and professionals learning machine learning th
 8. **naive-bayes-lecture.html** - Naive Bayes
 9. **neural-networks-lecture.html** - Neural Networks Basics
 10. **evaluation-metrics-lecture.html** - Model Evaluation & Metrics
+11. **ml-lecture-11.html** - Convolutional Neural Networks (CNN)
+
+### 🔗 **ORGANIZED INDEX**
+**Main Navigation:** `lectures-index.html` - Complete organized lecture browser
 
 ### 📍 **ADD NEW LECTURES HERE** 
-**Next lecture should be added as:** `ml-lecture-11.html`
+**Next lecture should be added as:** `ml-lecture-12.html`
 
 ### 🚧 Suggested Future Topics
 

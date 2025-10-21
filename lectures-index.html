@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Machine Learning Lecture Series - Complete Index</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .lecture-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .lecture-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .lecture-card:hover {
+            transform: translateY(-5px);
+        }
+        .lecture-number {
+            background: #2563eb;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .lecture-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .lecture-description {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        .lecture-link {
+            background: #2563eb;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            transition: background 0.3s;
+        }
+        .lecture-link:hover {
+            background: #1d4ed8;
+        }
+        .hero {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+        }
+        .hero h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .hero p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>ML Lectures</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#fundamentals">Fundamentals</a></li>
+                <li><a href="#algorithms">Algorithms</a></li>
+                <li><a href="#advanced">Advanced</a></li>
+                <li><a href="#practical">Practical</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <h1>Machine Learning Lecture Series</h1>
+        <p>Complete educational platform with 11+ comprehensive video lectures</p>
+    </div>
+
+    <main>
+        <section id="fundamentals">
+            <div class="container">
+                <h2 style="text-align: center; margin: 40px 0;">📚 Fundamentals</h2>
+                <div class="lecture-grid">
+                    <div class="lecture-card">
+                        <span class="lecture-number">Lecture 1</span>
+                        <div class="lecture-title">Introduction to Machine Learning</div>
+                        <div class="lecture-description">Comprehensive overview of ML concepts, types, and applications</div>
+                        <a href="ml-lecture-1.html" class="lecture-link">Start Learning</a>
+                    </div>
+                    
+                    <div class="lecture-card">
+                        <span class="lecture-number">Lecture 2</span>
+                        <div class="lecture-title">Classification vs Regression</div>
+                        <div class="lecture-description">Understanding the fundamental difference between prediction types</div>
+                        <a href="ml-lecture-2.html" class="lecture-link">Start Learning</a>
+                    </div>
+                    
+                    <div class="lecture-card">
+                        <span class="lecture-number">Lecture 3</span>
+                        <div class="lecture-title">Supervised Learning Algorithms</div>
+                        <div class="lecture-description">Deep dive into supervised learning methods and techniques</div>
+                        <a href="ml-lecture-3.html" class="lecture-link">Start Learning</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="algorithms">
+            <div class="container">
+                <h2 style="text-align: center; margin: 40px 0;">🔧 Core Algorithms</h2>
+                <div class="lecture-grid">
+                    <div class="lecture-card">
+                        <span class="lecture-number">Lecture 4</span>
+                        <div class="lecture-title">Linear Regression Deep Dive</div>
+                        <div class="lecture-description">Mathematical foundations and practical implementation</div>
+                        <a href="linear-regression-lecture.html" class="lecture-link">Start Learning</a>
+                    </div>
+                    
+                    <div class="lecture-card">
+                        <span class="lecture-number">Lecture 5</span>
+                        <div class="lecture-title">Decision Trees</div>
+                        <div class="lecture-description">Tree-based learning algorithms and decision making</div>
+                        <a href="decision-trees-lecture.html" class="lecture-link">Start Learning</a>
+                    </div>
+                    
+                    <div class="lecture-card">
+                        <span class="lecture-number">Lecture 6</span>
+                        <div class="lecture-title">Random Forest</div>
+                        <div class="lecture-description">Ensemble methods and bagging techniques</div>
+                        <a href="random-forest-lecture.html" class="lecture-link">Start Learning</a>
+                    </div>
+                    
+                    <div class="lecture-card">
+                        <span class="lecture-number">Lecture 7</span>
+                        <div class="lecture-title">Support Vector Machines</div>
+                        <div class="lecture-description">Margin-based classification and kernel methods</div>
+                        <a href="support-vector-machine-lecture.html" class="lecture-link">Start Learning</a>
+                    </div>
+                    
+                    <div class="lecture-card">
+                        <span class="lecture-number">Lecture 8</span>
+                        <div class="lecture-title">Naive Bayes</div>
+                        <div class="lecture-description">Probabilistic classification using Bayes theorem</div>
+                        <a href="naive-bayes-lecture.html" class="lecture-link">Start Learning</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="advanced">
+            <div class="container">
+                <h2 style="text-align: center; margin: 40px 0;">🧠 Neural Networks & Deep Learning</h2>
+                <div class="lecture-grid">
+                    <div class="lecture-card">
+                        <span class="lecture-number">Lecture 9</span>
+                        <div class="lecture-title">Neural Networks Basics</div>
+                        <div class="lecture-description">Introduction to artificial neural networks and backpropagation</div>
+                        <a href="neural-networks-lecture.html" class="lecture-link">Start Learning</a>
+                    </div>
+                    
+                    <div class="lecture-card">
+                        <span class="lecture-number">Lecture 11</span>
+                        <div class="lecture-title">Convolutional Neural Networks (CNN)</div>
+                        <div class="lecture-description">Deep learning for image recognition and computer vision</div>
+                        <a href="ml-lecture-11.html" class="lecture-link">Start Learning</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="practical">
+            <div class="container">
+                <h2 style="text-align: center; margin: 40px 0;">📊 Practical & Evaluation</h2>
+                <div class="lecture-grid">
+                    <div class="lecture-card">
+                        <span class="lecture-number">Lecture 10</span>
+                        <div class="lecture-title">Model Evaluation & Metrics</div>
+                        <div class="lecture-description">Performance measurement and model validation techniques</div>
+                        <a href="evaluation-metrics-lecture.html" class="lecture-link">Start Learning</a>
+                    </div>
+                    
+                    <div class="lecture-card">
+                        <span class="lecture-number">Special</span>
+                        <div class="lecture-title">Data Preprocessing</div>
+                        <div class="lecture-description">Data cleaning, feature scaling, and preparation techniques</div>
+                        <a href="data-preprocessing-lecture.html" class="lecture-link">Start Learning</a>
+                    </div>
+                    
+                    <div class="lecture-card">
+                        <span class="lecture-number">Special</span>
+                        <div class="lecture-title">Feature Selection</div>
+                        <div class="lecture-description">Selecting the most relevant features for better model performance</div>
+                        <a href="feature-selection-complete-lecture.html" class="lecture-link">Start Learning</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section style="background: #f8f9fa; padding: 40px 20px; text-align: center;">
+            <h2>🚀 Learning Path Recommendations</h2>
+            <div style="max-width: 800px; margin: 0 auto;">
+                <p><strong>Beginner Path:</strong> Lectures 1 → 2 → 3 → 4 → 10</p>
+                <p><strong>Algorithm Focus:</strong> Lectures 4 → 5 → 6 → 7 → 8</p>
+                <p><strong>Deep Learning Path:</strong> Lectures 9 → 11</p>
+                <p><strong>Practical Focus:</strong> Data Preprocessing → Feature Selection → Evaluation Metrics</p>
+            </div>
+        </section>
+    </main>
+
+    <footer style="background: #333; color: white; text-align: center; padding: 20px;">
+        <p>&copy; 2024 ML Lecture Series. Educational content for machine learning enthusiasts.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
