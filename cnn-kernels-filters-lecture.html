@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNN Kernels & Filters - 3 Minute ML Lecture</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .lecture-container {
+            max-width: 900px;
+            margin: 90px auto 0;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .lecture-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 10px;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        
+        .highlight {
+            background: #e74c3c;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        .timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #e74c3c;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="index.html" class="logo">ML Tutorials</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="ml-lecture-11.html">CNN Basics</a></li>
+                    <li><a href="neural-networks-lecture.html">Neural Networks</a></li>
+                    <li><a href="decision-trees-lecture.html">Decision Trees</a></li>
+                    <li><a href="ml-lecture-13.html">📍 Next (13)</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="timer" id="timer">3:00</div>
+    
+    <div class="lecture-container">
+        <div class="lecture-header">
+            <h1>🔍 CNN Kernels & Filters</h1>
+            <p>Machine Learning Made Simple</p>
+            <p><em>3-Minute Complete Guide</em></p>
+        </div>
+
+        <div class="section">
+            <h2>🤔 What are Kernels & Filters?</h2>
+            <p>A <span class="highlight">kernel (or filter)</span> is a small matrix that slides across an image to detect specific features like edges, corners, or textures.</p>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/2D_Convolution_Animation.gif/256px-2D_Convolution_Animation.gif" alt="Convolution Animation" style="max-width: 100%; height: 200px; border-radius: 10px;">
+                <p><em>Kernel sliding across image performing convolution</em></p>
+            </div>
+            
+            <p><strong>Think of kernels like specialized magnifying glasses:</strong> Imagine you have different magnifying glasses, each designed to spot specific things. One highlights horizontal lines, another finds vertical edges, and another detects corners. That's exactly what CNN kernels do - each one is trained to find different patterns!</p>
+            
+            <p><strong>Why kernels work:</strong> Instead of looking at individual pixels, kernels examine neighborhoods of pixels together. This lets them detect meaningful patterns like "this area has a strong vertical edge" or "this region is blurry."</p>
+            
+            <div class="code-block">
+# Simple 3x3 edge detection kernel<br>
+kernel = [[-1, -1, -1],<br>
+          [-1,  8, -1],<br>
+          [-1, -1, -1]]
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔍 Key Terminology: Stride, Padding & More</h2>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://miro.medium.com/max/1400/1*Fw-ehcNBR9byHtho-Rxbtw.gif" alt="Stride Animation" style="max-width: 100%; height: 200px; border-radius: 10px;">
+                <p><em>Different stride values change how the kernel moves</em></p>
+            </div>
+            
+            <p><strong>Stride - How Big Steps the Kernel Takes:</strong></p>
+            <p><span class="highlight">Stride = 1</span>: Kernel moves 1 pixel at a time (detailed scan)<br>
+            <span class="highlight">Stride = 2</span>: Kernel jumps 2 pixels (faster, smaller output)<br>
+            Think of stride like walking vs. running - bigger strides cover ground faster but miss some details!</p>
+            
+            <p><strong>Padding - Adding Borders:</strong></p>
+            <p><span class="highlight">No Padding</span>: Output gets smaller than input<br>
+            <span class="highlight">Same Padding</span>: Add zeros around edges to keep same size<br>
+            It's like adding a frame around a photo to preserve the original dimensions!</p>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://miro.medium.com/max/1400/1*1okwhewf5KCtIPaFib4XaA.gif" alt="Padding Visualization" style="max-width: 100%; height: 200px; border-radius: 10px;">
+                <p><em>Padding preserves spatial dimensions</em></p>
+            </div>
+            
+            <p><strong>Dilation - Spreading Out the Kernel:</strong></p>
+            <p>Dilation adds spaces between kernel elements, letting you see a wider area without more parameters. It's like using a wider-angle lens on your magnifying glass!</p>
+            
+            <div class="code-block">
+# Output size calculation<br>
+output_size = (input_size - kernel_size + 2*padding) / stride + 1<br>
+<br>
+# Example: 28x28 input, 3x3 kernel, stride=1, padding=1<br>
+output = (28 - 3 + 2*1) / 1 + 1 = 28x28
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Common Filter Types & Their Magic</h2>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://media.geeksforgeeks.org/wp-content/uploads/20211027143743/Typesofkernels.png" alt="Different Filters" style="max-width: 100%; height: 250px; border-radius: 10px;">
+                <p><em>Different kernels detect different features</em></p>
+            </div>
+            
+            <p><strong>Edge Detection Filters:</strong> These are like outline detectors. They highlight boundaries between different regions in an image.</p>
+            
+            <p><strong>Blur Filters:</strong> These smooth out details by averaging neighboring pixels. Think of them as the "soft focus" effect in photography!</p>
+            
+            <p><strong>Sharpen Filters:</strong> These enhance edges and details, making images look crisper. They're the opposite of blur filters!</p>
+            
+            <div class="code-block">
+# Popular filter examples<br>
+edge_filter = [[-1, -1, -1],<br>
+               [-1,  8, -1],<br>
+               [-1, -1, -1]]<br>
+<br>
+blur_filter = [[1/9, 1/9, 1/9],<br>
+               [1/9, 1/9, 1/9],<br>
+               [1/9, 1/9, 1/9]]<br>
+<br>
+sharpen_filter = [[ 0, -1,  0],<br>
+                  [-1,  5, -1],<br>
+                  [ 0, -1,  0]]
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>💡 Receptive Field & Practical Tips</h2>
+            
+            <div style="background: #fff3cd; padding: 15px; border-radius: 5px; margin-bottom: 15px;">
+                <h4>🎯 Receptive Field - How Much Each Neuron "Sees":</h4>
+                <ul>
+                    <li><strong>Layer 1:</strong> Sees 3x3 pixels (local features like edges)</li>
+                    <li><strong>Layer 2:</strong> Sees 5x5 pixels (combines edges into shapes)</li>
+                    <li><strong>Layer 3:</strong> Sees 7x7 pixels (recognizes objects)</li>
+                    <li><strong>Deeper layers:</strong> See larger areas, detect complex patterns</li>
+                </ul>
+            </div>
+            
+            <div style="background: #d4edda; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                <h4>🎯 Quick Implementation:</h4>
+                <div class="code-block">
+# TensorFlow/Keras CNN with different kernels<br>
+import tensorflow as tf<br>
+<br>
+model = tf.keras.Sequential([<br>
+    tf.keras.layers.Conv2D(32, (3,3), strides=1, padding='same'),<br>
+    tf.keras.layers.Conv2D(64, (3,3), strides=2, padding='valid'),<br>
+    tf.keras.layers.Conv2D(128, (5,5), strides=1, padding='same'),<br>
+    tf.keras.layers.GlobalAveragePooling2D(),<br>
+    tf.keras.layers.Dense(10, activation='softmax')<br>
+])<br>
+<br>
+# 32, 64, 128 = number of different filters<br>
+# (3,3), (5,5) = kernel sizes<br>
+# strides = how big steps the kernel takes<br>
+# padding = 'same' keeps size, 'valid' shrinks
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 3-minute timer
+        let timeLeft = 180;
+        const timer = document.getElementById('timer');
+        
+        const countdown = setInterval(() => {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timer.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                timer.textContent = "Time's Up!";
+                timer.style.background = '#27ae60';
+            }
+            timeLeft--;
+        }, 1000);
+    </script>
+</body>
+</html>
