@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIFAR-10 CNN Classification - 3 Minute ML Lecture</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+        }
+        
+        .lecture-container {
+            max-width: 900px;
+            margin: 90px auto 0;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .lecture-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            border-radius: 10px;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-left: 4px solid #ff6b6b;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        
+        .highlight {
+            background: #e74c3c;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        .timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #e74c3c;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .cifar-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .cifar-class {
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="index.html" class="logo">ML Tutorials</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="cnn-kernels-filters-lecture.html">CNN Kernels</a></li>
+                    <li><a href="ml-lecture-11.html">CNN Basics</a></li>
+                    <li><a href="neural-networks-lecture.html">Neural Networks</a></li>
+                    <li><a href="ml-lecture-14.html">📍 Next (14)</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="timer" id="timer">3:00</div>
+    
+    <div class="lecture-container">
+        <div class="lecture-header">
+            <h1>🖼️ CIFAR-10 CNN Classification</h1>
+            <p>Machine Learning Made Simple</p>
+            <p><em>3-Minute Complete Guide</em></p>
+        </div>
+
+        <div class="section">
+            <h2>🤔 What is CIFAR-10?</h2>
+            <p>CIFAR-10 is a famous dataset with <span class="highlight">60,000 tiny images (32x32 pixels)</span> across 10 different classes. It's like the "Hello World" of computer vision!</p>
+            
+            <div class="cifar-grid">
+                <div class="cifar-class">✈️<br>Airplane</div>
+                <div class="cifar-class">🚗<br>Automobile</div>
+                <div class="cifar-class">🐦<br>Bird</div>
+                <div class="cifar-class">🐱<br>Cat</div>
+                <div class="cifar-class">🦌<br>Deer</div>
+                <div class="cifar-class">🐕<br>Dog</div>
+                <div class="cifar-class">🐸<br>Frog</div>
+                <div class="cifar-class">🐎<br>Horse</div>
+                <div class="cifar-class">🚢<br>Ship</div>
+                <div class="cifar-class">🚛<br>Truck</div>
+            </div>
+            
+            <p><strong>Why CIFAR-10 is perfect for learning:</strong></p>
+            <ul>
+                <li><strong>Small images:</strong> 32x32 pixels = fast training</li>
+                <li><strong>Diverse classes:</strong> Animals, vehicles, objects</li>
+                <li><strong>Challenging:</strong> Low resolution makes it tricky</li>
+                <li><strong>Balanced:</strong> 6,000 images per class</li>
+            </ul>
+            
+            <div class="code-block">
+# Load CIFAR-10 dataset<br>
+import tensorflow as tf<br>
+<br>
+(x_train, y_train), (x_test, y_test) = tf.keras.datasets.cifar10.load_data()<br>
+<br>
+print(f"Training images: {x_train.shape}")  # (50000, 32, 32, 3)<br>
+print(f"Test images: {x_test.shape}")       # (10000, 32, 32, 3)<br>
+print(f"Classes: {len(set(y_train.flatten()))}")  # 10 classes
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🏗️ Building a CNN for CIFAR-10</h2>
+            
+            <p><strong>The CNN Architecture Strategy:</strong></p>
+            <p>Think of your CNN like a detective that gets better at seeing details as it goes deeper. Early layers spot edges and colors, deeper layers recognize shapes and objects!</p>
+            
+            <div style="background: #fff3cd; padding: 15px; border-radius: 5px; margin: 15px 0;">
+                <h4>🎯 Our CNN Blueprint:</h4>
+                <ul>
+                    <li><strong>Layer 1:</strong> 32 filters (3x3) → Find basic edges</li>
+                    <li><strong>Layer 2:</strong> 64 filters (3x3) → Combine edges into shapes</li>
+                    <li><strong>Layer 3:</strong> 128 filters (3x3) → Recognize complex patterns</li>
+                    <li><strong>Dense Layer:</strong> 512 neurons → Make final decisions</li>
+                    <li><strong>Output:</strong> 10 neurons → One for each class</li>
+                </ul>
+            </div>
+            
+            <div class="code-block">
+# Complete CIFAR-10 CNN Model<br>
+import tensorflow as tf<br>
+from tensorflow.keras import layers, models<br>
+<br>
+model = models.Sequential([<br>
+    # First Conv Block<br>
+    layers.Conv2D(32, (3, 3), activation='relu', input_shape=(32, 32, 3)),<br>
+    layers.MaxPooling2D((2, 2)),<br>
+    <br>
+    # Second Conv Block<br>
+    layers.Conv2D(64, (3, 3), activation='relu'),<br>
+    layers.MaxPooling2D((2, 2)),<br>
+    <br>
+    # Third Conv Block<br>
+    layers.Conv2D(128, (3, 3), activation='relu'),<br>
+    <br>
+    # Classifier<br>
+    layers.Flatten(),<br>
+    layers.Dense(512, activation='relu'),<br>
+    layers.Dropout(0.5),<br>
+    layers.Dense(10, activation='softmax')<br>
+])
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Training & Getting High Accuracy</h2>
+            
+            <p><strong>Data Preprocessing - The Secret Sauce:</strong></p>
+            <p>Raw pixel values (0-255) are too big for neural networks. We normalize them to 0-1 range, like adjusting the volume on your stereo!</p>
+            
+            <div class="code-block">
+# Preprocess the data<br>
+x_train = x_train.astype('float32') / 255.0<br>
+x_test = x_test.astype('float32') / 255.0<br>
+<br>
+# Convert labels to categorical<br>
+y_train = tf.keras.utils.to_categorical(y_train, 10)<br>
+y_test = tf.keras.utils.to_categorical(y_test, 10)<br>
+<br>
+# Compile model<br>
+model.compile(<br>
+    optimizer='adam',<br>
+    loss='categorical_crossentropy',<br>
+    metrics=['accuracy']<br>
+)<br>
+<br>
+# Train the model<br>
+history = model.fit(<br>
+    x_train, y_train,<br>
+    batch_size=32,<br>
+    epochs=20,<br>
+    validation_data=(x_test, y_test)<br>
+)
+            </div>
+            
+            <div style="background: #d4edda; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                <h4>🎯 Pro Tips for Better Accuracy:</h4>
+                <ul>
+                    <li><strong>Data Augmentation:</strong> Rotate, flip, zoom images for more training data</li>
+                    <li><strong>Dropout:</strong> Prevents overfitting (like studying different topics, not just one)</li>
+                    <li><strong>Learning Rate Scheduling:</strong> Start fast, slow down as you get closer</li>
+                    <li><strong>Batch Normalization:</strong> Keeps training stable</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>💡 Making Predictions & Understanding Results</h2>
+            
+            <p><strong>How to interpret your model's predictions:</strong></p>
+            <p>Your model outputs 10 probabilities (one for each class). The highest probability wins! It's like a voting system where each neuron votes for what it thinks the image is.</p>
+            
+            <div class="code-block">
+# Make predictions<br>
+predictions = model.predict(x_test[:5])<br>
+<br>
+# Get class names<br>
+class_names = ['airplane', 'automobile', 'bird', 'cat', 'deer',<br>
+               'dog', 'frog', 'horse', 'ship', 'truck']<br>
+<br>
+# Show predictions<br>
+for i in range(5):<br>
+    predicted_class = np.argmax(predictions[i])<br>
+    confidence = np.max(predictions[i]) * 100<br>
+    print(f"Image {i}: {class_names[predicted_class]} ({confidence:.1f}% confident)")
+            </div>
+            
+            <div style="background: #fff3cd; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                <h4>🎯 Expected Performance:</h4>
+                <ul>
+                    <li><strong>Basic CNN:</strong> ~70-75% accuracy</li>
+                    <li><strong>With Data Augmentation:</strong> ~80-85% accuracy</li>
+                    <li><strong>Advanced Techniques:</strong> ~90%+ accuracy</li>
+                    <li><strong>State-of-the-art:</strong> ~99% accuracy (ResNet, EfficientNet)</li>
+                </ul>
+                <p><em>Remember: CIFAR-10 is challenging because images are only 32x32 pixels!</em></p>
+            </div>
+            
+            <div class="code-block">
+# Evaluate model<br>
+test_loss, test_accuracy = model.evaluate(x_test, y_test, verbose=0)<br>
+print(f"Test Accuracy: {test_accuracy:.4f} ({test_accuracy*100:.2f}%)")<br>
+<br>
+# Save your trained model<br>
+model.save('cifar10_cnn_model.h5')<br>
+print("Model saved successfully!")
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 3-minute timer
+        let timeLeft = 180;
+        const timer = document.getElementById('timer');
+        
+        const countdown = setInterval(() => {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timer.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                timer.textContent = "Time's Up!";
+                timer.style.background = '#27ae60';
+            }
+            timeLeft--;
+        }, 1000);
+    </script>
+</body>
+</html>

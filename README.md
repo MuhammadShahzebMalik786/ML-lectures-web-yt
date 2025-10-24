@@ -6,7 +6,7 @@ A comprehensive educational website series featuring complete video lectures on 
 
 Educational platform for students and professionals learning machine learning through structured video content and supplementary resources.
 
-## 📚 Current Lectures (12/12)
+## 📚 Current Lectures (13/13)
 
 ### ✅ Completed Lectures
 
@@ -22,12 +22,13 @@ Educational platform for students and professionals learning machine learning th
 10. **evaluation-metrics-lecture.html** - Model Evaluation & Metrics
 11. **ml-lecture-11.html** - Convolutional Neural Networks (CNN)
 12. **cnn-kernels-filters-lecture.html** - CNN Kernels & Filters Deep Dive
+13. **cifar10-cnn-lecture.html** - CIFAR-10 CNN Classification
 
 ### 🔗 **ORGANIZED INDEX**
 **Main Navigation:** `lectures-index.html` - Complete organized lecture browser
 
 ### 📍 **ADD NEW LECTURES HERE** 
-**Next lecture should be added as:** `ml-lecture-13.html`
+**Next lecture should be added as:** `ml-lecture-14.html`
 
 ### 🚧 Suggested Future Topics
 
