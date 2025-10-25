@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimizers, Epochs & Loss Functions - ML Lecture 14</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+        }
+        
+        .lecture-container {
+            max-width: 900px;
+            margin: 90px auto 0;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .lecture-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            border-radius: 10px;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-left: 4px solid #ff6b6b;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        
+        .highlight {
+            background: #e74c3c;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        .optimizer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .optimizer-card {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .loss-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .loss-card {
+            background: linear-gradient(45deg, #ff9a9e, #fecfef);
+            color: #333;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #e74c3c;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="index.html" class="logo">ML Tutorials</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="neural-networks-lecture.html">Neural Networks</a></li>
+                    <li><a href="cnn-kernels-filters-lecture.html">CNN Kernels</a></li>
+                    <li><a href="cifar10-cnn-lecture.html">CIFAR-10 CNN</a></li>
+                    <li><a href="lectures-index.html">📍 All Lectures</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="timer" id="timer">8:00</div>
+    
+    <div class="lecture-container">
+        <div class="lecture-header">
+            <h1>⚡ Optimizers, Epochs & Loss Functions</h1>
+            <p>Machine Learning Training Essentials</p>
+            <p><em>Complete Guide for Teaching</em></p>
+        </div>
+
+        <div class="section">
+            <h2>🎯 What Are Epochs?</h2>
+            <p>An <span class="highlight">epoch</span> is one complete pass through your entire training dataset.</p>
+            
+            <p><strong>Think of epochs like studying for an exam:</strong></p>
+            <ul>
+                <li><strong>1 Epoch</strong> = Reading through all your notes once</li>
+                <li><strong>Multiple Epochs</strong> = Reading through notes multiple times to learn better</li>
+                <li><strong>Too Few Epochs</strong> = Underfitting (didn't study enough)</li>
+                <li><strong>Too Many Epochs</strong> = Overfitting (memorized notes but can't apply knowledge)</li>
+            </ul>
+            
+            <div class="code-block">
+# Training with epochs
+model.fit(X_train, y_train, 
+          epochs=100,           # Read data 100 times
+          batch_size=32,        # Process 32 samples at once
+          validation_split=0.2) # Use 20% for validation
+            </div>
+            
+            <p><strong>Batch vs Epoch:</strong></p>
+            <ul>
+                <li><strong>Batch</strong>: Small group of samples processed together</li>
+                <li><strong>Epoch</strong>: All batches processed once = 1 epoch</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Optimizers - The Learning Engines</h2>
+            <p>Optimizers decide <span class="highlight">how</span> your model learns from mistakes. They adjust weights to minimize loss.</p>
+            
+            <div class="optimizer-grid">
+                <div class="optimizer-card">
+                    <h3>SGD</h3>
+                    <p>Stochastic Gradient Descent</p>
+                    <p><strong>Simple & Reliable</strong></p>
+                </div>
+                <div class="optimizer-card">
+                    <h3>Adam</h3>
+                    <p>Adaptive Moment Estimation</p>
+                    <p><strong>Most Popular</strong></p>
+                </div>
+                <div class="optimizer-card">
+                    <h3>RMSprop</h3>
+                    <p>Root Mean Square Propagation</p>
+                    <p><strong>Good for RNNs</strong></p>
+                </div>
+                <div class="optimizer-card">
+                    <h3>AdaGrad</h3>
+                    <p>Adaptive Gradient</p>
+                    <p><strong>Sparse Data</strong></p>
+                </div>
+            </div>
+            
+            <h3>🏃‍♂️ SGD (Stochastic Gradient Descent)</h3>
+            <p><strong>How it works:</strong> Like walking downhill - takes steps in the steepest direction</p>
+            <div class="code-block">
+optimizer = tf.keras.optimizers.SGD(
+    learning_rate=0.01,  # How big steps to take
+    momentum=0.9         # Helps avoid getting stuck
+)
+            </div>
+            
+            <h3>🧠 Adam (Adaptive Moment Estimation)</h3>
+            <p><strong>How it works:</strong> Smart walker that remembers past steps and adjusts speed automatically</p>
+            <div class="code-block">
+optimizer = tf.keras.optimizers.Adam(
+    learning_rate=0.001,  # Usually smaller than SGD
+    beta_1=0.9,          # Momentum parameter
+    beta_2=0.999         # Variance parameter
+)
+            </div>
+            
+            <h3>📊 RMSprop</h3>
+            <p><strong>How it works:</strong> Adjusts learning rate for each parameter individually</p>
+            <div class="code-block">
+optimizer = tf.keras.optimizers.RMSprop(
+    learning_rate=0.001,
+    rho=0.9              # Decay rate
+)
+            </div>
+            
+            <h3>🎯 When to Use Which?</h3>
+            <ul>
+                <li><strong>Adam</strong>: Default choice, works well for most problems</li>
+                <li><strong>SGD</strong>: When you want more control, often better final performance</li>
+                <li><strong>RMSprop</strong>: Good for recurrent neural networks</li>
+                <li><strong>AdaGrad</strong>: Sparse data, natural language processing</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>📉 Loss Functions - Measuring Mistakes</h2>
+            <p>Loss functions measure <span class="highlight">how wrong</span> your model's predictions are. Different problems need different loss functions.</p>
+            
+            <div class="loss-grid">
+                <div class="loss-card">
+                    <h3>🎯 Binary Crossentropy</h3>
+                    <p><strong>Use for:</strong> Binary classification (Yes/No, Cat/Dog)</p>
+                    <div class="code-block" style="background: #34495e; color: white; margin-top: 10px;">
+model.compile(
+    loss='binary_crossentropy',
+    optimizer='adam',
+    metrics=['accuracy']
+)
+                    </div>
+                    <p><strong>Example:</strong> Email spam detection, medical diagnosis</p>
+                </div>
+                
+                <div class="loss-card">
+                    <h3>🎨 Categorical Crossentropy</h3>
+                    <p><strong>Use for:</strong> Multi-class classification (Cat/Dog/Bird)</p>
+                    <div class="code-block" style="background: #34495e; color: white; margin-top: 10px;">
+model.compile(
+    loss='categorical_crossentropy',
+    optimizer='adam',
+    metrics=['accuracy']
+)
+                    </div>
+                    <p><strong>Example:</strong> Image classification, text classification</p>
+                </div>
+                
+                <div class="loss-card">
+                    <h3>📊 Sparse Categorical Crossentropy</h3>
+                    <p><strong>Use for:</strong> Multi-class with integer labels</p>
+                    <div class="code-block" style="background: #34495e; color: white; margin-top: 10px;">
+model.compile(
+    loss='sparse_categorical_crossentropy',
+    optimizer='adam',
+    metrics=['accuracy']
+)
+                    </div>
+                    <p><strong>Example:</strong> When labels are [0, 1, 2] instead of one-hot</p>
+                </div>
+                
+                <div class="loss-card">
+                    <h3>📈 Mean Squared Error (MSE)</h3>
+                    <p><strong>Use for:</strong> Regression problems</p>
+                    <div class="code-block" style="background: #34495e; color: white; margin-top: 10px;">
+model.compile(
+    loss='mse',
+    optimizer='adam',
+    metrics=['mae']
+)
+                    </div>
+                    <p><strong>Example:</strong> Predicting house prices, stock prices</p>
+                </div>
+                
+                <div class="loss-card">
+                    <h3>📏 Mean Absolute Error (MAE)</h3>
+                    <p><strong>Use for:</strong> Regression with outliers</p>
+                    <div class="code-block" style="background: #34495e; color: white; margin-top: 10px;">
+model.compile(
+    loss='mae',
+    optimizer='adam',
+    metrics=['mse']
+)
+                    </div>
+                    <p><strong>Example:</strong> When you want to be less sensitive to outliers</p>
+                </div>
+                
+                <div class="loss-card">
+                    <h3>🎲 Huber Loss</h3>
+                    <p><strong>Use for:</strong> Robust regression</p>
+                    <div class="code-block" style="background: #34495e; color: white; margin-top: 10px;">
+model.compile(
+    loss='huber',
+    optimizer='adam',
+    metrics=['mae']
+)
+                    </div>
+                    <p><strong>Example:</strong> Combines MSE and MAE benefits</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>⚙️ Learning Rate - The Most Important Hyperparameter</h2>
+            <p>Learning rate controls <span class="highlight">how big steps</span> your optimizer takes when learning.</p>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://miro.medium.com/max/1400/1*rcmvCjQvsxrJi8Y4HpGcCw.png" alt="Learning Rate Visualization" style="max-width: 100%; height: 200px; border-radius: 10px;">
+                <p><em>Learning rate affects how model converges to optimal solution</em></p>
+            </div>
+            
+            <ul>
+                <li><strong>Too High (0.1+)</strong>: Model jumps around, never settles</li>
+                <li><strong>Just Right (0.001-0.01)</strong>: Smooth learning, good convergence</li>
+                <li><strong>Too Low (0.0001)</strong>: Learning is very slow, might get stuck</li>
+            </ul>
+            
+            <div class="code-block">
+# Learning rate scheduling
+initial_lr = 0.001
+lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
+    initial_lr,
+    decay_steps=1000,
+    decay_rate=0.9
+)
+
+optimizer = tf.keras.optimizers.Adam(learning_rate=lr_schedule)
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Practical Training Tips</h2>
+            
+            <h3>📊 Monitoring Training</h3>
+            <div class="code-block">
+# Complete training setup
+model.compile(
+    optimizer=tf.keras.optimizers.Adam(0.001),
+    loss='categorical_crossentropy',
+    metrics=['accuracy', 'top_5_accuracy']
+)
+
+# Training with callbacks
+history = model.fit(
+    X_train, y_train,
+    epochs=100,
+    batch_size=32,
+    validation_split=0.2,
+    callbacks=[
+        tf.keras.callbacks.EarlyStopping(patience=10),
+        tf.keras.callbacks.ReduceLROnPlateau(factor=0.5, patience=5)
+    ]
+)
+            </div>
+            
+            <h3>🛠️ Common Training Problems & Solutions</h3>
+            <ul>
+                <li><strong>Loss not decreasing</strong>: Try lower learning rate or different optimizer</li>
+                <li><strong>Overfitting</strong>: Add dropout, reduce epochs, more data</li>
+                <li><strong>Underfitting</strong>: More epochs, higher learning rate, bigger model</li>
+                <li><strong>Exploding gradients</strong>: Gradient clipping, lower learning rate</li>
+            </ul>
+            
+            <h3>🎨 Optimizer Comparison for Different Tasks</h3>
+            <div class="code-block">
+# Computer Vision
+optimizer = tf.keras.optimizers.Adam(0.001)
+
+# Natural Language Processing  
+optimizer = tf.keras.optimizers.AdamW(0.0001, weight_decay=0.01)
+
+# Time Series
+optimizer = tf.keras.optimizers.RMSprop(0.001)
+
+# Fine-tuning Pre-trained Models
+optimizer = tf.keras.optimizers.Adam(0.00001)  # Very small LR
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📚 Quick Reference Cheat Sheet</h2>
+            
+            <h3>🎯 Loss Function Selection</h3>
+            <div class="code-block">
+# Binary Classification (2 classes)
+loss = 'binary_crossentropy'
+
+# Multi-class Classification (3+ classes, one-hot labels)
+loss = 'categorical_crossentropy'
+
+# Multi-class Classification (3+ classes, integer labels)  
+loss = 'sparse_categorical_crossentropy'
+
+# Regression
+loss = 'mse'  # or 'mae' for outlier-robust
+            </div>
+            
+            <h3>⚡ Optimizer Quick Start</h3>
+            <div class="code-block">
+# Default choice - works for 90% of problems
+optimizer = tf.keras.optimizers.Adam(0.001)
+
+# For fine-tuning or when Adam fails
+optimizer = tf.keras.optimizers.SGD(0.01, momentum=0.9)
+
+# For RNNs or when memory is limited
+optimizer = tf.keras.optimizers.RMSprop(0.001)
+            </div>
+            
+            <h3>📈 Training Best Practices</h3>
+            <ul>
+                <li><strong>Start with Adam optimizer</strong> and learning rate 0.001</li>
+                <li><strong>Use early stopping</strong> to prevent overfitting</li>
+                <li><strong>Monitor both training and validation loss</strong></li>
+                <li><strong>Try learning rate scheduling</strong> for better convergence</li>
+                <li><strong>Experiment with batch sizes</strong> (32, 64, 128)</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🎓 Teaching Points Summary</h2>
+            <div style="background: linear-gradient(45deg, #667eea, #764ba2); color: white; padding: 20px; border-radius: 10px;">
+                <h3>Key Concepts to Emphasize:</h3>
+                <ul>
+                    <li><strong>Epochs</strong>: Complete passes through data - like studying sessions</li>
+                    <li><strong>Optimizers</strong>: How the model learns - Adam is usually best</li>
+                    <li><strong>Loss Functions</strong>: Match the problem type (classification vs regression)</li>
+                    <li><strong>Learning Rate</strong>: Most important hyperparameter to tune</li>
+                    <li><strong>Monitoring</strong>: Always watch training vs validation performance</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Timer functionality
+        let timeLeft = 480; // 8 minutes in seconds
+        const timer = document.getElementById('timer');
+        
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timer.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft > 0) {
+                timeLeft--;
+            } else {
+                timer.textContent = "Time's up!";
+                timer.style.background = '#27ae60';
+            }
+        }
+        
+        setInterval(updateTimer, 1000);
+        
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
