@@ -133,10 +133,10 @@
             </ul>
             
             <div class="code-block">
-# Training with epochs
-model.fit(X_train, y_train, 
-          epochs=100,           # Read data 100 times
-          batch_size=32,        # Process 32 samples at once
+# Training with epochs<br>
+model.fit(X_train, y_train, <br>
+          epochs=100,           # Read data 100 times<br>
+          batch_size=32,        # Process 32 samples at once<br>
           validation_split=0.2) # Use 20% for validation
             </div>
             
@@ -177,28 +177,28 @@ model.fit(X_train, y_train,
             <h3>🏃‍♂️ SGD (Stochastic Gradient Descent)</h3>
             <p><strong>How it works:</strong> Like walking downhill - takes steps in the steepest direction</p>
             <div class="code-block">
-optimizer = tf.keras.optimizers.SGD(
-    learning_rate=0.01,  # How big steps to take
-    momentum=0.9         # Helps avoid getting stuck
+optimizer = tf.keras.optimizers.SGD(<br>
+    learning_rate=0.01,  # How big steps to take<br>
+    momentum=0.9         # Helps avoid getting stuck<br>
 )
             </div>
             
             <h3>🧠 Adam (Adaptive Moment Estimation)</h3>
             <p><strong>How it works:</strong> Smart walker that remembers past steps and adjusts speed automatically</p>
             <div class="code-block">
-optimizer = tf.keras.optimizers.Adam(
-    learning_rate=0.001,  # Usually smaller than SGD
-    beta_1=0.9,          # Momentum parameter
-    beta_2=0.999         # Variance parameter
+optimizer = tf.keras.optimizers.Adam(<br>
+    learning_rate=0.001,  # Usually smaller than SGD<br>
+    beta_1=0.9,          # Momentum parameter<br>
+    beta_2=0.999         # Variance parameter<br>
 )
             </div>
             
             <h3>📊 RMSprop</h3>
             <p><strong>How it works:</strong> Adjusts learning rate for each parameter individually</p>
             <div class="code-block">
-optimizer = tf.keras.optimizers.RMSprop(
-    learning_rate=0.001,
-    rho=0.9              # Decay rate
+optimizer = tf.keras.optimizers.RMSprop(<br>
+    learning_rate=0.001,<br>
+    rho=0.9              # Decay rate<br>
 )
             </div>
             
@@ -220,10 +220,10 @@ optimizer = tf.keras.optimizers.RMSprop(
                     <h3>🎯 Binary Crossentropy</h3>
                     <p><strong>Use for:</strong> Binary classification (Yes/No, Cat/Dog)</p>
                     <div class="code-block" style="background: #34495e; color: white; margin-top: 10px;">
-model.compile(
-    loss='binary_crossentropy',
-    optimizer='adam',
-    metrics=['accuracy']
+model.compile(<br>
+    loss='binary_crossentropy',<br>
+    optimizer='adam',<br>
+    metrics=['accuracy']<br>
 )
                     </div>
                     <p><strong>Example:</strong> Email spam detection, medical diagnosis</p>
@@ -233,10 +233,10 @@ model.compile(
                     <h3>🎨 Categorical Crossentropy</h3>
                     <p><strong>Use for:</strong> Multi-class classification (Cat/Dog/Bird)</p>
                     <div class="code-block" style="background: #34495e; color: white; margin-top: 10px;">
-model.compile(
-    loss='categorical_crossentropy',
-    optimizer='adam',
-    metrics=['accuracy']
+model.compile(<br>
+    loss='categorical_crossentropy',<br>
+    optimizer='adam',<br>
+    metrics=['accuracy']<br>
 )
                     </div>
                     <p><strong>Example:</strong> Image classification, text classification</p>
@@ -246,10 +246,10 @@ model.compile(
                     <h3>📊 Sparse Categorical Crossentropy</h3>
                     <p><strong>Use for:</strong> Multi-class with integer labels</p>
                     <div class="code-block" style="background: #34495e; color: white; margin-top: 10px;">
-model.compile(
-    loss='sparse_categorical_crossentropy',
-    optimizer='adam',
-    metrics=['accuracy']
+model.compile(<br>
+    loss='sparse_categorical_crossentropy',<br>
+    optimizer='adam',<br>
+    metrics=['accuracy']<br>
 )
                     </div>
                     <p><strong>Example:</strong> When labels are [0, 1, 2] instead of one-hot</p>
@@ -259,10 +259,10 @@ model.compile(
                     <h3>📈 Mean Squared Error (MSE)</h3>
                     <p><strong>Use for:</strong> Regression problems</p>
                     <div class="code-block" style="background: #34495e; color: white; margin-top: 10px;">
-model.compile(
-    loss='mse',
-    optimizer='adam',
-    metrics=['mae']
+model.compile(<br>
+    loss='mse',<br>
+    optimizer='adam',<br>
+    metrics=['mae']<br>
 )
                     </div>
                     <p><strong>Example:</strong> Predicting house prices, stock prices</p>
@@ -272,10 +272,10 @@ model.compile(
                     <h3>📏 Mean Absolute Error (MAE)</h3>
                     <p><strong>Use for:</strong> Regression with outliers</p>
                     <div class="code-block" style="background: #34495e; color: white; margin-top: 10px;">
-model.compile(
-    loss='mae',
-    optimizer='adam',
-    metrics=['mse']
+model.compile(<br>
+    loss='mae',<br>
+    optimizer='adam',<br>
+    metrics=['mse']<br>
 )
                     </div>
                     <p><strong>Example:</strong> When you want to be less sensitive to outliers</p>
@@ -285,10 +285,10 @@ model.compile(
                     <h3>🎲 Huber Loss</h3>
                     <p><strong>Use for:</strong> Robust regression</p>
                     <div class="code-block" style="background: #34495e; color: white; margin-top: 10px;">
-model.compile(
-    loss='huber',
-    optimizer='adam',
-    metrics=['mae']
+model.compile(<br>
+    loss='huber',<br>
+    optimizer='adam',<br>
+    metrics=['mae']<br>
 )
                     </div>
                     <p><strong>Example:</strong> Combines MSE and MAE benefits</p>
@@ -312,14 +312,14 @@ model.compile(
             </ul>
             
             <div class="code-block">
-# Learning rate scheduling
-initial_lr = 0.001
-lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
-    initial_lr,
-    decay_steps=1000,
-    decay_rate=0.9
-)
-
+# Learning rate scheduling<br>
+initial_lr = 0.001<br>
+lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(<br>
+    initial_lr,<br>
+    decay_steps=1000,<br>
+    decay_rate=0.9<br>
+)<br>
+<br>
 optimizer = tf.keras.optimizers.Adam(learning_rate=lr_schedule)
             </div>
         </div>
@@ -329,23 +329,23 @@ optimizer = tf.keras.optimizers.Adam(learning_rate=lr_schedule)
             
             <h3>📊 Monitoring Training</h3>
             <div class="code-block">
-# Complete training setup
-model.compile(
-    optimizer=tf.keras.optimizers.Adam(0.001),
-    loss='categorical_crossentropy',
-    metrics=['accuracy', 'top_5_accuracy']
-)
-
-# Training with callbacks
-history = model.fit(
-    X_train, y_train,
-    epochs=100,
-    batch_size=32,
-    validation_split=0.2,
-    callbacks=[
-        tf.keras.callbacks.EarlyStopping(patience=10),
-        tf.keras.callbacks.ReduceLROnPlateau(factor=0.5, patience=5)
-    ]
+# Complete training setup<br>
+model.compile(<br>
+    optimizer=tf.keras.optimizers.Adam(0.001),<br>
+    loss='categorical_crossentropy',<br>
+    metrics=['accuracy', 'top_5_accuracy']<br>
+)<br>
+<br>
+# Training with callbacks<br>
+history = model.fit(<br>
+    X_train, y_train,<br>
+    epochs=100,<br>
+    batch_size=32,<br>
+    validation_split=0.2,<br>
+    callbacks=[<br>
+        tf.keras.callbacks.EarlyStopping(patience=10),<br>
+        tf.keras.callbacks.ReduceLROnPlateau(factor=0.5, patience=5)<br>
+    ]<br>
 )
             </div>
             
@@ -359,16 +359,16 @@ history = model.fit(
             
             <h3>🎨 Optimizer Comparison for Different Tasks</h3>
             <div class="code-block">
-# Computer Vision
-optimizer = tf.keras.optimizers.Adam(0.001)
-
-# Natural Language Processing  
-optimizer = tf.keras.optimizers.AdamW(0.0001, weight_decay=0.01)
-
-# Time Series
-optimizer = tf.keras.optimizers.RMSprop(0.001)
-
-# Fine-tuning Pre-trained Models
+# Computer Vision<br>
+optimizer = tf.keras.optimizers.Adam(0.001)<br>
+<br>
+# Natural Language Processing  <br>
+optimizer = tf.keras.optimizers.AdamW(0.0001, weight_decay=0.01)<br>
+<br>
+# Time Series<br>
+optimizer = tf.keras.optimizers.RMSprop(0.001)<br>
+<br>
+# Fine-tuning Pre-trained Models<br>
 optimizer = tf.keras.optimizers.Adam(0.00001)  # Very small LR
             </div>
         </div>
@@ -378,28 +378,28 @@ optimizer = tf.keras.optimizers.Adam(0.00001)  # Very small LR
             
             <h3>🎯 Loss Function Selection</h3>
             <div class="code-block">
-# Binary Classification (2 classes)
-loss = 'binary_crossentropy'
-
-# Multi-class Classification (3+ classes, one-hot labels)
-loss = 'categorical_crossentropy'
-
-# Multi-class Classification (3+ classes, integer labels)  
-loss = 'sparse_categorical_crossentropy'
-
-# Regression
+# Binary Classification (2 classes)<br>
+loss = 'binary_crossentropy'<br>
+<br>
+# Multi-class Classification (3+ classes, one-hot labels)<br>
+loss = 'categorical_crossentropy'<br>
+<br>
+# Multi-class Classification (3+ classes, integer labels)  <br>
+loss = 'sparse_categorical_crossentropy'<br>
+<br>
+# Regression<br>
 loss = 'mse'  # or 'mae' for outlier-robust
             </div>
             
             <h3>⚡ Optimizer Quick Start</h3>
             <div class="code-block">
-# Default choice - works for 90% of problems
-optimizer = tf.keras.optimizers.Adam(0.001)
-
-# For fine-tuning or when Adam fails
-optimizer = tf.keras.optimizers.SGD(0.01, momentum=0.9)
-
-# For RNNs or when memory is limited
+# Default choice - works for 90% of problems<br>
+optimizer = tf.keras.optimizers.Adam(0.001)<br>
+<br>
+# For fine-tuning or when Adam fails<br>
+optimizer = tf.keras.optimizers.SGD(0.01, momentum=0.9)<br>
+<br>
+# For RNNs or when memory is limited<br>
 optimizer = tf.keras.optimizers.RMSprop(0.001)
             </div>
             

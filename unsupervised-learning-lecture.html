@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unsupervised Learning Algorithms - 3 Minute ML Lecture</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .lecture-container {
+            max-width: 900px;
+            margin: 90px auto 0;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .lecture-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 10px;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        
+        .highlight {
+            background: #e74c3c;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        .timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #e74c3c;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="index.html" class="logo">ML Tutorials</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="neural-networks-lecture.html">Neural Networks</a></li>
+                    <li><a href="decision-trees-lecture.html">Decision Trees</a></li>
+                    <li><a href="random-forest-lecture.html">Random Forest</a></li>
+                    <li><a href="lectures-index.html">📍 All Lectures</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="timer" id="timer">3:00</div>
+    
+    <div class="lecture-container">
+        <div class="lecture-header">
+            <h1>🔍 Unsupervised Learning Algorithms</h1>
+            <p>Machine Learning Made Simple</p>
+            <p><em>3-Minute Complete Guide</em></p>
+        </div>
+
+        <div class="section">
+            <h2>🤔 What is Unsupervised Learning?</h2>
+            <p>Learning from data <span class="highlight">without labels or target values</span> - finding hidden patterns, structures, and relationships in data.</p>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/ClusterAnalysis_Mouse.svg/256px-ClusterAnalysis_Mouse.svg.png" alt="Clustering Example" style="max-width: 100%; height: 200px; border-radius: 10px;">
+                <p><em>Clustering: Finding natural groups in data</em></p>
+            </div>
+            
+            <p><strong>Think of it like organizing a messy room:</strong> You have a pile of items but no instructions on how to organize them. You naturally group similar items together - books with books, clothes with clothes. That's clustering!</p>
+            
+            <p><strong>Why Unsupervised Learning?</strong> Most real-world data doesn't come with labels. We need to discover patterns, reduce complexity, and understand data structure without being told what to look for.</p>
+            
+            <div class="code-block">
+from sklearn.cluster import KMeans<br>
+kmeans = KMeans(n_clusters=3)<br>
+clusters = kmeans.fit_predict(data)
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 K-Means Clustering: Finding Groups</h2>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/K-means_convergence.gif/256px-K-means_convergence.gif" alt="K-Means Animation" style="max-width: 100%; height: 200px; border-radius: 10px;">
+                <p><em>K-Means: Iteratively finding optimal cluster centers</em></p>
+            </div>
+            
+            <p><strong>How K-Means Works:</strong></p>
+            <p>1. Choose K (number of groups you want)<br>
+            2. Place K random "center points" in your data<br>
+            3. Assign each data point to the nearest center<br>
+            4. Move centers to the middle of their assigned points<br>
+            5. Repeat until centers stop moving</p>
+            
+            <p><strong>Real-World Example:</strong> Customer segmentation - group customers by buying behavior without knowing their demographics. K-Means finds natural customer groups: budget shoppers, premium buyers, occasional purchasers.</p>
+            
+            <div class="code-block">
+# K-Means Clustering<br>
+from sklearn.cluster import KMeans<br>
+import matplotlib.pyplot as plt<br><br>
+kmeans = KMeans(n_clusters=3, random_state=42)<br>
+clusters = kmeans.fit_predict(customer_data)<br>
+plt.scatter(customer_data[:, 0], customer_data[:, 1], c=clusters)
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🌳 Hierarchical Clustering: Building Trees</h2>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Hierarchical_clustering_simple_diagram.svg/256px-Hierarchical_clustering_simple_diagram.svg.png" alt="Hierarchical Clustering" style="max-width: 100%; height: 200px; border-radius: 10px;">
+                <p><em>Dendrogram: Tree showing how clusters merge</em></p>
+            </div>
+            
+            <p><strong>How Hierarchical Clustering Works:</strong></p>
+            <p>Start with each point as its own cluster, then repeatedly merge the closest clusters until you have one big cluster. Creates a tree (dendrogram) showing relationships.</p>
+            
+            <p><strong>Advantage over K-Means:</strong> You don't need to specify the number of clusters beforehand. The dendrogram shows natural breakpoints.</p>
+            
+            <div class="code-block">
+from sklearn.cluster import AgglomerativeClustering<br>
+from scipy.cluster.hierarchy import dendrogram, linkage<br><br>
+hierarchical = AgglomerativeClustering(n_clusters=3)<br>
+clusters = hierarchical.fit_predict(data)
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📊 Principal Component Analysis (PCA): Dimension Reduction</h2>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/GaussianScatterPCA.svg/256px-GaussianScatterPCA.svg.png" alt="PCA Visualization" style="max-width: 100%; height: 200px; border-radius: 10px;">
+                <p><em>PCA: Finding the most important directions in data</em></p>
+            </div>
+            
+            <p><strong>What PCA Does:</strong> Reduces data dimensions while keeping the most important information. Like taking a 3D shadow and projecting it onto a 2D wall - you lose some detail but keep the main shape.</p>
+            
+            <p><strong>How PCA Works:</strong></p>
+            <p>1. Find the direction where data varies the most (1st principal component)<br>
+            2. Find the next direction with most remaining variation (2nd component)<br>
+            3. Continue until you have enough components<br>
+            4. Project data onto these new directions</p>
+            
+            <p><strong>Real-World Use:</strong> Reduce 1000 features to 10 while keeping 95% of information. Great for visualization, noise reduction, and speeding up other algorithms.</p>
+            
+            <div class="code-block">
+from sklearn.decomposition import PCA<br><br>
+pca = PCA(n_components=2)  # Reduce to 2 dimensions<br>
+reduced_data = pca.fit_transform(high_dim_data)<br>
+print(f"Variance explained: {pca.explained_variance_ratio_}")
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Real-World Applications</h2>
+            
+            <p><strong>🛒 Customer Segmentation:</strong> Group customers by behavior for targeted marketing</p>
+            <p><strong>🧬 Gene Analysis:</strong> Find patterns in genetic data to understand diseases</p>
+            <p><strong>📈 Market Research:</strong> Discover hidden market segments</p>
+            <p><strong>🖼️ Image Compression:</strong> Reduce image size while preserving quality</p>
+            <p><strong>🔍 Anomaly Detection:</strong> Find unusual patterns that might indicate fraud</p>
+            <p><strong>📊 Data Visualization:</strong> Reduce complex data to 2D/3D for plotting</p>
+            
+            <div class="code-block">
+# Complete Unsupervised Learning Pipeline<br>
+from sklearn.preprocessing import StandardScaler<br>
+from sklearn.decomposition import PCA<br>
+from sklearn.cluster import KMeans<br><br>
+# 1. Standardize data<br>
+scaler = StandardScaler()<br>
+scaled_data = scaler.fit_transform(raw_data)<br><br>
+# 2. Reduce dimensions<br>
+pca = PCA(n_components=0.95)  # Keep 95% variance<br>
+reduced_data = pca.fit_transform(scaled_data)<br><br>
+# 3. Cluster<br>
+kmeans = KMeans(n_clusters=5)<br>
+clusters = kmeans.fit_predict(reduced_data)
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>💡 Key Takeaways</h2>
+            <p><strong>✅ Clustering:</strong> Groups similar data points together</p>
+            <p><strong>✅ PCA:</strong> Reduces dimensions while preserving information</p>
+            <p><strong>✅ No Labels Needed:</strong> Discovers patterns without supervision</p>
+            <p><strong>✅ Exploratory:</strong> Great for understanding data structure</p>
+            <p><strong>⚠️ Interpretation:</strong> Results need domain expertise to understand</p>
+            <p><strong>⚠️ Validation:</strong> Harder to evaluate than supervised learning</p>
+        </div>
+
+        <div class="section">
+            <h2>📚 Resources & Next Steps</h2>
+            <p><strong>📖 Practice:</strong> Try clustering on customer data, image segmentation</p>
+            <p><strong>🔗 Next Topics:</strong> DBSCAN clustering, t-SNE visualization, Autoencoders</p>
+            <p><strong>💻 Tools:</strong> scikit-learn, matplotlib for visualization</p>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="lectures-index.html" style="background: #667eea; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">← Back to All Lectures</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 3-minute timer
+        let timeLeft = 180;
+        const timer = document.getElementById('timer');
+        
+        const countdown = setInterval(() => {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timer.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                timer.textContent = "Time's up!";
+                timer.style.background = '#27ae60';
+            }
+            timeLeft--;
+        }, 1000);
+    </script>
+</body>
+</html>

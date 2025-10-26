@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unsupervised Learning Algorithms & K-Means Clustering - 3 Minute ML Lecture</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .lecture-container {
+            max-width: 900px;
+            margin: 90px auto 0;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .lecture-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 10px;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        
+        .highlight {
+            background: #e74c3c;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        .timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #e74c3c;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .algorithm-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .algorithm-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #667eea;
+            text-align: center;
+        }
+        
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .pros, .cons {
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .pros {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+        }
+        
+        .cons {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="index.html" class="logo">ML Tutorials</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="unsupervised-learning-lecture.html">Unsupervised Learning</a></li>
+                    <li><a href="neural-networks-lecture.html">Neural Networks</a></li>
+                    <li><a href="decision-trees-lecture.html">Decision Trees</a></li>
+                    <li><a href="ensemble-methods-lecture.html">📍 Next (22)</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="timer" id="timer">3:00</div>
+    
+    <div class="lecture-container">
+        <div class="lecture-header">
+            <h1>🔍 Unsupervised Learning Algorithms & K-Means Clustering</h1>
+            <p>Machine Learning Made Simple</p>
+            <p><em>3-Minute Complete Guide</em></p>
+        </div>
+
+        <div class="section">
+            <h2>🤔 What is Unsupervised Learning?</h2>
+            <p>Machine learning that finds <span class="highlight">hidden patterns</span> in data without labeled examples. It discovers structure in data where we don't know the "right answer".</p>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Kernel_Machine.svg/512px-Kernel_Machine.svg.png" alt="Machine Learning Types" style="max-width: 100%; height: 300px; border-radius: 10px;">
+                <div style="background: #f0f0f0; padding: 20px; border-radius: 10px; margin-top: 10px;">
+                    <p><strong>Supervised:</strong> Input → Algorithm → Predicted Output (with known labels)</p>
+                    <p><strong>Unsupervised:</strong> Input → Algorithm → Hidden Patterns (no labels)</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🧠 Main Unsupervised Algorithms</h2>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Cluster-2.svg/512px-Cluster-2.svg.png" alt="Clustering Algorithms Comparison" style="max-width: 100%; height: 300px; border-radius: 10px;">
+                <p><em>Different clustering algorithms handle different data shapes</em></p>
+            </div>
+            
+            <div class="algorithm-grid">
+                <div class="algorithm-card">
+                    <h3>K-Means</h3>
+                    <p>Groups data into k clusters</p>
+                    <p><strong>Best for:</strong> Round clusters</p>
+                </div>
+                
+                <div class="algorithm-card">
+                    <h3>Hierarchical</h3>
+                    <p>Creates cluster tree</p>
+                    <p><strong>Best for:</strong> Unknown k</p>
+                </div>
+                
+                <div class="algorithm-card">
+                    <h3>DBSCAN</h3>
+                    <p>Density-based clustering</p>
+                    <p><strong>Best for:</strong> Irregular shapes</p>
+                </div>
+                
+                <div class="algorithm-card">
+                    <h3>PCA</h3>
+                    <p>Reduces dimensions</p>
+                    <p><strong>Best for:</strong> Data compression</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 K-Means Algorithm Deep Dive</h2>
+            <p>The most popular clustering algorithm that partitions data into <span class="highlight">k clusters</span> by minimizing within-cluster distances.</p>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/ea/K-means_convergence.gif" alt="K-Means Algorithm Steps" style="max-width: 100%; height: 300px; border-radius: 10px;">
+                <p><em>K-Means algorithm in action: Initialize → Assign → Update → Repeat</em></p>
+            </div>
+            
+            <h3>📋 Algorithm Steps:</h3>
+            <ol>
+                <li><strong>Initialize:</strong> Place k random centroids</li>
+                <li><strong>Assign:</strong> Each point goes to nearest centroid</li>
+                <li><strong>Update:</strong> Move centroids to cluster centers</li>
+                <li><strong>Repeat:</strong> Until centroids stop moving</li>
+            </ol>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <div style="background: #e3f2fd; padding: 20px; border-radius: 10px;">
+                    <p><strong>Distance Formula:</strong> d = √[(x₁-x₂)² + (y₁-y₂)²]</p>
+                    <p><strong>Centroid Update:</strong> New center = Average of all points in cluster</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>💻 Python Implementation</h2>
+            <div class="code-block">
+from sklearn.cluster import KMeans<br>
+import numpy as np<br>
+import matplotlib.pyplot as plt<br>
+<br>
+# Generate sample data<br>
+X = np.random.rand(100, 2) * 10<br>
+<br>
+# Apply K-Means<br>
+kmeans = KMeans(n_clusters=3, random_state=42)<br>
+labels = kmeans.fit_predict(X)<br>
+centroids = kmeans.cluster_centers_<br>
+<br>
+# Plot results<br>
+plt.scatter(X[:, 0], X[:, 1], c=labels, cmap='viridis')<br>
+plt.scatter(centroids[:, 0], centroids[:, 1], <br>
+           c='red', marker='x', s=200)<br>
+plt.title('K-Means Clustering')<br>
+plt.show()
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>⚖️ K-Means Pros & Cons</h2>
+            <div class="pros-cons">
+                <div class="pros">
+                    <h3>✅ Advantages</h3>
+                    <ul>
+                        <li>Simple and fast</li>
+                        <li>Works well with spherical clusters</li>
+                        <li>Scales to large datasets</li>
+                        <li>Guaranteed to converge</li>
+                        <li>Memory efficient</li>
+                    </ul>
+                </div>
+                
+                <div class="cons">
+                    <h3>❌ Disadvantages</h3>
+                    <ul>
+                        <li>Must choose k beforehand</li>
+                        <li>Sensitive to initialization</li>
+                        <li>Assumes spherical clusters</li>
+                        <li>Affected by outliers</li>
+                        <li>Struggles with varying sizes</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/K-means_convergence.gif/512px-K-means_convergence.gif" alt="K-Means Convergence Process" style="max-width: 100%; height: 300px; border-radius: 10px;">
+                <p><em>K-Means convergence: Centroids find optimal positions for clustering</em></p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔧 Choosing the Right K</h2>
+            <p>The biggest challenge in K-Means is selecting the optimal number of clusters.</p>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/DataClustering_ElbowCriterion.JPG/512px-DataClustering_ElbowCriterion.JPG" alt="Elbow Method" style="max-width: 100%; height: 300px; border-radius: 10px;">
+                <p><em>Elbow Method: The "elbow" point indicates optimal number of clusters</em></p>
+            </div>
+            
+            <h3>Methods to Find Optimal K:</h3>
+            <ul>
+                <li><strong>Elbow Method:</strong> Plot cost vs k, find the "elbow" point</li>
+                <li><strong>Silhouette Score:</strong> Measures how well points fit their clusters</li>
+                <li><strong>Gap Statistic:</strong> Compares clustering with random data</li>
+            </ul>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://scikit-learn.org/stable/_images/sphx_glr_plot_kmeans_silhouette_analysis_001.png" alt="Silhouette Analysis" style="max-width: 100%; height: 250px; border-radius: 10px;">
+                <p><em>Silhouette Analysis: Higher scores mean better clustering quality</em></p>
+            </div>
+            
+            <div class="code-block">
+# Elbow Method<br>
+costs = []<br>
+for k in range(1, 11):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;kmeans = KMeans(n_clusters=k)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;kmeans.fit(X)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;costs.append(kmeans.inertia_)<br>
+<br>
+plt.plot(range(1, 11), costs, 'bo-')<br>
+plt.xlabel('Number of Clusters (k)')<br>
+plt.ylabel('Cost')<br>
+plt.title('Elbow Method')<br>
+plt.show()
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Real-World Applications</h2>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/ClusterAnalysis_Mouse.svg/512px-ClusterAnalysis_Mouse.svg.png" alt="Cluster Analysis Example" style="max-width: 100%; height: 300px; border-radius: 10px;">
+                <p><em>Cluster analysis example: How algorithms identify natural groupings in data</em></p>
+            </div>
+            
+            <ul>
+                <li><strong>Customer Segmentation:</strong> Group customers by behavior</li>
+                <li><strong>Image Compression:</strong> Reduce colors in images</li>
+                <li><strong>Market Research:</strong> Identify consumer groups</li>
+                <li><strong>Gene Analysis:</strong> Group similar genetic patterns</li>
+                <li><strong>Recommendation Systems:</strong> Group similar users/items</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Key Takeaways</h2>
+            <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107;">
+                <ul>
+                    <li><span class="highlight">K-Means</span> is the go-to clustering algorithm</li>
+                    <li>Choose k using elbow method or silhouette analysis</li>
+                    <li>Works best with spherical, similar-sized clusters</li>
+                    <li>Always standardize your data before clustering</li>
+                    <li>Try multiple random initializations for best results</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📚 Practice Exercise</h2>
+            <p><strong>Challenge:</strong> Use K-Means to segment customers based on age and income.</p>
+            <div class="code-block">
+# Your turn: Implement customer segmentation<br>
+import pandas as pd<br>
+<br>
+# Load customer data<br>
+data = pd.read_csv('customers.csv')<br>
+X = data[['age', 'income']].values<br>
+<br>
+# Apply K-Means (find optimal k first!)<br>
+# Plot the results<br>
+# Interpret the clusters
+            </div>
+        </div>
+
+        <div style="text-align: center; margin: 30px 0; padding: 20px; background: linear-gradient(45deg, #667eea, #764ba2); color: white; border-radius: 10px;">
+            <h2>🎉 Congratulations!</h2>
+            <p>You now understand unsupervised learning and K-Means clustering!</p>
+            <p><strong>Next:</strong> <a href="ensemble-methods-lecture.html" style="color: #ffeb3b;">Ensemble Methods →</a></p>
+        </div>
+    </div>
+
+    <script>
+        // 3-minute timer
+        let timeLeft = 180;
+        const timer = document.getElementById('timer');
+        
+        const countdown = setInterval(() => {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timer.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                timer.textContent = "Time's Up!";
+                timer.style.background = '#28a745';
+            }
+            timeLeft--;
+        }, 1000);
+    </script>
+</body>
+</html>

@@ -6,56 +6,83 @@ A comprehensive educational website series featuring complete video lectures on 
 
 Educational platform for students and professionals learning machine learning through structured video content and supplementary resources.
 
-## 📚 Current Lectures (14/14)
+## 📚 Current Lectures (21/21)
 
 ### ✅ Completed Lectures
 
-1. **ml-lecture-1.html** - Introduction to Machine Learning
-2. **ml-lecture-2.html** - Classification vs Regression
-3. **ml-lecture-3.html** - Supervised Learning Algorithms
+1. **introduction-to-machine-learning-lecture.html** - Introduction to Machine Learning
+2. **classification-vs-regression-lecture.html** - Classification vs Regression
+3. **supervised-learning-algorithms-lecture.html** - Supervised Learning Algorithms
 4. **linear-regression-lecture.html** - Linear Regression Deep Dive
 5. **decision-trees-lecture.html** - Decision Trees
-6. **random-forest-lecture.html** - Random Forest
-7. **support-vector-machine-lecture.html** - Support Vector Machines
-8. **naive-bayes-lecture.html** - Naive Bayes
-9. **neural-networks-lecture.html** - Neural Networks Basics
-10. **evaluation-metrics-lecture.html** - Model Evaluation & Metrics
-11. **ml-lecture-11.html** - Convolutional Neural Networks (CNN)
-12. **cnn-kernels-filters-lecture.html** - CNN Kernels & Filters Deep Dive
-13. **cifar10-cnn-lecture.html** - CIFAR-10 CNN Classification
-14. **ml-lecture-14.html** - Optimizers, Epochs & Loss Functions
+6. **gini-entropy-lecture.html** - Gini & Entropy for Decision Trees
+7. **random-forest-lecture.html** - Random Forest
+8. **support-vector-machine-lecture.html** - Support Vector Machines
+9. **naive-bayes-lecture.html** - Naive Bayes
+10. **neural-networks-lecture.html** - Neural Networks Basics
+11. **neuron-lecture.html** - Artificial Neuron Deep Dive
+12. **evaluation-metrics-lecture.html** - Model Evaluation & Metrics
+13. **data-preprocessing-lecture.html** - Data Preprocessing
+14. **feature-selection-lecture.html** - Feature Selection & Engineering
+15. **convolutional-neural-networks-lecture.html** - Convolutional Neural Networks (CNN)
+16. **cnn-kernels-filters-lecture.html** - CNN Kernels & Filters Deep Dive
+17. **cnn-pooling-lecture.html** - CNN Pooling Operations
+18. **cifar10-cnn-lecture.html** - CIFAR-10 CNN Classification
+19. **optimizers-epochs-loss-functions-lecture.html** - Optimizers, Epochs & Loss Functions
+20. **unsupervised-learning-lecture.html** - Unsupervised Learning: Clustering, PCA & Dimensionality Reduction
+21. **unsupervised-algorithms-kmeans-lecture.html** - Unsupervised Algorithms & K-Means Clustering Deep Dive
 
 ### 🔗 **ORGANIZED INDEX**
 **Main Navigation:** `lectures-index.html` - Complete organized lecture browser
 
-### 📍 **ADD NEW LECTURES HERE** 
-**Next lecture should be added as:** `ml-lecture-15.html`
+### 📍 **NEXT LECTURE TO ADD** 
+**Next lecture should be:** `ensemble-methods-lecture.html` - Bagging, Boosting, Stacking
 
 ### 🚧 Suggested Future Topics
 
-11. **Unsupervised Learning** - Clustering, PCA, Dimensionality Reduction
-12. **Feature Engineering & Selection** - Data preprocessing techniques  
-13. **Advanced Topics** - Ensemble methods, Deep Learning advanced
+20. **Unsupervised Learning** - Clustering, PCA, Dimensionality Reduction
+21. **Ensemble Methods** - Bagging, Boosting, Stacking
+22. **Deep Learning Advanced** - RNNs, LSTMs, Transformers
 
 ## 📁 Project Structure
 
 ```
 ML lectures/
-├── ml-lecture-1.html          # Introduction to ML
-├── ml-lecture-2.html          # Classification vs Regression  
-├── ml_visualizations.html     # Interactive visualizations
-├── styles.css                 # Shared styling
-├── script.js                  # Interactive features
-└── README.md                  # This file
+├── introduction-to-machine-learning-lecture.html    # Introduction to ML
+├── classification-vs-regression-lecture.html        # Classification vs Regression  
+├── supervised-learning-algorithms-lecture.html      # Supervised Learning
+├── linear-regression-lecture.html                   # Linear Regression
+├── decision-trees-lecture.html                      # Decision Trees
+├── gini-entropy-lecture.html                        # Gini & Entropy
+├── random-forest-lecture.html                       # Random Forest
+├── support-vector-machine-lecture.html              # Support Vector Machines
+├── naive-bayes-lecture.html                         # Naive Bayes
+├── neural-networks-lecture.html                     # Neural Networks
+├── neuron-lecture.html                              # Artificial Neuron
+├── evaluation-metrics-lecture.html                  # Model Evaluation
+├── data-preprocessing-lecture.html                  # Data Preprocessing
+├── feature-selection-lecture.html                   # Feature Selection
+├── convolutional-neural-networks-lecture.html       # CNN Basics
+├── cnn-kernels-filters-lecture.html                 # CNN Kernels & Filters
+├── cnn-pooling-lecture.html                         # CNN Pooling
+├── cifar10-cnn-lecture.html                        # CIFAR-10 CNN
+├── optimizers-epochs-loss-functions-lecture.html   # Optimizers, Epochs & Loss Functions
+├── unsupervised-learning-lecture.html              # Unsupervised Learning
+├── unsupervised-algorithms-kmeans-lecture.html     # Unsupervised Algorithms & K-Means
+├── lectures-index.html                              # Main navigation
+├── ml_visualizations.html                           # Interactive visualizations
+├── styles.css                                       # Shared styling
+├── script.js                                        # Interactive features
+└── README.md                                        # This file
 ```
 
 ## 🎯 Next Steps
 
-1. **Create Lecture 3**: Supervised Learning Algorithms
+1. **Create Lecture 21**: Ensemble Methods
 
-   * Linear Regression implementation
-   * Logistic Regression for classification
-   * Code examples and visualizations
+   * Bagging and Bootstrap Aggregating
+   * Boosting algorithms (AdaBoost, Gradient Boosting)
+   * Stacking and model combination techniques
 
 2. **Enhance Existing Content**
 
