@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ensemble Methods: Bagging, Boosting & Stacking - 3 Minute ML Lecture</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .lecture-container {
+            max-width: 900px;
+            margin: 90px auto 0;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .lecture-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 10px;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        
+        .highlight {
+            background: #e74c3c;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        .timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #e74c3c;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="index.html" class="logo">ML Tutorials</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="neural-networks-lecture.html">Neural Networks</a></li>
+                    <li><a href="decision-trees-lecture.html">Decision Trees</a></li>
+                    <li><a href="random-forest-lecture.html">Random Forest</a></li>
+                    <li><a href="ml-lecture-23.html">📍 Next (23)</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="timer" id="timer">3:00</div>
+    
+    <div class="lecture-container">
+        <div class="lecture-header">
+            <h1>🎯 Ensemble Methods</h1>
+            <p>Machine Learning Made Simple</p>
+            <p><em>3-Minute Complete Guide</em></p>
+        </div>
+
+        <div class="section">
+            <h2>🤔 What are Ensemble Methods?</h2>
+            <p>Ensemble methods combine <span class="highlight">multiple machine learning models</span> to create a stronger predictor than any individual model alone.</p>
+            
+            <p><strong>Think of ensemble methods like asking multiple doctors for opinions:</strong> When facing a serious medical condition, you wouldn't rely on just one doctor's opinion. You'd consult multiple specialists, and their combined wisdom would give you more confidence in the diagnosis. That's exactly how ensemble methods work!</p>
+            
+            <p><strong>Why do ensembles work?</strong> Individual models make different types of mistakes. When you combine them intelligently, their errors often cancel out, leaving you with more accurate predictions. It's the "wisdom of crowds" principle in action.</p>
+            
+            <div class="code-block">
+from sklearn.ensemble import RandomForestClassifier<br>
+rf = RandomForestClassifier(n_estimators=100)<br>
+rf.fit(X_train, y_train)
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎒 Bagging (Bootstrap Aggregating)</h2>
+            
+            <p><strong>Bagging - The Parallel Approach:</strong></p>
+            <p>Bagging trains multiple models on different random samples of your data, then averages their predictions. It's like having 10 different doctors each examine a different random sample of your medical history, then taking a vote on the diagnosis.</p>
+            
+            <p><strong>Random Forest - Bagging Champion:</strong></p>
+            <p>Random Forest is the most popular bagging method. It creates many decision trees, each trained on a different bootstrap sample of the data, plus it randomly selects features for each tree. This double randomness makes the ensemble very robust.</p>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <div style="background: #e8f4fd; padding: 15px; border-radius: 10px; display: inline-block;">
+                    <p><strong>Bagging Process:</strong></p>
+                    <p>Data → Bootstrap Sample 1 → Model 1 ↘</p>
+                    <p>Data → Bootstrap Sample 2 → Model 2 → Average → Prediction</p>
+                    <p>Data → Bootstrap Sample 3 → Model 3 ↗</p>
+                </div>
+            </div>
+            
+            <div class="code-block">
+from sklearn.ensemble import RandomForestClassifier<br>
+<br>
+# Random Forest uses bagging with decision trees<br>
+rf = RandomForestClassifier(n_estimators=100)<br>
+rf.fit(X_train, y_train)<br>
+predictions = rf.predict(X_test)
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Boosting - Learning from Mistakes</h2>
+            
+            <p><strong>Boosting - The Sequential Approach:</strong></p>
+            <p>Boosting trains models one after another, where each new model focuses on fixing the mistakes of the previous models. It's like a student learning from their errors - after each test, they study harder on the questions they got wrong.</p>
+            
+            <p><strong>AdaBoost & Gradient Boosting:</strong></p>
+            <p>AdaBoost adjusts the importance of training examples - giving more weight to previously misclassified samples. Gradient Boosting fits new models to the residual errors of previous models. Both create powerful ensembles by learning from mistakes.</p>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <div style="background: #fff3cd; padding: 15px; border-radius: 10px; display: inline-block;">
+                    <p><strong>Boosting Process:</strong></p>
+                    <p>Data → Model 1 → Errors → Model 2 → Errors → Model 3 → Weighted Combination</p>
+                </div>
+            </div>
+            
+            <div class="code-block">
+from sklearn.ensemble import AdaBoostClassifier, GradientBoostingClassifier<br>
+<br>
+# AdaBoost<br>
+ada = AdaBoostClassifier(n_estimators=100)<br>
+ada.fit(X_train, y_train)<br>
+<br>
+# Gradient Boosting<br>
+gb = GradientBoostingClassifier(n_estimators=100)<br>
+gb.fit(X_train, y_train)
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📚 Stacking - The Meta-Learning Approach</h2>
+            
+            <p><strong>Stacking - Learning How to Combine:</strong></p>
+            <p>Stacking uses a "meta-learner" to learn the best way to combine predictions from multiple base models. It's like having a general practitioner who knows how to best combine opinions from different specialists (cardiologist, neurologist, etc.) into a final diagnosis.</p>
+            
+            <p><strong>Two-Level Learning:</strong></p>
+            <p>First, train several different base models. Then, train a meta-model that learns how to optimally combine the base model predictions. The meta-model discovers which base models to trust more for different types of inputs.</p>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <div style="background: #d4edda; padding: 15px; border-radius: 10px; display: inline-block;">
+                    <p><strong>Stacking Process:</strong></p>
+                    <p>Base Model 1 → Prediction 1 ↘</p>
+                    <p>Base Model 2 → Prediction 2 → Meta-Learner → Final Prediction</p>
+                    <p>Base Model 3 → Prediction 3 ↗</p>
+                </div>
+            </div>
+            
+            <div class="code-block">
+from sklearn.ensemble import StackingClassifier<br>
+from sklearn.linear_model import LogisticRegression<br>
+<br>
+base_models = [<br>
+    ('rf', RandomForestClassifier()),<br>
+    ('svm', SVC()),<br>
+    ('nb', GaussianNB())<br>
+]<br>
+<br>
+stacking = StackingClassifier(<br>
+    estimators=base_models,<br>
+    final_estimator=LogisticRegression()<br>
+)<br>
+stacking.fit(X_train, y_train)
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>💡 When to Use Each Method</h2>
+            
+            <div style="background: #fff3cd; padding: 15px; border-radius: 5px; margin-bottom: 15px;">
+                <h4>🎯 Quick Decision Guide:</h4>
+                <ul>
+                    <li><strong>Use Bagging (Random Forest)</strong> when you have high variance (overfitting) problems</li>
+                    <li><strong>Use Boosting</strong> when you have high bias (underfitting) problems</li>
+                    <li><strong>Use Stacking</strong> when you want maximum performance and have diverse base models</li>
+                    <li><strong>Start with Random Forest</strong> - it's robust and works well in most situations</li>
+                </ul>
+            </div>
+            
+            <div style="background: #d4edda; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                <h4>🎯 Complete Ensemble Comparison:</h4>
+                <div class="code-block">
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, StackingClassifier<br>
+from sklearn.linear_model import LogisticRegression<br>
+<br>
+# Bagging<br>
+rf = RandomForestClassifier(n_estimators=100)<br>
+rf.fit(X_train, y_train)<br>
+<br>
+# Boosting<br>
+ada = AdaBoostClassifier(n_estimators=100)<br>
+ada.fit(X_train, y_train)<br>
+<br>
+# Stacking<br>
+base_models = [('rf', RandomForestClassifier()), ('ada', AdaBoostClassifier())]<br>
+stacking = StackingClassifier(estimators=base_models, final_estimator=LogisticRegression())<br>
+stacking.fit(X_train, y_train)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 3-minute timer
+        let timeLeft = 180;
+        const timer = document.getElementById('timer');
+        
+        const countdown = setInterval(() => {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timer.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                timer.textContent = "Time's Up!";
+                timer.style.background = '#27ae60';
+            }
+            timeLeft--;
+        }, 1000);
+    </script>
+</body>
+</html>

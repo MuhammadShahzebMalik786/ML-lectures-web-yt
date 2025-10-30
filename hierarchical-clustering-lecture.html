@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hierarchical Clustering - 3 Minute ML Lecture</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .lecture-container {
+            max-width: 900px;
+            margin: 90px auto 0;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .lecture-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 10px;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        
+        .highlight {
+            background: #e74c3c;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        .algorithm-box {
+            background: #3498db;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .comparison-table th {
+            background: #667eea;
+            color: white;
+        }
+        
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .pros, .cons {
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .pros {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+        }
+        
+        .cons {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+        }
+        
+        .dendrogram-visual {
+            background: #f8f9fa;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>ML Lectures</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="lectures-index.html">All Lectures</a></li>
+                <li><a href="unsupervised-learning-lecture.html">Previous</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="lecture-container">
+        <div class="lecture-header">
+            <h1>🌳 Hierarchical Clustering</h1>
+            <p>Building Tree-Based Cluster Structures</p>
+            <p><strong>Lecture 22</strong> | Unsupervised Learning Series</p>
+        </div>
+
+        <div class="section">
+            <h2>🎯 What is Hierarchical Clustering?</h2>
+            <p>Hierarchical clustering creates a <span class="highlight">tree of clusters</span> called a dendrogram. Unlike K-means, you don't need to specify the number of clusters beforehand.</p>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://scikit-learn.org/stable/_images/sphx_glr_plot_agglomerative_clustering_001.png" alt="Hierarchical Clustering Overview" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <p style="font-style: italic; color: #666; margin-top: 10px;">Hierarchical clustering builds a tree structure of clusters</p>
+            </div>
+            
+            <div class="algorithm-box">
+                <strong>Key Concept:</strong> Build a hierarchy of clusters by either merging (agglomerative) or splitting (divisive) data points based on distance.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔄 Two Types of Hierarchical Clustering</h2>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;">
+                <!-- Agglomerative (Bottom-up) -->
+                <div style="background: linear-gradient(135deg, #e8f5e8, #d4edda); padding: 25px; border-radius: 15px; border: 3px solid #28a745; box-shadow: 0 6px 12px rgba(0,0,0,0.1);">
+                    <h3 style="color: #155724; text-align: center; margin-bottom: 20px;">🔗 Agglomerative (Bottom-up)</h3>
+                    
+                    <div style="text-align: center; margin: 20px 0;">
+                        <div style="margin-bottom: 15px; font-weight: bold; color: #155724;">Step 1: Start with individual points</div>
+                        <div style="display: flex; justify-content: center; gap: 15px; margin: 15px 0;">
+                            <div style="width: 30px; height: 30px; background: #28a745; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;">A</div>
+                            <div style="width: 30px; height: 30px; background: #28a745; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;">B</div>
+                            <div style="width: 30px; height: 30px; background: #28a745; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;">C</div>
+                            <div style="width: 30px; height: 30px; background: #28a745; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;">D</div>
+                        </div>
+                        
+                        <div style="margin: 20px 0; font-size: 24px; color: #28a745;">⬇️</div>
+                        
+                        <div style="margin-bottom: 15px; font-weight: bold; color: #155724;">Step 2: Merge closest pairs</div>
+                        <div style="display: flex; justify-content: center; gap: 20px; margin: 15px 0;">
+                            <div style="background: rgba(40, 167, 69, 0.2); padding: 10px; border-radius: 10px; border: 2px dashed #28a745;">
+                                <div style="display: flex; gap: 5px;">
+                                    <div style="width: 25px; height: 25px; background: #28a745; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px;">A</div>
+                                    <div style="width: 25px; height: 25px; background: #28a745; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px;">B</div>
+                                </div>
+                            </div>
+                            <div style="background: rgba(40, 167, 69, 0.2); padding: 10px; border-radius: 10px; border: 2px dashed #28a745;">
+                                <div style="display: flex; gap: 5px;">
+                                    <div style="width: 25px; height: 25px; background: #28a745; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px;">C</div>
+                                    <div style="width: 25px; height: 25px; background: #28a745; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px;">D</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin: 20px 0; font-size: 24px; color: #28a745;">⬇️</div>
+                        
+                        <div style="margin-bottom: 15px; font-weight: bold; color: #155724;">Step 3: Final merge</div>
+                        <div style="display: flex; justify-content: center; margin: 15px 0;">
+                            <div style="background: rgba(40, 167, 69, 0.3); padding: 15px; border-radius: 15px; border: 3px solid #28a745;">
+                                <div style="display: flex; gap: 8px;">
+                                    <div style="width: 25px; height: 25px; background: #28a745; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px;">A</div>
+                                    <div style="width: 25px; height: 25px; background: #28a745; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px;">B</div>
+                                    <div style="width: 25px; height: 25px; background: #28a745; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px;">C</div>
+                                    <div style="width: 25px; height: 25px; background: #28a745; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px;">D</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Divisive (Top-down) -->
+                <div style="background: linear-gradient(135deg, #fff3cd, #ffeaa7); padding: 25px; border-radius: 15px; border: 3px solid #fd7e14; box-shadow: 0 6px 12px rgba(0,0,0,0.1);">
+                    <h3 style="color: #856404; text-align: center; margin-bottom: 20px;">✂️ Divisive (Top-down)</h3>
+                    
+                    <div style="text-align: center; margin: 20px 0;">
+                        <div style="margin-bottom: 15px; font-weight: bold; color: #856404;">Step 1: Start with all points together</div>
+                        <div style="display: flex; justify-content: center; margin: 15px 0;">
+                            <div style="background: rgba(253, 126, 20, 0.3); padding: 15px; border-radius: 15px; border: 3px solid #fd7e14;">
+                                <div style="display: flex; gap: 8px;">
+                                    <div style="width: 25px; height: 25px; background: #fd7e14; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px;">A</div>
+                                    <div style="width: 25px; height: 25px; background: #fd7e14; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px;">B</div>
+                                    <div style="width: 25px; height: 25px; background: #fd7e14; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px;">C</div>
+                                    <div style="width: 25px; height: 25px; background: #fd7e14; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px;">D</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin: 20px 0; font-size: 24px; color: #fd7e14;">⬇️</div>
+                        
+                        <div style="margin-bottom: 15px; font-weight: bold; color: #856404;">Step 2: Split into groups</div>
+                        <div style="display: flex; justify-content: center; gap: 20px; margin: 15px 0;">
+                            <div style="background: rgba(253, 126, 20, 0.2); padding: 10px; border-radius: 10px; border: 2px dashed #fd7e14;">
+                                <div style="display: flex; gap: 5px;">
+                                    <div style="width: 25px; height: 25px; background: #fd7e14; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px;">A</div>
+                                    <div style="width: 25px; height: 25px; background: #fd7e14; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px;">B</div>
+                                </div>
+                            </div>
+                            <div style="background: rgba(253, 126, 20, 0.2); padding: 10px; border-radius: 10px; border: 2px dashed #fd7e14;">
+                                <div style="display: flex; gap: 5px;">
+                                    <div style="width: 25px; height: 25px; background: #fd7e14; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px;">C</div>
+                                    <div style="width: 25px; height: 25px; background: #fd7e14; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px;">D</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin: 20px 0; font-size: 24px; color: #fd7e14;">⬇️</div>
+                        
+                        <div style="margin-bottom: 15px; font-weight: bold; color: #856404;">Step 3: Continue splitting</div>
+                        <div style="display: flex; justify-content: center; gap: 15px; margin: 15px 0;">
+                            <div style="width: 30px; height: 30px; background: #fd7e14; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;">A</div>
+                            <div style="width: 30px; height: 30px; background: #fd7e14; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;">B</div>
+                            <div style="width: 30px; height: 30px; background: #fd7e14; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;">C</div>
+                            <div style="width: 30px; height: 30px; background: #fd7e14; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;">D</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <table class="comparison-table">
+                <tr>
+                    <th>Type</th>
+                    <th>Approach</th>
+                    <th>Process</th>
+                    <th>Usage</th>
+                </tr>
+                <tr>
+                    <td><strong>Agglomerative</strong></td>
+                    <td>Bottom-up</td>
+                    <td>Start with individual points, merge closest clusters</td>
+                    <td>Most common</td>
+                </tr>
+                <tr>
+                    <td><strong>Divisive</strong></td>
+                    <td>Top-down</td>
+                    <td>Start with all points, recursively split clusters</td>
+                    <td>Less common</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>⚙️ Agglomerative Clustering Algorithm</h2>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://scikit-learn.org/stable/_images/sphx_glr_plot_agglomerative_clustering_metrics_005.png" alt="Agglomerative Clustering Steps" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <p style="font-style: italic; color: #666; margin-top: 10px;">Step-by-step agglomerative clustering process</p>
+            </div>
+            
+            <div class="algorithm-box">
+                <strong>Step-by-Step Process:</strong>
+                <ol>
+                    <li>Start: Each data point is its own cluster</li>
+                    <li>Calculate distances between all cluster pairs</li>
+                    <li>Merge the two closest clusters</li>
+                    <li>Repeat until only one cluster remains</li>
+                    <li>Cut the dendrogram at desired level for final clusters</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📏 Linkage Criteria (Distance Between Clusters)</h2>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://scikit-learn.org/stable/_images/sphx_glr_plot_linkage_comparison_001.png" alt="Linkage Criteria Visualization" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <p style="font-style: italic; color: #666; margin-top: 10px;">Different linkage criteria: Single, Complete, Average, and Ward</p>
+            </div>
+            
+            <table class="comparison-table">
+                <tr>
+                    <th>Linkage</th>
+                    <th>Distance Calculation</th>
+                    <th>Characteristics</th>
+                </tr>
+                <tr>
+                    <td><strong>Single</strong></td>
+                    <td>Minimum distance between any two points</td>
+                    <td>Can create elongated clusters</td>
+                </tr>
+                <tr>
+                    <td><strong>Complete</strong></td>
+                    <td>Maximum distance between any two points</td>
+                    <td>Creates compact, spherical clusters</td>
+                </tr>
+                <tr>
+                    <td><strong>Average</strong></td>
+                    <td>Average distance between all point pairs</td>
+                    <td>Balanced approach</td>
+                </tr>
+                <tr>
+                    <td><strong>Ward</strong></td>
+                    <td>Minimizes within-cluster variance</td>
+                    <td>Most popular, creates balanced clusters</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>🌳 Dendrogram Visualization</h2>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://docs.scipy.org/doc/scipy/reference/_images/scipy-cluster-hierarchy-dendrogram-1.png" alt="Dendrogram Example" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <p style="font-style: italic; color: #666; margin-top: 10px;">Real dendrogram showing hierarchical cluster structure</p>
+            </div>
+            
+            <div class="dendrogram-visual" style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); border: 2px solid #667eea; border-radius: 12px; padding: 30px; margin: 25px 0;">
+                <h4 style="color: #667eea; margin-bottom: 20px;">📊 Interactive Dendrogram Structure</h4>
+                
+                <div style="display: flex; justify-content: center; align-items: end; margin: 20px 0; font-family: 'Arial', sans-serif;">
+                    <div style="text-align: center; margin: 0 15px;">
+                        <div style="width: 60px; height: 200px; background: linear-gradient(to top, #667eea 0%, #764ba2 100%); border-radius: 8px; position: relative; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+                            <div style="position: absolute; top: -25px; left: 50%; transform: translateX(-50%); background: white; padding: 5px 10px; border-radius: 15px; font-size: 12px; font-weight: bold; color: #667eea; border: 2px solid #667eea;">Height: 10</div>
+                            <div style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%); color: white; font-weight: bold;">All Data</div>
+                        </div>
+                        <div style="margin-top: 10px; font-weight: bold; color: #333;">Cut for 1 cluster</div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; justify-content: center; align-items: end; margin: 20px 0;">
+                    <div style="text-align: center; margin: 0 10px;">
+                        <div style="width: 45px; height: 150px; background: linear-gradient(to top, #28a745, #20c997); border-radius: 6px; position: relative; box-shadow: 0 3px 6px rgba(0,0,0,0.15);">
+                            <div style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); background: white; padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; color: #28a745; border: 2px solid #28a745;">H: 7</div>
+                            <div style="position: absolute; top: 15px; left: 50%; transform: translateX(-50%); color: white; font-size: 11px; font-weight: bold;">Group A</div>
+                        </div>
+                        <div style="margin-top: 8px; font-size: 12px; color: #555;">Cluster 1</div>
+                    </div>
+                    
+                    <div style="text-align: center; margin: 0 10px;">
+                        <div style="width: 45px; height: 150px; background: linear-gradient(to top, #fd7e14, #ffc107); border-radius: 6px; position: relative; box-shadow: 0 3px 6px rgba(0,0,0,0.15);">
+                            <div style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); background: white; padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; color: #fd7e14; border: 2px solid #fd7e14;">H: 7</div>
+                            <div style="position: absolute; top: 15px; left: 50%; transform: translateX(-50%); color: white; font-size: 11px; font-weight: bold;">Group B</div>
+                        </div>
+                        <div style="margin-top: 8px; font-size: 12px; color: #555;">Cluster 2</div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin: 20px 0; padding: 15px; background: rgba(102, 126, 234, 0.1); border-radius: 8px;">
+                    <div style="font-size: 14px; color: #667eea; margin-bottom: 10px;">✂️ <strong>Cut Line at Different Heights:</strong></div>
+                    <div style="display: flex; justify-content: space-around; flex-wrap: wrap;">
+                        <div style="margin: 5px; padding: 8px 15px; background: #e74c3c; color: white; border-radius: 20px; font-size: 12px; font-weight: bold;">Height 10 → 1 Cluster</div>
+                        <div style="margin: 5px; padding: 8px 15px; background: #f39c12; color: white; border-radius: 20px; font-size: 12px; font-weight: bold;">Height 7 → 2 Clusters</div>
+                        <div style="margin: 5px; padding: 8px 15px; background: #27ae60; color: white; border-radius: 20px; font-size: 12px; font-weight: bold;">Height 4 → 3 Clusters</div>
+                        <div style="margin: 5px; padding: 8px 15px; background: #3498db; color: white; border-radius: 20px; font-size: 12px; font-weight: bold;">Height 2 → 5 Clusters</div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; justify-content: center; margin: 20px 0;">
+                    <div style="display: flex; align-items: center; background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                        <div style="width: 20px; height: 20px; background: #667eea; border-radius: 50%; margin-right: 10px;"></div>
+                        <span style="font-size: 14px; color: #333;"><strong>Point 1</strong></span>
+                    </div>
+                    <div style="display: flex; align-items: center; background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-left: 10px;">
+                        <div style="width: 20px; height: 20px; background: #28a745; border-radius: 50%; margin-right: 10px;"></div>
+                        <span style="font-size: 14px; color: #333;"><strong>Point 2</strong></span>
+                    </div>
+                    <div style="display: flex; align-items: center; background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-left: 10px;">
+                        <div style="width: 20px; height: 20px; background: #fd7e14; border-radius: 50%; margin-right: 10px;"></div>
+                        <span style="font-size: 14px; color: #333;"><strong>Point 3</strong></span>
+                    </div>
+                    <div style="display: flex; align-items: center; background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-left: 10px;">
+                        <div style="width: 20px; height: 20px; background: #e74c3c; border-radius: 50%; margin-right: 10px;"></div>
+                        <span style="font-size: 14px; color: #333;"><strong>Point 4</strong></span>
+                    </div>
+                    <div style="display: flex; align-items: center; background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-left: 10px;">
+                        <div style="width: 20px; height: 20px; background: #9b59b6; border-radius: 50%; margin-right: 10px;"></div>
+                        <span style="font-size: 14px; color: #333;"><strong>Point 5</strong></span>
+                    </div>
+                </div>
+                
+                <div style="background: rgba(40, 167, 69, 0.1); padding: 15px; border-radius: 8px; border-left: 4px solid #28a745;">
+                    <p style="margin: 0; color: #155724; font-weight: bold;">📖 Reading Guide:</p>
+                    <ul style="margin: 10px 0; color: #155724;">
+                        <li><strong>Height:</strong> Indicates distance when clusters were merged</li>
+                        <li><strong>Horizontal Cut:</strong> Determines final number of clusters</li>
+                        <li><strong>Lower Cut:</strong> More clusters (more granular)</li>
+                        <li><strong>Higher Cut:</strong> Fewer clusters (more general)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🧮 Mathematical Calculations</h2>
+            
+            <h3>Distance Metrics</h3>
+            <div class="code-block">
+# Euclidean Distance between points A and B<br>
+d(A,B) = √[(x₁-x₂)² + (y₁-y₂)²]<br><br>
+
+# Manhattan Distance<br>
+d(A,B) = |x₁-x₂| + |y₁-y₂|<br><br>
+
+# Cosine Distance<br>
+d(A,B) = 1 - (A·B)/(||A|| × ||B||)
+            </div>
+
+            <h3>Linkage Distance Calculations</h3>
+            <div class="code-block">
+# Single Linkage (Minimum)<br>
+d(C₁,C₂) = min{d(x,y) : x∈C₁, y∈C₂}<br><br>
+
+# Complete Linkage (Maximum)<br>
+d(C₁,C₂) = max{d(x,y) : x∈C₁, y∈C₂}<br><br>
+
+# Average Linkage<br>
+d(C₁,C₂) = (1/|C₁||C₂|) × Σ Σ d(x,y)<br><br>
+
+# Ward Linkage (Variance)<br>
+d(C₁,C₂) = √[(2×|C₁|×|C₂|)/(|C₁|+|C₂|)] × ||μ₁-μ₂||
+            </div>
+
+            <h3>Step-by-Step Example</h3>
+            <div class="algorithm-box">
+                <strong>Sample Data Points:</strong><br>
+                A(1,1), B(2,1), C(4,3), D(5,4)
+            </div>
+
+            <div class="code-block">
+# Step 1: Calculate distance matrix<br>
+Distance Matrix:<br>
+    A    B    C    D<br>
+A   0   1.0  3.6  5.0<br>
+B   1.0  0   2.8  4.2<br>
+C   3.6 2.8   0   1.4<br>
+D   5.0 4.2  1.4   0<br><br>
+
+# Step 2: Find minimum distance (A,B = 1.0)<br>
+Merge A and B → Cluster AB<br><br>
+
+# Step 3: Update distance matrix using Average Linkage<br>
+d(AB,C) = [d(A,C) + d(B,C)]/2 = (3.6 + 2.8)/2 = 3.2<br>
+d(AB,D) = [d(A,D) + d(B,D)]/2 = (5.0 + 4.2)/2 = 4.6<br><br>
+
+New Matrix:<br>
+     AB   C    D<br>
+AB    0  3.2  4.6<br>
+C    3.2  0   1.4<br>
+D    4.6 1.4   0<br><br>
+
+# Step 4: Find minimum distance (C,D = 1.4)<br>
+Merge C and D → Cluster CD<br><br>
+
+# Step 5: Final merge<br>
+d(AB,CD) = 3.2<br>
+Final dendrogram height = 3.2
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📊 Visual Data Examples</h2>
+            
+            <div class="algorithm-box">
+                <strong>Real Dataset Example: Customer Segmentation</strong>
+            </div>
+
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://matplotlib.org/stable/_images/sphx_glr_plot_dendrogram_001.png" alt="Customer Segmentation with Hierarchical Clustering" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <p style="font-style: italic; color: #666; margin-top: 10px;">Customer segmentation using hierarchical clustering with dendrogram</p>
+            </div>
+
+            <div class="algorithm-box">
+                <strong>Customer Features Analysis:</strong><br>
+                • <strong>Age:</strong> 22-55 years (demographic segmentation)<br>
+                • <strong>Income:</strong> $25,000-$95,000 (economic segmentation)<br>
+                • <strong>Spending Score:</strong> 15-90 points (behavioral segmentation)<br><br>
+                
+                <strong>Data Preprocessing:</strong><br>
+                All features are standardized using Z-score normalization to ensure equal weight in distance calculations.
+            </div>
+
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://scikit-learn.org/stable/_images/sphx_glr_plot_agglomerative_clustering_003.png" alt="Hierarchical Clustering Results Visualization" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <p style="font-style: italic; color: #666; margin-top: 10px;">Scatter plot showing hierarchical clustering results with different colors for each cluster</p>
+            </div>
+
+            <h3>Expected Clustering Results</h3>
+            <div class="algorithm-box">
+                <strong>3-Cluster Solution:</strong><br>
+                • <strong>Cluster 1:</strong> Young, Low Income (Budget-conscious customers)<br>
+                • <strong>Cluster 2:</strong> Middle-aged, Medium Income (Moderate spenders)<br>
+                • <strong>Cluster 3:</strong> High Income, High Spending (Premium customers)
+            </div>
+        </div>
+            
+            <div class="code-block">
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.cluster import AgglomerativeClustering
+from sklearn.datasets import make_blobs
+from scipy.cluster.hierarchy import dendrogram, linkage
+from scipy.cluster.hierarchy import fcluster
+
+# Generate sample data
+X, _ = make_blobs(n_samples=100, centers=4, 
+                  cluster_std=1.0, random_state=42)
+
+# Method 1: Using sklearn
+hierarchical = AgglomerativeClustering(
+    n_clusters=4,           # Number of final clusters
+    linkage='ward'          # Linkage criterion
+)
+cluster_labels = hierarchical.fit_predict(X)
+
+# Method 2: Using scipy for dendrogram
+linkage_matrix = linkage(X, method='ward')
+
+# Plot dendrogram
+plt.figure(figsize=(12, 5))
+
+plt.subplot(1, 2, 1)
+dendrogram(linkage_matrix, truncate_mode='level', p=3)
+plt.title('Dendrogram')
+plt.xlabel('Sample Index')
+plt.ylabel('Distance')
+
+plt.subplot(1, 2, 2)
+plt.scatter(X[:, 0], X[:, 1], c=cluster_labels, cmap='viridis')
+plt.title('Hierarchical Clustering Result')
+plt.xlabel('Feature 1')
+plt.ylabel('Feature 2')
+
+plt.tight_layout()
+plt.show()
+
+# Extract clusters at specific distance threshold
+clusters = fcluster(linkage_matrix, t=3, criterion='maxclust')
+print(f"Cluster assignments: {clusters}")
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>⚖️ Hierarchical vs K-Means Clustering</h2>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://scikit-learn.org/stable/_images/sphx_glr_plot_cluster_comparison_001.png" alt="Hierarchical vs K-Means Comparison" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <p style="font-style: italic; color: #666; margin-top: 10px;">Visual comparison: Hierarchical clustering vs K-means results</p>
+            </div>
+            
+            <table class="comparison-table">
+                <tr>
+                    <th>Aspect</th>
+                    <th>Hierarchical</th>
+                    <th>K-Means</th>
+                </tr>
+                <tr>
+                    <td><strong>Cluster Number</strong></td>
+                    <td>Don't need to specify beforehand</td>
+                    <td>Must specify K in advance</td>
+                </tr>
+                <tr>
+                    <td><strong>Cluster Shape</strong></td>
+                    <td>Any shape (depends on linkage)</td>
+                    <td>Spherical clusters</td>
+                </tr>
+                <tr>
+                    <td><strong>Computational Cost</strong></td>
+                    <td>O(n³) - expensive for large datasets</td>
+                    <td>O(nkt) - more efficient</td>
+                </tr>
+                <tr>
+                    <td><strong>Deterministic</strong></td>
+                    <td>Yes - same result every time</td>
+                    <td>No - depends on initialization</td>
+                </tr>
+                <tr>
+                    <td><strong>Visualization</strong></td>
+                    <td>Dendrogram shows hierarchy</td>
+                    <td>Only final cluster assignments</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>✅ Advantages & Disadvantages</h2>
+            
+            <div class="pros-cons">
+                <div class="pros">
+                    <h4>✅ Advantages</h4>
+                    <ul>
+                        <li>No need to specify number of clusters</li>
+                        <li>Deterministic results</li>
+                        <li>Hierarchical structure provides insights</li>
+                        <li>Works with any distance metric</li>
+                        <li>Can handle non-spherical clusters</li>
+                        <li>Dendrogram visualization</li>
+                    </ul>
+                </div>
+                
+                <div class="cons">
+                    <h4>❌ Disadvantages</h4>
+                    <ul>
+                        <li>Computationally expensive O(n³)</li>
+                        <li>Sensitive to noise and outliers</li>
+                        <li>Difficult to handle large datasets</li>
+                        <li>Once merged, cannot undo</li>
+                        <li>Choice of linkage affects results</li>
+                        <li>Memory intensive</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 When to Use Hierarchical Clustering</h2>
+            
+            <div class="algorithm-box">
+                <strong>Best Use Cases:</strong>
+                <ul>
+                    <li><strong>Small to medium datasets</strong> (< 10,000 points)</li>
+                    <li><strong>Unknown cluster count</strong> - explore different numbers</li>
+                    <li><strong>Hierarchical relationships</strong> matter (taxonomy, organization)</li>
+                    <li><strong>Deterministic results</strong> required</li>
+                    <li><strong>Non-spherical clusters</strong> expected</li>
+                    <li><strong>Visualization</strong> of cluster relationships needed</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔧 Practical Tips</h2>
+            
+            <div class="algorithm-box">
+                <strong>Choosing Optimal Number of Clusters:</strong><br>
+                • Look for the largest jump in dendrogram distances<br>
+                • Use the "elbow method" on the linkage distances<br>
+                • Consider domain knowledge and business requirements<br><br>
+                
+                <strong>Data Preprocessing Guidelines:</strong><br>
+                • Always standardize features for distance-based clustering<br>
+                • Remove outliers that can distort cluster formation<br>
+                • Consider feature selection for high-dimensional data<br><br>
+                
+                <strong>Linkage Selection:</strong><br>
+                • <strong>Ward:</strong> Best for balanced, spherical clusters<br>
+                • <strong>Complete:</strong> Good for compact clusters<br>
+                • <strong>Single:</strong> Can handle elongated clusters but sensitive to noise<br>
+                • <strong>Average:</strong> Balanced approach between single and complete
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📊 Real-World Applications</h2>
+            
+            <ul>
+                <li><strong>Biology:</strong> Phylogenetic trees, species classification</li>
+                <li><strong>Marketing:</strong> Customer segmentation with hierarchy</li>
+                <li><strong>Social Networks:</strong> Community detection</li>
+                <li><strong>Image Processing:</strong> Image segmentation</li>
+                <li><strong>Finance:</strong> Portfolio clustering, risk analysis</li>
+                <li><strong>Text Mining:</strong> Document clustering, topic hierarchy</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Key Takeaways</h2>
+            
+            <div class="algorithm-box">
+                <ul>
+                    <li><strong>Hierarchical clustering</strong> builds tree structures of clusters</li>
+                    <li><strong>Agglomerative</strong> (bottom-up) is most common approach</li>
+                    <li><strong>Linkage criteria</strong> (single, complete, average, ward) affect results</li>
+                    <li><strong>Dendrograms</strong> visualize cluster hierarchy and help choose cluster count</li>
+                    <li><strong>Best for small-medium datasets</strong> where hierarchy matters</li>
+                    <li><strong>Deterministic</strong> but computationally expensive</li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin: 30px 0; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+            <h3>🎓 Next Steps</h3>
+            <p>Continue with <strong>DBSCAN & Density-Based Clustering</strong> to learn about handling noise and arbitrary cluster shapes!</p>
+            <div style="margin-top: 15px;">
+                <a href="unsupervised-algorithms-kmeans-lecture.html" style="margin: 0 10px; padding: 10px 20px; background: #667eea; color: white; text-decoration: none; border-radius: 5px;">← Previous: K-Means</a>
+                <a href="lectures-index.html" style="margin: 0 10px; padding: 10px 20px; background: #28a745; color: white; text-decoration: none; border-radius: 5px;">All Lectures</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Add animation to sections on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
